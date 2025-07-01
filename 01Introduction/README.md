@@ -88,8 +88,9 @@ ZOMI 酱
 :maxdepth: 1
 
 00Introduction
-01Present
+01present
 02Develop
-03Architecture
-04Sample
+03architecture
+05Sample
+06Foundation
 ```
