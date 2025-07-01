@@ -82,7 +82,6 @@ def get_subfile(path, dir_path):
 	image_name = '/images/' + dir_path.split('/')[-1]
 	save_name = dir_path.split('/')[:-1]
 	save_path = '/'.join(save_name) + image_name
-	
 	## 找到所有的 md 并记录下来
 	for file in file_path:
 		fp = os.path.join(path, file)
@@ -135,19 +134,28 @@ def getallfile(path):
 	# 遍历该文件夹下的所有目录或者文件
 	for file in file_path:
 		fp = os.path.join(path, file)
-		if os.path.isdir(fp):
+		if os.path.isdir(fp) and fp.split('/')[-1] != "images":
 			file_dist = fp.split('/')
 			new_dir_name = ''.join(file_dist[-2:])
 			new_path = create_dir(dir_paths, new_dir_name)
 			if new_path:
 				get_subfile(fp, new_path)
-
+		
+		elif os.path.isdir(fp) and fp.split('/')[-1] == "images":
+			file_dist = fp.split('/')
+			save_path = dir_paths +"images/"+ file_dist[-2]+"/"
+			os.makedirs(save_path, exist_ok=True)
+			shutil.copytree(fp, save_path, dirs_exist_ok = True)
 		elif os.path.isfile(fp):
 			# 遍历 md 文件，并复制到指定目录
 			if check_markdown(fp):
 				new_dir_name = fp.split('/')[-2]
-				new_path = create_dir(dir_paths, new_dir_name)
+				print("fp:",fp,new_dir_name,fp)
+				new_path = dir_paths+"/"+new_dir_name
+				os.makedirs(new_path, exist_ok=True)
 				shutil.copy(fp, new_path)
+				# 修改image目录
+				change_iamgepath_markdown(new_path+"/"+os.path.basename(fp))
 
 
 target_dir0 = '/Users/a1-6/Workspaces/AISystem/01Introduction'
