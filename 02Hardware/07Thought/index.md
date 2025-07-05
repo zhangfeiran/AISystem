@@ -4,7 +4,7 @@
 
 基于 AI 芯片的 SIMD 硬件结构和 SIMT 的硬件结构原理，分析其上层的编程模型 SPMD 与 CUDA 之间的关系，去了解做好 AI 芯片其实跟软件的关联性也有着密切的关系，并对 AI 芯片近 10 年的发展进行一个总结和思考。
 
-## 内容大纲
+**内容大纲**
 
 > `PPT`和`字幕`需要到 [Github](https://github.com/chenzomi12/AISystem) 下载，网页课程版链接会失效哦~
 >
@@ -19,7 +19,7 @@
 | AI 芯片黄金十年 | 05 从 CUDA 和 NVIDIA 中借鉴 | [文章](./05DSA.md), [PPT](./05DSA.pdf), [视频](https://www.bilibili.com/video/BV1j94y1N7qh)|
 | AI 芯片黄金十年 | 06 AI 芯片的思考 | [文章](./06AIChip.md), [PPT](./06AIChip.pdf), [视频](https://www.bilibili.com/video/BV1te411y7UC/)|
 
-## 备注
+**备注**
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

@@ -6,7 +6,7 @@
 
 在正文后面与正文有关的文章或参考资料，是作为说明书或论文的补充部分，并不是必需的。其是由于篇幅过大或取材于复制品而不便编入正文的材料。
 
-## 备注
+**备注**
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

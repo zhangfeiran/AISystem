@@ -4,7 +4,7 @@
 
 - 《国内 AI 芯片》深入地解读国内 AI 初创芯片厂商如国内第一 AI 芯片上市公司寒武纪、国内造 GPU 声势最大的壁仞科技、腾讯重头的燧原科技等科技公司的 AI 芯片架构。
 
-## 内容大纲
+**内容大纲**
 
 > `PPT`和`字幕`需要到 [Github](https://github.com/chenzomi12/AISystem) 下载，网页课程版链接会失效哦~
 >
@@ -23,7 +23,7 @@
 | 国内 AI 芯片 | 09 昇腾 AI 算力集群 | [文章](./09AscendCluster.md), [PPT](), [视频]() |
 | 国内 AI 芯片 | 10 昇腾 AI 全栈架构 | [文章](./10AscendArch.md), [PPT](), [视频]() |
 
-## 备注
+**备注**
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 
