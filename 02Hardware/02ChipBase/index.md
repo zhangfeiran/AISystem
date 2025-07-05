@@ -20,7 +20,7 @@
 | AI 芯片基础 | 06 NPU 基础| [文章](./06NPUBase.md), [PPT](./06NPUBase.pdf), [视频](https://www.bilibili.com/video/BV1Rk4y1e77n/)|
 | AI 芯片基础 | 07 超异构计算 | [文章](./07Future.md), [PPT](./07Future.pdf), [视频](https://www.bilibili.com/video/BV1YM4y117VK) |
 
-## 备注
+备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

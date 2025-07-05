@@ -17,7 +17,7 @@ PyTorch 2.0 是 PyTorch 捐献给 Linux 基金会的第一个版本。从 PyTorc
 | 05 AOTAutograd 原理 | [PPT](./05.aotatuograd.pdf), [视频](https://www.bilibili.com/video/BV1Me4y1V7Ke/) |
 | 06 Dispatch 机制| [PPT](./06.dispatch.pdf), [视频](https://www.bilibili.com/video/BV1L3411d7SM/) |
 
-## 备注
+备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

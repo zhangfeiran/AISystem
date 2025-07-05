@@ -4,7 +4,7 @@
 
 - 《图形处理器 GPU》深入地讲解 GPU 的工作原理，其最重要的指标是 GPU 计算吞吐、存储和传输带宽，并对英伟达的 GPU 的十年 5 代不断演进的硬件架构进行梳理。
 
-## 内容大纲
+内容大纲
 
 > `PPT`和`字幕`需要到 [Github](https://github.com/chenzomi12/AISystem) 下载，网页课程版链接会失效哦~
 > 
@@ -18,7 +18,7 @@
 | 图形处理器 GPU | 04 GPU 架构回顾第一篇 | [文章](./04History.md), [PPT](./04Fermi.pdf), [视频](https://www.bilibili.com/video/BV1x24y1F7kY/) |
 | 图形处理器 GPU | 05 GPU 架构回顾第二篇 | [文章](./04History.md), [PPT](./05Turing.pdf), [视频](https://www.bilibili.com/video/BV1mm4y1C7fg/) |
 
-## 备注
+备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

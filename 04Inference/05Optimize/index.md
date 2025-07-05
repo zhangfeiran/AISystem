@@ -4,7 +4,7 @@
 
 《模型优化》在这一节当中分为模型转换和模型优化，在整体架构图中属于离线模型转换模块。一方面，推理引擎需要把不同 AI 框架训练得到的模型进行转换；另外一方面需要对转换后的模型进行图优化等技术。
 
-## 内容大纲
+内容大纲
 
 > `PPT`和`字幕`需要到 [Github](https://github.com/chenzomi12/AISystem) 下载，网页课程版链接会失效哦~
 >
@@ -17,7 +17,7 @@
 | 图优化模块| 03 算子融合/替换/前移 | [文章](./02Basic.md), [PPT](./02Basic.pdf), [视频](https://www.bilibili.com/video/BV1Qj411T7Ef/) |
 | 图优化模块| 04 数据布局转换&内存优化| [文章](./03Extend.md), [PPT](./03Extend.pdf), [视频](https://www.bilibili.com/video/BV1Ae4y1N7u7/) |
 
-## 备注
+备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

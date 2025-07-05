@@ -22,7 +22,7 @@
 | 04 混合并行 | [文章](./06HybridParallel.md), [PPT](./04MindsporeParallel.pdf), [视频](https://www.bilibili.com/video/BV1vt4y1K7wT/) |
 | 05 分布式训练总结 | [PPT](./07Summary.pdf), [视频](https://www.bilibili.com/video/BV1av4y1S7DQ/) |
 
-## 备注
+备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 
