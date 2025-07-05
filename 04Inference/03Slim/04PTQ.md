@@ -152,14 +152,14 @@ $$
 INT8 相乘、加之后的结果用 INT32 格式存储，如果下一个算子需要 FP32 格式数据作为输入，则通过 Dequantize 反量化操作将 INT32 数据反量化为 FP32。Dequantize 反量化推导过程如下：
 
 $$
-\begin{align*}
+\begin{aligned}
 y &= x \cdot w \\
 &= x_{\text{scale}} \cdot (x_{\text{int}} + x_{\text{offset}}) \cdot w_{\text{scale}} \cdot (w_{\text{int}} + w_{\text{offset}})\\
 &= (x_{\text{scale}} \cdot w_{\text{scale}}) \cdot (x_{\text{int}} + x_{\text{offset}}) \cdot (w_{\text{int}} + w_{\text{offset}})\\
 &= (x_{\text{scale}} \cdot w_{\text{scale}}) \cdot (x_{\text{int}} \cdot w_{\text{int}} + x_{\text{int}} \cdot x_{\text{offset}} + w_{\text{int}} \cdot x_{\text{offset}} + w_{\text{offset}} \cdot x_{\text{offset}})\\
 &= (x_{\text{scale}} \cdot w_{\text{scale}}) \cdot (INT32_{result} + x_{\text{int}} \cdot x_{\text{offset}} + w_{\text{int}} \cdot x_{\text{offset}} + w_{\text{offset}} \cdot x_{\text{offset}})\\
 &\approx (x_{\text{scale}} \cdot w_{\text{scale}}) \cdot INT32_{result}
-\end{align*}
+\end{aligned}
 $$
 
 #### 重量化
@@ -167,12 +167,12 @@ $$
 INT8 乘加之后的结果用 INT32 格式存储，如果下一层需要 INT8 格式数据作为输入，则通过 Requantize 重量化操作将 INT32 数据重量化为 INT8。重量化推导过程如下：
 
 $$
-\begin{align*}
+\begin{aligned}
 y &= x \cdot w \\
 &= x_{\text{scale}} \cdot (x_{\text{int}} + x_{\text{offset}}) \cdot w_{\text{scale}} \cdot (w_{\text{int}} + w_{\text{offset}}) \\
 &= (x_{\text{scale}} \cdot w_{\text{scale}}) \cdot (x_{\text{int}} + x_{\text{offset}}) \cdot (w_{\text{int}} + w_{\text{offset}}) \\
 &= (x_{\text{scale}} \cdot w_{\text{scale}}) \cdot \text{INT32\_result}
-\end{align*}
+\end{aligned}
 $$
 
 其中 y 为下一个节点的输入，即 $y=x_{next}$:

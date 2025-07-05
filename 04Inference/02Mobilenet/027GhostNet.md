@@ -228,7 +228,7 @@ Ghost Module 中只有 m 个特征与其他像素交互，这影响了 Ghost Mod
 回想一下，在经典的自注意力中，线性变换层将输入特征图转换为计算 attention maps 的 query 和 key。类似的，作者实现一个 $1 \times 1$ 的卷积操作，将 Ghost Module 分支的输入 $X$ 转换为 DFC module 分支的输入 $Z$。两个分支输出的乘积，即为最终输出 $O\in {R}^{H \times W\times C}$ 可以表示为：
 
 $$
-$\mathcal{O} = Sigmoid(A)\odot V(X)
+\mathcal{O} = Sigmoid(A)\odot V(X)
 $$
 
 其中，$\odot$ 表示 element-wise multiplication，$A$ 是 attention map，Sigmoid 是归一化函数以缩放到 ( 0 , 1 )  范围。$ \mathcal{V}()$ 表示 Ghost Module，$X $ 为输入特征。则信息聚合过程如下图所示：

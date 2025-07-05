@@ -52,11 +52,11 @@ $$
 FakeQuant 量化和反量化的过程：
 
 $$
-\begin{align*}
+\begin{aligned}
 Q(x) &= FakeQuant(x) \\
 &= DeQuant(Quant(x)) \\
 &= s * (Clamp(round(x/s)-z)+z)
-\end{align*}
+\end{aligned}
 $$
 
 原始权重为 W，伪量化之后得到浮点值 Q(W)，同理得到激活的伪量化值 Q(X)。这些伪量化得到的浮点值虽然表示为浮点数，但仅能取离散的量化级别。

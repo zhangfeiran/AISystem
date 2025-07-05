@@ -75,13 +75,13 @@ def conv_dw(inp, oup, stride):
 计算量:
 
 $$
-D_{k}\cdot D_{k} \cdot αM\cdotρD_{F}\cdotρD_{F}+ αM\cdot αN\cdotρD_{F}\cdotρD_{F}
+D_{k}\cdot D_{k} \cdot αM\cdot ρD_{F}\cdot ρD_{F}+ αM\cdot αN\cdot ρD_{F}\cdot ρD_{F}
 $$
 
 计算量减少了:
 
 $$
-\frac{D_{k}\cdot D_{k} \cdot αM\cdotρD_{F}\cdotρD_{F}+ αM\cdot αN\cdotρD_{F}\cdotρD_{F}}{D_{k}\cdot D_{k} \cdot M\cdot N\cdot D_{F}\cdot D_{F}} =\frac{αρ}{N}+\frac{α^{2}ρ^{2}}{D_{k}^{2}}
+\frac{D_{k}\cdot D_{k} \cdot αM\cdot ρD_{F}\cdot ρD_{F}+ αM\cdot αN\cdot ρD_{F}\cdot ρD_{F}}{D_{k}\cdot D_{k} \cdot M\cdot N\cdot D_{F}\cdot D_{F}} =\frac{αρ}{N}+\frac{α^{2}ρ^{2}}{D_{k}^{2}}
 $$
 
 ### 网络结构实现
@@ -104,7 +104,8 @@ def conv_bn(inp, oup, stride):
 def conv_dw(inp, oup, stride):
     return nn.Sequential(
                 # dw
-                nn.Conv2d(inp, inp, 3, stride, 1, groups=inp, bias=False),   # DW 卷积的卷积核输入与输出的数量一致，且等于分组数
+                nn.Conv2d(inp, inp, 3, stride, 1, groups=inp, bias=False),
+                # DW 卷积的卷积核输入与输出的数量一致，且等于分组数
                 nn.BatchNorm2d(inp),
                 nn.ReLU(inplace=True),
 

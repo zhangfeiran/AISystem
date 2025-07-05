@@ -153,7 +153,7 @@ resolution:r=γ^{φ}
 $$
 
 $$
-s.t. α\cdotβ^{2}\cotγ^{2}\approx 2
+s.t. α\cdot β^{2}\cdot γ^{2}\approx 2
 $$
 
 $$
@@ -185,7 +185,7 @@ $$
 
 移除不需要的搜索选项，重用 EfficientNet 中搜索的 channel sizes，接着在搜索空间中随机采样了 1000 个模型，并针对每个模型训练 10 个 epochs（使用较小的图像尺度）。搜索奖励结合了模型准确率 A，标准训练一个 step 所需时间 S 以及模型参数大小 P，奖励函数可写成：
 $$
-A \cdot S^{w}\cdot P^{v}
+A \cdot S^{w} \cdot P^{v}
 $$
 
 其中，A 是模型精度、S 是归一化训练时长，P 是参数量，w=-0.07 和 v=-005。
