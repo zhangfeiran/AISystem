@@ -52,7 +52,7 @@ FBNet v1 的训练方法和构建网络的方法基本上沿用了 DARTS 的方�
 
 DNAS 将网络结构搜索问题公式化为：
 
-$$\underset {a∈A}{min}  \underset {w_{a}}{min} L(a,w_{a}) \tag{1}$$
+$$\underset {a∈A}{min}  \underset {w_{a}}{min} L(a,w_{a}) $$
 
 给定结构空间 A，寻找最优的结构 $a∈A$，在训练好权值后 $w_{a}$，可以满足最小化损失 $L(a,w_{a})$，论文主要集中于 3 个因素：搜索空间、考虑实际时延的损失函数以及高效的搜索算法。
 
@@ -62,11 +62,11 @@ $$\underset {a∈A}{min}  \underset {w_{a}}{min} L(a,w_{a}) \tag{1}$$
 
 公式 1 中的损失函数不仅要反映准确率，也要反应目标硬件上的时延。因此，定义以下损失函数：
 
-$$L(a,w_{a}) = CE(a,w_{a})\cdot αlog(LAT(a)^{β})\tag{2}$$
+$$L(a,w_{a}) = CE(a,w_{a})\cdot αlog(LAT(a)^{β})$$
 
 $CE(a,w_{a})$ 表示交叉熵损失，LAT(a)表示当前结构在目标硬件上的时延，α控制整体损失函数的幅值，β调整时延项的幅值。时延的计算可能比较耗时，论文使用 block 的时延 lookup 表格来估计网络的的整体：
 
-$$LAT(a) = \sum_{l}LAT(b_{l}^{(a)})\tag{3} $$
+$$LAT(a) = \sum_{l}LAT(b_{l}^{(a)}) $$
 
 其中 $b_{l}^{(a)}$ 为结构 a 中 l 层的 block，这种估计方法假设 block 间的计算相互独立，对 CPUs 和 DSPs 等串行计算设备有效，通过这种方法，能够快速估计 $10^{21}$ 种网络的实际时延。
 
@@ -90,19 +90,19 @@ $$LAT(a) = \sum_{l}LAT(b_{l}^{(a)})\tag{3} $$
 给定输入 x，Gumbel Softmax 输出如下，Gumbel 权重为 gi:
 
 $$
-y = \sum^{k}_{i=1}g_{i}P_{AD}(b_{i}(x),k) \tag{1}
+y = \sum^{k}_{i=1}g_{i}P_{AD}(b_{i}(x),k) 
 $$
 
 注意，这相当于将所有卷积的滤波器数量增加到 k，并屏蔽掉额外的通道(下图，步骤 C)。$l_{i} \in R^{k}$ 是一个列向量，I 以 1 开头，k-i 以 0 结尾。注意，搜索方法对于 1 和 0 的排序是不变的。由于所有块 bi 具有相同数量的滤波器，可以通过共享权重来近似，使得 bi = b(下图，步骤 D)：
 
 $$
-y = \sum^{k}_{i=1}g_{i}(b(x)\circ l_{i}) \tag{2}
+y = \sum^{k}_{i=1}g_{i}(b(x)\circ l_{i}) 
 $$
 
 最后，利用这种近似，可以处理原始信道搜索方法的计算复杂性:这相当于计算集合掩码并且只运行块 b 一次(下图，步骤 E)
 
 $$
-y=b(x)\circ \underbrace{\sum^{k}_{i=1}g_{i}l_{i}}_{M} \tag{3}
+y=b(x)\circ \underbrace{\sum^{k}_{i=1}g_{i}l_{i}}_{M} 
 $$
 
 这种近似只需要一个正向传递和一个特征映射，除了等式 3 中可忽略的 M 项之外，不会引起额外的 FLOP 或存储器成本。(图 Channel Masking for channel search（DMaskingNAS），通道屏蔽)。此外，这种近似并不等价，只是因为权重是共享的，这在 DNAS 被证明可以减少训练时间和提高准确性[Single-path nas: Device-aware efficient convnet design]。这使本文能够搜索任何模块的输出通道数，包括相关的架构决策，如反向残差模块中的扩展速率。
@@ -118,7 +118,7 @@ $$
 JointNAS，分粗粒度和细粒度两个阶段，对网络架构和训练超参都进行搜索。JointNAS 优化目标可公式化为:
 
 $$
-\underset{(A,h)∈Ω}{max} acc(A,h),subject to g_{i}(A)\leqslant C_{i} for i=1,..,τ \tag{1}
+\underset{(A,h)∈Ω}{max} acc(A,h),subject to g_{i}(A)\leqslant C_{i} for i=1,..,τ 
 $$
 
 A，h，Ω分别表示网络架构、训练策略以及搜索空间；$g_{i}(A)$，$τ$ 分别表示资源约束信息资源消耗计算和资源数量，acc 计算当前结构和训练参数下的准确率。
@@ -233,7 +233,7 @@ $$
 给定特征图 $Z ∈ R ^{H \times W\times C}$，它可以看作 hw 的 tokens，记作 $z_{i}\in R^{C}$，也就是 $Z={z_{11},z_{12},...,z_{hw}}$。FC 层生成 attention map 的公式表达如下:
 
 $$
-a_{hw} = \sum_{h',w'} F_{h,w,h',w'}\odot z_{h',w'}\tag{1}
+a_{hw} = \sum_{h',w'} F_{h,w,h',w'}\odot z_{h',w'}
 $$
 
 其中，$\odot$ 表示 element-wise multiplication，F 是 FC 层中可学习的权重，$A={a_{11},a_{12},...,a_{HW}}$。根据上述公式，将所有 tokens 与可学习的权重聚合在一起以提取全局信息，该过程比经典的自注意力简单的多。然而，该过程的计算复杂度仍然是二次方，特征图的大小为 $ \mathcal{O}({H^{2}W^{2}})$，这在实际情况下是不可接受的，特别是当输入的图像是高分辨率时。

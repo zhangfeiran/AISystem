@@ -342,7 +342,7 @@ MHA（下图 a）允许 Transformer 对 tokens 间的关系进行编码。具体
 
 $$
 y=Concat\Bigg(\underbrace{<σ(<xW_{Q}^{0},xW_{k}^{0}>),xW_{v}^{0}>}_{a^{0} \in R^{k \times k}}..., \underbrace{<σ(<xW_{Q}^{h},xW_{k}^{h}>),xW_{v}^{h}>}_{a^{h} \in R^{k \times k}}
-\Bigg)W_{o}\tag{1}
+\Bigg)W_{o}
 $$
 
 其中 $W_{Q}^{i} \in R^{d \times d_{h}}$,$W_{K}^{i} \in R^{d \times d_{h}}$,$W_{V}^{i} \in R^{d \times d_{h}}$ 是第 i 个线性层的(或头部)分别在 Q、K 和 V 分支中的权重。符号<.,.>表示点积运算。
@@ -354,7 +354,7 @@ $$
 上下文分数 $c_{s}$ 用于计算上下文向量 $c_{v}$。具体来说，输入 x 是线性输出 $x_{K}\in R^{k \times d}$。使用权重 $W_{K} \in R^{d \times d}$ 的键分支 K 映射到 d 维空间，以产生输出 $x_{K}$ 。然后将上下文向量 $c_{v}\in R^{d}$ 计算为 $x_{K}$ 的加权和：
 
 $$
-c_{v} = \sum_{i=1}^{k}c_{s}(i)x_{K(i)} \tag{2} 
+c_{v} = \sum_{i=1}^{k}c_{s}(i)x_{K(i)}  
 $$
 
 上下文向量 $c_{v}$ 在某种意义上类似等式(1)中的注意力矩阵 a,它也编码输入 x 中所有 tokens 的信息，但计算成本较低。

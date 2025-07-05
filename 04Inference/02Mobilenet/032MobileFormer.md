@@ -19,7 +19,7 @@ Mobile-Former 将 MobileNet 和 Transformer 并行化，并通过双向交叉注
 Mobile 和 Former 通过双线桥将局部和全局特征双向融合。这两个方向分别表示为 Mobile→Former 和 Mobile←Former。我们提出了一种轻量级的交叉注意力模型，其中映射（$W^{Q}$,$W^{K}$,$W^{V}$)从 Mobile 中移除，以节省计算，但在 Former 中保留。在通道数较少的 Mobile 瓶颈处计算交叉注意力。具体而言，从局部特征图 X 到全局 tokens Z 的轻量级交叉注意力计算如下：
 
 $$
-A_{X->Z} = [Attn(\widetilde{z_{i}}W_{i}^{Q},\widetilde{x_{i}},\widetilde{x_{i}})]_{i=1:h}W^{o}\tag{1}
+A_{X->Z} = [Attn(\widetilde{z_{i}}W_{i}^{Q},\widetilde{x_{i}},\widetilde{x_{i}})]_{i=1:h}W^{o}
 $$
 
 其中局部特征 X 和全局 tokens Z 被拆分进入 h 个头，即 $X=[\widetilde{x_{1}}...\widetilde{x_{h}}],Z=[\widetilde{z_{1}}...\widetilde{z_{h}}]$ 表示多头注意力。第 i 个头的拆分 $\widetilde{z_{1}}\in R^{M \times \frac {d}{h} }$ 与第 i 个 token$\widetilde{z_{1}}\in R^{d}$ 不同。$W_{i}^{Q}$ 是第 i 个头的查询映射矩阵。$W^{O}$ 用于将多个头组合在一起。Attn(Q,K,V)是查询 Q、键 K 和值 V 的标准注意力函数，即：
@@ -31,7 +31,7 @@ $$
 其中 $[.]_{1:h}$ 表示将 h 个元素 concat 到一起。需要注意的是，键和值的映射矩阵从 Mobile 中移除，而查询的映射矩阵 $W_{i}^{Q}$ 在 Former 中保留。类似地从全局到局部的交叉注意力计算如下：
 
 $$
-A_{Z->X} = [Attn(\widetilde{x_{i}},\widetilde{z_{i}}\odot W_{i}^{K},\widetilde{z_{i}}\odot W_{i}^{V})]_{i=1:h}\tag{2}
+A_{Z->X} = [Attn(\widetilde{x_{i}},\widetilde{z_{i}}\odot W_{i}^{K},\widetilde{z_{i}}\odot W_{i}^{V})]_{i=1:h}
 $$
 
 其中 $W_{i}^{K}$ 和 $W_{i}^{V}$ 分别是 Former 中键和值的映射矩阵。而查询的映射矩阵从 Mobile 中移除。

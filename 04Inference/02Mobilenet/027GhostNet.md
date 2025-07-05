@@ -139,7 +139,7 @@ GhostNet 主要由一堆 Ghost bottleneck 组成，其中 Ghost bottleneck 以 G
 给定特征图 $Z ∈ R ^{H \times W\times C}$，它可以看作 hw 的 tokens，记作 $z_{i}\in R^{C}$，也就是 $Z={z_{11},z_{12},...,z_{hw}}$。FC 层生成 attention map 的公式表达如下:
 
 $$
-a_{hw} = \sum_{h',w'} F_{h,w,h',w'}\odot z_{h',w'}\tag{1}
+a_{hw} = \sum_{h',w'} F_{h,w,h',w'}\odot z_{h',w'}
 $$
 
 其中，$\odot$ 表示 element-wise multiplication，F 是 FC 层中可学习的权重，$A={a_{11},a_{12},...,a_{HW}}$。根据上述公式，将所有 tokens 与可学习的权重聚合在一起以提取全局信息，该过程比经典的自注意力简单的多。然而，该过程的计算复杂度仍然是二次方，特征图的大小为 $ \mathcal{O}({H^{2}W^{2}})$，这在实际情况下是不可接受的，特别是当输入的图像是高分辨率时。
@@ -147,11 +147,11 @@ $$
 例如，对于 4 层的 GhostNet 网络的特征图具有 3136 $(56 \times 56)$ 个 tokens，这使得计算变得 attention maps 异常复杂。实际上，CNN 中的特征图通常是低秩的，不需要将不同空间位置的所有输入和输出的 tokens 密集地连接起来。特征的 2D 尺寸很自然地提供一个视角，以减少 FC 层的计算量，也就是根据上述公式分解为两个 FC 层，分别沿水平方向和垂直方向聚合特征，其公式表达如下：
 
 $$
-a'_{hw} =\sum_{h'=1}^{H}F^{H}_{h,h'w}\odot z_{h'w},h=1,2,...,H,w=1,2,...,W \tag{2}
+a'_{hw} =\sum_{h'=1}^{H}F^{H}_{h,h'w}\odot z_{h'w},h=1,2,...,H,w=1,2,...,W 
 $$
 
 $$
-a_{hw} =\sum_{w'=1}^{W}F^{W}_{w,hw'}\odot z_{h'w},h=1,2,...,H,w=1,2,...,W \tag{3}
+a_{hw} =\sum_{w'=1}^{W}F^{W}_{w,hw'}\odot z_{h'w},h=1,2,...,H,w=1,2,...,W 
 $$
 
 其中，$F^{H}$ 和 $F^{W}$ 是变换的权重。输入原始特征 Z，并依次应用公式(2)和公式(3)，分别提取沿两个方向的长距离依赖关系。作者将此操作称为解耦全连接注意力(decoupled fully connected attention，DFC attention)，其信息流如下图所示：
