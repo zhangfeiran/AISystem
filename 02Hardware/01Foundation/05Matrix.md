@@ -15,11 +15,11 @@ AI 模型中的卷积层的实现定义大家应该都已经比较熟悉了，�
 假设卷积的输入和输出的特征图维度用(IH, IW), (OH, OW)表示，卷积核窗口的数据维度用(KH, KW)表示，输入通道是 IC，输出通道是 OC，输入输出特征图和卷积核数据维度重排的转化对应关系如下公式，对输入数据的重排的过程称为 Im2Col，同理把转换后矩阵乘的数据排布方式再换回卷积输入的过程称为 Col2Im。
 
 $$
-\begin{align}
+\begin{aligned}
 &input:(IC, IH, IW)\rightarrow(OH*OW, KH*KW*IC)\\
 &filter: (OC, KH, KW, IC)\rightarrow(OC, KH*KW*IC)\\
 &output:(OC,OH, OW)\rightarrow(OC,OH*OW)
-\end{align}
+\end{aligned}
 $$
 
 更具体的，假设卷积核的维度(2, 2)，输入特征图维度(3, 3)，输入和输出通道都是 1，对一个无 padding，stride=1 的卷积操作，输出特征图是(2, 2)，所以输入卷积核转换为矩阵乘排布后的行数是 $2 * 2 = 4$，列数为 $2 * 2 * 1= 4$。下图是对应的卷积到矩阵乘的转换示意，输入、输出特征图和卷积核都用不同的颜色表示，图中数字表示位置标记。
@@ -29,11 +29,11 @@ $$
 比如输入特征图的排布转换过程：第 1 个输出对应输入特征图的窗口数据标记为 1, 2, 4, 5；第 2 个输出对应的输入特征图窗口数据标记为 2, 3, 5, 6；第 3 个输出对应的输入特征图窗口数据标记为 4, 5, 7, 8；第 4 个输出对应的输入特征图窗口数据标记为 5, 6, 8, 9。矩阵乘的维度对应关系如下。
 
 $$
-\begin{align}
+\begin{aligned}
 &input: (OH*OW, KH*KW*IC)\rightarrow (4,4)\\
 &filter: (OC, KH*KW*IC)\rightarrow(1,4)\\
 &output:(OC, OH*OW)\rightarrow(1,4)
-\end{align}
+\end{aligned}
 $$
 
 ## 矩阵乘分块 Tilling

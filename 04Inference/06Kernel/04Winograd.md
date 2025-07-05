@@ -17,7 +17,7 @@ Winograd 算法最早是 1980 年由 Shmuel Winograd 提出的《Arithmetic comp
 以一维卷积 $F(2,3)$ 为例，假设输入信号为 $d=[d_0,d_1,d_2,d_3]^T$，卷积核为 $g=[g_0,g_1,g_2]^T$，则整个卷积过程可以转换为如下的矩阵乘形式：
 
 $$
-\begin{align}
+\begin{aligned}
 F(2,3) = \begin{bmatrix}
   d_0 & d_1 & d_2\\
   d_1 & d_2 & d_3
@@ -31,16 +31,16 @@ g_2
  r_0 \\
  r_1
 \end{bmatrix}
-\end{align}
+\end{aligned}
 $$
 
 如果是使用一般的矩阵乘法进行计算，则如下式所示，会进行 6 次乘法操作与 4 次加法操作。
 
 $$
-\begin{align}
+\begin{aligned}
 r_0 & = d_0 \times g_0 +  d_1 \times g_1 + d_2 \times g_2\\
 r_1 & = d_1 \times g_0 +  d_2 \times g_1 + d_3 \times g_2
-\end{align}
+\end{aligned}
 $$
 
 具体的过程可以由下图了解到，在卷积的计算过程中，由于在卷积层的设计中，往往卷积的步幅（Stride）的大小会小于卷积核的大小，所以最后转换的矩阵乘中往往有规律的分布着大量重复元素，比如这个一维卷积例子中矩阵乘输入矩阵第一行的 $d_1$、$d_2$ 和第二行中的 $d_1$、$d_2$，卷积转换成的矩阵乘法比一般矩阵乘法的问题域更小，这就让优化存在了可能。
@@ -50,7 +50,7 @@ $$
 在 Winograd 算法中则是通过增加加法操作来减少乘法操作从而实现计算加速，具体操作如下式所示：
 
 $$
-\begin{align}
+\begin{aligned}
 F(2,3) = \begin{bmatrix}
   d_0 & d_1 & d_2\\
   d_1 & d_2 & d_3
@@ -64,7 +64,7 @@ g_2
  m_1 + m_2 + m_3 \\
  m_2 - m_3 - m_4
 \end{bmatrix}
-\end{align}
+\end{aligned}
 $$
 
 其中，$m_1=(d_0-d_2)g_0$，$m_2=(d_1+d_2)\frac{g_0+g_1+g_2}{2}$，$m_3=(d_2-d_1)\frac{g_0-g_1+g_2}{2}$，$m_4=(d_1-d_3)g_2$。
@@ -74,10 +74,10 @@ $$
 而 Winograd 加速卷积计算的具体推导过程如下，由上面的式子可以得知：
 
 $$
-\begin{align}
+\begin{aligned}
  m_1 + m_2 + m_3 &= d_0 \times g_0 +  d_1 \times g_1 + d_2 \times g_2\\
  m_2 - m_3 - m_4 &= d_1 \times g_0 +  d_2 \times g_1 + d_3 \times g_2
-\end{align}
+\end{aligned}
 $$
 
 其中，因为 $m_1$ 与 $m_4$ 没有重复出现，所以令 $m_1 = d_0 \times g_0$，$m_4 = -d_3 \times g_2$，这样就可以约掉 $m_1$ 和 $m_4$，所以左边的式子只剩下两个变量，两个等式两个变量即可求出 $m_2$ 与 $m_3$，在这个时候的 $m_1$、$m_2$、$m_3$、$m_4$ 是这样的：
@@ -132,9 +132,9 @@ $$
 将上面的计算过程写成矩阵的形式如下：
 
 $$
-\begin{align}
+\begin{aligned}
 Y = A^T[(Gg)\odot (B^Td)]
-\end{align}
+\end{aligned}
 $$
 
 其中，
@@ -180,9 +180,9 @@ $$
 将一维卷积 $F(2,3)$ 的变换扩展到二维卷积 $F(2 \times 2, 3 \times 3)$，同样用矩阵形式表示为：
 
 $$
-\begin{align}
+\begin{aligned}
 Y = A^T[[GgG^T]\odot[B^TdB]]A
-\end{align}
+\end{aligned}
 $$
 
 其中，$g$ 为 $r \times r$ 的卷积核，$d$ 为 $(m + r -1) \times (m + r -1)$ 的图像块.

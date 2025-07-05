@@ -648,7 +648,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 2)一些硬件供应商使用自己的低级 IR，需要从高层 IR 转换
 
-![img](images/07Practice07.webp)
+![img](images/07Practice07.png)
 
 **基于模式的分组：**
 
@@ -656,7 +656,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 该框架提供了模式匹配机制，如下代码描述的匹配一个 Conv2d-add-relu
 
-![](images/07Practice08.webp)
+![](images/07Practice08.png)
 
 通过上述匹配模式表，可以将图 3（上）a 转换为 b
 
@@ -664,7 +664,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 在根据模式将 node 进行分组后，下一步是根据编程模型指定支持的算子列表。例如下代码注册了一个函数，指示所有浮点类型的 Conv2D 节点被注释并卸载到 MyAccel 中
 
-![](images/07Practice09.webp)
+![](images/07Practice09.png)
 
 通过一组注解函数，在图中生成了多个区域，这些区域可以被卸载到目标加速器上，如上图 3（c） 。
 
@@ -713,7 +713,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 运行时系统负责执行模型图的推理，并将算子和子图分发到目标平台。图执行引擎可以是一个简单的数据流图 visitor，处理大多数 CNN；也可以是一个虚拟机来执行字节码，处理现代模型中呈现出的动态性和控制流。
 
-![img](images/07Practice10.webp)
+![img](images/07Practice10.png)
 
 运行时系统流程如下：
 

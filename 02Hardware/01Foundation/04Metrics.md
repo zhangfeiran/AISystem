@@ -133,7 +133,7 @@ bw、π 和 AI 芯片有关，bytes 和 ops 和 AI 模型有关，当模型是�
 $$
 t1 > t2 \\
 \rightarrow bytes / bw > ops / π \\
-\rightarrowπ/bw > ops/bytes
+\rightarrow π/bw > ops/bytes
 $$
 
 根据算术强度和操作字节比的概念，我们很容易评估出一个 AI 模型在指定 AI 芯片上的理论性能情况。下面展示一个具体的示例。

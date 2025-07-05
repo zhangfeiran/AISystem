@@ -40,7 +40,6 @@ AI 芯片，作为 AI 的硬件体系架构主要是指 AI 芯片，这里就很
 :maxdepth: 2
 :numbered:
 
-00Introduction.pptx/index
 01Foundation/index
 02ChipBase/index
 03GPUBase/index
