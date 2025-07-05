@@ -18,7 +18,7 @@ CANN 是昇腾的计算架构（Compute Architecture for Neural Networks），�
 | 04 Ascend C 语法扩展 | [文章](./04Grmmar.md) |
 | 05 Ascend C 编程范式详解 | [文章](./05Paradigm.md) |
 
-备注
+## 备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

@@ -4,7 +4,7 @@
 
 在上层应用或者 AI 网络模型中，看到的是算子；但是在推理引擎实际执行的是具体的 Kernel，而推理引擎中 CNN 占据了主要是得执行时间，因此其 Kernel 优化尤为重要。
 
-内容大纲
+## 内容大纲
 
 > `PPT`和`字幕`需要到 [Github](https://github.com/chenzomi12/AISystem) 下载，网页课程版链接会失效哦~
 >
@@ -21,7 +21,7 @@
 | Kernel 优化 | 07 nc4hw4 内存排布 | [文章](./07Nc4hw4.md), [PPT](./07Nc4hw4.pdf) |
 | Kernel 优化 | 08 汇编与循环优化| [文章](./08Others.md), [PPT](./08Others.pdf) |
 
-备注
+## 备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

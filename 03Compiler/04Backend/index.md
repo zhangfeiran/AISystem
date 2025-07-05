@@ -4,7 +4,7 @@
 
 《编译后端优化》后端优化作为 AI 编译器跟硬件之间的相连接的模块，更多的是算子或者 Kernel 进行优化，而优化之前需要把计算图转换称为调度树等 IR 格式，然后针对每一个算子/Kernel 进行循环优化、指令优化和内存优化等技术。
 
-内容大纲
+## 内容大纲
 
 > `PPT`和`字幕`需要到 [Github](https://github.com/chenzomi12/AISystem) 下载，网页课程版链接会失效哦~
 >
@@ -19,7 +19,7 @@
 | 05 指令和内存优化 | [文章](./05OtherOpt.md), [PPT](./05OtherOpt.pdf), [视频](https://www.bilibili.com/video/BV11d4y1a7J6/)  |
 | 06 Auto-Tuning 原理 | [文章](./06AutoTuning.md), [PPT](./06AutoTuning.pdf), [视频](https://www.bilibili.com/video/BV1uA411D7JF/) |
 
-备注
+## 备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

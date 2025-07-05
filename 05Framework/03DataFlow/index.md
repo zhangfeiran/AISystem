@@ -6,7 +6,7 @@
 
 目前主流的 AI 框架都选择使用计算图来抽象神经网络计算，《计算图》实际上，AI 框架主要的职责是把深度学习的表达转换称为计算机能够识别的计算图，计算图作为 AI 框架中核心的数据结构，贯穿 AI 框架的大部分整个生命周期，于是计算图对于 AI 框架的前端核心技术就显得尤为重要。
 
-内容大纲
+## 内容大纲
 
 > `PPT`和`字幕`需要到 [Github](https://github.com/chenzomi12/AISystem) 下载，网页课程版链接会失效哦~
 >
@@ -22,7 +22,7 @@
 | 06 计算图实现动静统一| [文章](./06StaticGraph.md), [PPT](./06StaticGraph.pdf), [视频](https://www.bilibili.com/video/BV17P41177Pk/)|
 | 07 计算图的挑战与未来 |[文章](./07Future.md), [PPT](./07Future.pdf), [视频](https://www.bilibili.com/video/BV1hm4y1A7Nv/) |
 
-备注
+## 备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

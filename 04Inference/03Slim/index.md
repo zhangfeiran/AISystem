@@ -4,7 +4,7 @@
 
 《模型压缩》模型压缩跟轻量化网络模型不同，压缩主要是对轻量化或者非轻量化模型执行剪枝、蒸馏、量化等压缩算法和手段，使得模型更加小、更加轻便、更加利于执行。
 
-内容大纲
+## 内容大纲
 
 > `PPT`和`字幕`需要到 [Github](https://github.com/chenzomi12/AISystem) 下载，网页课程版链接会失效哦~
 >
@@ -20,7 +20,7 @@
 | 模型压缩 | 06(上) 知识蒸馏原理 | [文章](./06Distillation.md), [PPT](./06Distillation.pdf), [视频](https://www.bilibili.com/video/BV1My4y197Tf/)|
 | 模型压缩 | 06(下) 知识蒸馏算法 | [文章](./06Distillation.md), [PPT](./06Distillation.pdf), [视频](https://www.bilibili.com/video/BV1vA411d7MF/)|
 
-备注
+## 备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

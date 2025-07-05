@@ -6,7 +6,7 @@
 
 本节自动微分系列将会大概初步谈一谈从手动微分到自动微分的过程，03 自动微分正反模式中深入了自动微分的正反向模式具体公式和推导。实际上 02 了解到正反向模式只是自动微分的原理模式，在实际代码实现的过程，04 会通过三种实现方式（基于库、操作符重载、源码转换）来实现。05 和 06 则是具体跟大家一起手把手实现一个类似于 PyTorch 的自动微分框架。07 最后做个小小的总结，一起 review 自动微分面临易用性、性能的挑战，最后在可微分编程方面畅享了下未来。
 
-内容大纲
+## 内容大纲
 
 > `PPT`和`字幕`需要到 [Github](https://github.com/chenzomi12/AISystem) 下载，网页课程版链接会失效哦~
 > 
@@ -22,7 +22,7 @@
 | 06 亲自实现一个 PyTorch | [文章](./06ReversedMode.md), [视频](https://www.bilibili.com/video/BV1ae4y1z7E6/) |
 | 07 自动微分的挑战&未来     | [文章](./07Challenge.md), [PPT](./07Challenge.pdf), [视频](https://www.bilibili.com/video/BV17e4y1z73W/) |
 
-备注
+## 备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 

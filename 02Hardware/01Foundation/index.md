@@ -4,7 +4,7 @@
 
 《AI 计算体系》深入 AI 的计算模式，从而理解 AI 的“计算”需要什么。通过 AI 芯片关键指标，了解 AI 芯片要更好的支持“计算”，需要关注那些重点工作。最后通过深度学习的计算核心“矩阵乘”来看对“计算”的实际需求和情况，为了提升计算性能、降低功耗和满足训练推理不同场景应用，对“计算”引入 TF32/BF16，甚至是 FP8 等复杂多样比特位宽的数据精度格式。
 
-内容大纲
+## 内容大纲
 
 > `PPT`和`字幕`需要到 [Github](https://github.com/chenzomi12/AISystem) 下载，网页课程版链接会失效哦~
 >
@@ -20,7 +20,7 @@
 | AI 计算体系 | 06 数据单位：比特位 | [文章](./06BitWidth.md), [PPT](./06BitWidth.pdf), [视频](https://www.bilibili.com/video/BV1WT411k724/) |
 | AI 计算体系 | 07 AI 计算体系总结| [PPT](./07Summary.pdf), [视频](https://www.bilibili.com/video/BV1j54y1T7ii/) |
 
-备注
+## 备注
 
 文字课程开源在 [AISys](https://chenzomi12.github.io/)，系列视频托管[B 站](https://space.bilibili.com/517221395)和[油管](https://www.youtube.com/@ZOMI666/videos)，PPT 开源在[github](https://github.com/chenzomi12/AISystem)，欢迎取用！！！
 
