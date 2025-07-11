@@ -164,19 +164,19 @@ String s2 = new StringBuilder(a).append(b).toString();
 
 - 当计算图中某个节点的数据输入节点均为编译期常量(不同 AI 编译器的定义可能完全不相同)的节点，则可以提前计算出该节点的值来完全替换该节点。
 
-  ![first](images/07constant_fold01.png)
+  ![first](../../imageswtf/03Compiler-03Frontend-images-07constant_fold01.png)
 
   以 AddN 为例，对于两个形状大小为(N,C,H,W)四维常量 Tensor，AddN 的计算结果在编译期间是可以确定的，可以生成一个与该结果等值的数据节点替换掉 AddN。这样就不需要给 Add 节点分配额外的存储资源，在计算图执行的过程中，也不需要反复计算 AddN 这个操作，可直接进行访问。
 
 - 输入形状确定的 Shape 类型的操作，比如 Size、Shape 等操作。这些操作都只与输入的形状有关，与输入的具体值无关，而相比于具体输入值来说，当输入的形状在编译期间是一个可以确定的值时，AI 编译器就可以直接计算出 Shape 类型操作的值。
 
-  ![second](images/07constant_fold02.png)
+  ![second](../../imageswtf/03Compiler-03Frontend-images-07constant_fold02.png)
 
   以 Size 为例，对于形状大小为(1,2,3,4)的四维变量 Tensor，Size 的计算在编译期间是可以确定，AI 编译器会生成一个值为 24 的常量数据节点来替换 Size 节点。
 
 - 数据输入节点不全为编译常量节点，但是这部分节点是可常量折叠的节点，即经过一系列的常量折叠后，该节点会被替换成编译常量节点。
 
-  ![third](images/07constant_fold03.png)
+  ![third](../../imageswtf/03Compiler-03Frontend-images-07constant_fold03.png)
 
   如上图，依旧以 AddN 为例，可以看出 AddN2 并不满足第一类的折叠规则，但是 AI 编译器发现 AddN1 是个可常量折叠的节点，AI 编译器生成一个常量数据节点替换掉 AddN1 后，发现 AddN2 也满足第一类的折叠规则，所以 AI 编译器会再生成一个常量数据节点替换掉 AddN2。
 
@@ -204,7 +204,7 @@ String s2 = new StringBuilder(a).append(b).toString();
 
 5. 常量折叠。判断需要可常量折叠节点集是否为空，如果为空，则说明常量图中的所有常量节点无论替换与否都不会影响原图的计算，这些点通常可能是死代码或者冗余节点，会被后续的优化处理给删除掉，这种情况则不需要进行常量折叠；如果不为空，那么会将生成一个值与该节点的计算结果相同的常量数据节点来替换该节点。
 
-    ![third test](images/07constant_fold03.png)
+    ![third test](../../imageswtf/03Compiler-03Frontend-images-07constant_fold03.png)
 
     如上图中，AddN2 的输出为 Conv（不在常量图中），tensorflow 会计算 AddN2 的输出结果，由于可以肯定其输入要么是编译期常量要么是可折叠常量节点，递归处理其所有输入节点即可。
 

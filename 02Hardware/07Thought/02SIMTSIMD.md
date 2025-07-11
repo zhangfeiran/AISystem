@@ -14,11 +14,11 @@ SIMD 仍然是单线程，不是多线程操作，硬件上仅需要一个计算
 
 $$C[0: 3] = A[0: 3] × B[0: 3]$$
 
-![向量计算](images/02SIMT_SIMD01.png)
+![向量计算](../../imageswtf/02Hardware-07Thought-images-02SIMT_SIMD01.png)
 
 为了使 SIMD 实现一次乘法可以完成多个元素的计算，要求硬件上增加 ALU 单元的数量，因此会有多个处理单元（Process Unit），同时也需要增加功能单元的数据通路数量，由控制单元（Control Unit）将数据传送给 Process Unit，从而实现在单一时钟周期内整体上提升硬件的计算吞吐量。
 
-![SIMD 硬件组成](images/02SIMT_SIMD02.png)
+![SIMD 硬件组成](../../imageswtf/02Hardware-07Thought-images-02SIMT_SIMD02.png)
 
 但是在实际计算的过程中，SIMD 有其优缺点：
 
@@ -92,11 +92,11 @@ SIMT 类似 CPU 上的多线程，有多个计算核心系统，每一个核心�
 
 还是以之前的数组相乘 $C[0: 3] = A[0: 3] × B[0: 3]$ 为例，两个等长数组 Vector A 与 Vector B，需要每个元素逐一对应相乘后得到 Vector C。SIMT 给每个元素分配一个线程，一个线程只需要完成一个元素的乘法，所有线程并行执行完成后，两个数组的相乘就完成了。
 
-![SIMT 计算本质](images/02SIMT_SIMD03.png)
+![SIMT 计算本质](../../imageswtf/02Hardware-07Thought-images-02SIMT_SIMD03.png)
 
 具体到 SIMT 的硬件结构，SIMT 提供一个多核系统（SIMT Core Cluster），CPU 负责将算子（Kernel）加载到 SIMT Core Cluster 中，每个 SIMT 核（SIMT Core）有独立的 RF（Register File）、ALU、Data Cache，但是只有一个指令计数寄存器（Program Counter）和一个指令译码寄存器，指令被同时广播给所有的 SIMT 核，从而执行具体的计算。GPU 则是由多个 SIMT Core Cluster 组成，每个 SIMT Core Cluster 由多个 SIMT Core 构成，SIMT Core 中有多个 Thread Block。
 
-![SIMT 硬件结构](images/02SIMT_SIMD04.png)
+![SIMT 硬件结构](../../imageswtf/02Hardware-07Thought-images-02SIMT_SIMD04.png)
 
 GPU 的 SIMT 可以看作是一个特殊的 SIMD 结构，SIMT 硬件核心流水可以被分为 SIMT 前端（SIMT front-end）和 SIMD 后端（SIMD back-end）。流水线中存在三个调度循环，分别是取指循环、指令发射循环和寄存器访问循环。
 
@@ -106,11 +106,11 @@ GPU 的 SIMT 可以看作是一个特殊的 SIMD 结构，SIMT 硬件核心流�
 
 - 寄存器访问循环包含 Operand Collector、ALU 和 Memory 三个阶段。
 
-![SIMT 硬件核心流水](images/02SIMT_SIMD05.png)
+![SIMT 硬件核心流水](../../imageswtf/02Hardware-07Thought-images-02SIMT_SIMD05.png)
 
 流水线中的三个调度循环共同组成 SIMT 硬件核心流水，其中取指是将具体的指令放在堆栈中，堆栈在运行时就会把所有的线程分发到具体的 ALU 中，在具体执行时采用 SIMD 的方式，SIMT 主要完成具体线程的前端控制。
 
-![核心流水调度](images/02SIMT_SIMD06.png)
+![核心流水调度](../../imageswtf/02Hardware-07Thought-images-02SIMT_SIMD06.png)
 
 结合上述内容，SIMD 和 SIMT 的主要区别和联系如下：
 
@@ -128,23 +128,23 @@ GPU 的 SIMT 可以看作是一个特殊的 SIMD 结构，SIMT 硬件核心流�
 
 回顾 GPU 的线程分级，在图形图像处理中会将图像进行切分，网格（Grid）表示要执行的任务，大的网格会被分成多个小的网格，每个网格中包含了很多相同线程（Threads）数量的块（Blocks），此时线程分层执行，块中的线程独立执行，对像素数据进行处理和计算，可以共享数据，同步数据交换。
 
-![图像处理中的网格切分与并行计算](images/02SIMT_SIMD07.png)
+![图像处理中的网格切分与并行计算](../../imageswtf/02Hardware-07Thought-images-02SIMT_SIMD07.png)
 
 CUDA 并行编程模型基于单程序多数据（Single Program Mutiple Data，SPMD）模式，关于 SPMD 与 SIMT 之间的联系和区别会在之后重点讲解。在 CUDA 编程中，grid 是线程块（block）的阵列集合，线程块映射到 SM 上进行计算处理。一个线程块可包含多个线程束，线程块的大小影响 CUDA Kernel 程序的性能。在 CUDA 架构下，GPU 执行时的最小单位是线程（thread），一个 block 中的线程可存取同一块共享的内存，而且可以快速进行同步。
 
 与 SIMD 不同的是，SIMT 允许程序员为独立、标量线程编写线程级的并行代码，还允许为协同线程编写数据并行代码。为了确保正确性，开发者可忽略 SIMT 行为，很少需要维护一个 warp 块内的线程分支，而是通过维护相关代码，即可获得硬件并行带来的显著的性能提升。在一个线程块（Thread Block）中所有线程执行同一段代码，在英伟达 GPU 中这段代码称为 Kernel，每一个线程有一个自己的线程索引（threadIdx.x）用于计算内存地址和执行控制决策，每个线程在执行时被分配的唯一标识符，因此可以通过程序来准确控制每一个线程。
 
-![线程 ID 与数据并行](images/02SIMT_SIMD08.png)
+![线程 ID 与数据并行](../../imageswtf/02Hardware-07Thought-images-02SIMT_SIMD08.png)
 
 将多个线程块组合在一起就会组成一个 Grid 线程组，因此线程块就可以看作是 SM 的基本调度单元，SM 对应着具体的硬件单元，线程块则是编程所抽象出来的概念。因为有多个线程块进行组合，同时存在硬件计算单元在横向和纵向两个维度的排布，因此线程索引通常由块索引（Block Index）和线程内索引（Thread Index Within Block）组成。其中，块索引用于标识当前线程所在的块（Block），而线程内索引用于标识当前线程在所属块中的位置。
 
 使用 `blockIdx.x` 和 `blockDim.x` 来访问块索引和块维度（Block Dimension）中的 x 分量。`blockIdx.x` 表示当前线程所在的块的 x 方向索引，在 CUDA 中，块索引是一个三维的向量，包括 x、y 和 z 三个分量。`blockDim.x` 表示当前块的 x 方向维度大小，在 CUDA 中，块维度也是一个三维的向量，包括 x、y 和 z 三个分量。通过 `blockIdx.x` 和 `blockDim.x`，可以方便地获取当前线程所在的块的 x 方向索引和当前块在 x 方向上的线程数量，从而进行相应的计算和操作。
 
-![多个线程块组合时线程索引](images/02SIMT_SIMD09.png)
+![多个线程块组合时线程索引](../../imageswtf/02Hardware-07Thought-images-02SIMT_SIMD09.png)
 
 回顾英伟达 GPU 软件和硬件之间的对应关系，线程对应于 CUDA Core，线程以线程块为单位被分配到 SM 上，SM 维护线程块和线程 ID，SM 管理和调度线程执行。每个线程块又按照每个 Warp 中共 32 个线程执行，Warp 是 SM 的调度单位，Warp 里的线程执行 SIMD。Block 线程块只在一个 SM 上通过 Wrap 进行调度，一旦在 SM 上调用了 Block 线程块，就会一直保留到执行完 Kernel。SM 可以同时保存多个 Block 线程块，块间并行的执行。
 
-![CUDA 跟 NVIDIA 硬件架构的关系](images/02SIMT_SIMD10.png)
+![CUDA 跟 NVIDIA 硬件架构的关系](../../imageswtf/02Hardware-07Thought-images-02SIMT_SIMD10.png)
 
 在 AI 框架的开发流程方面，首先会按照编程思想定义神经网络，然后根据 AI 框架编写对应的程序，AI 框架会自动构建计算正向图，根据自动微分原理构建反向图。其中在神经网络中比较重要的算子是矩阵乘，以 CUDA 代码为例实现 $C = A × B$，使用 `blockIdx.x` 和 `blockDim.x` 来访问块索引和块维度。
 

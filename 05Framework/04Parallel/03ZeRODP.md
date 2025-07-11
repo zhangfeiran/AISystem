@@ -12,7 +12,7 @@
 
 在深度学习中，常用的精度格式包括 **FP32**、**FP16**、**BF16** 和 **TF32**。
 
-![常用精度 FP32 FP16 BF16](images/02DataParallel06.png)
+![常用精度 FP32 FP16 BF16](../../imageswtf/05Framework-04Parallel-images-02DataParallel06.png)
 
 - **FP16**：同样是 IEEE 754 标准下的半精度浮点格式。随着深度学习的发展，FP16 逐渐取代了 FP32 的地位。因为相较于 FP32，更低的精度并不会对神经网络的性能产生重大影响。额外的精度不会带来任何好处，反而会更慢、占用更多内存并降低通信速度。FP16 通常用于混合精度训练（MindSpore/PyTorch）。也用于训练后量化，以加快推理速度。其他用于量化的格式还有整数 INT8（8 位整数）、INT4（4 位）甚至 INT1（二进制值）。
 
@@ -41,7 +41,7 @@ torch.backends.npu.matmul.allow_16 = True
 
 混精度训练可以分为两个部分：**半精度** 和 **权重备份**，如图所示，这里使用 FP16 和 FP32 来举例。在训练开始时，准备两套模型状态，其中一套为 FP32 类型（优化器状态和模型参数），另一套为 FP16 类型（模型参数），在前向传播、反向传播时，都使用 FP16 类型的模型参数进行计算；而在参数更新时，将梯度成与学习率 $\eta$ 相乘，更新到 FP32 类型的模型状态上，在新一轮的训练中，再次将 FP32 类型的模型拷贝为 FP16 类型的模型。这个过程就是**混精度训练**。
 
-![混精度训练](images/02DataParallel08.png)
+![混精度训练](../../imageswtf/05Framework-04Parallel-images-02DataParallel08.png)
 
 由于在计算密集的前向传播、反向传播中，使用了 FP16 进行计算，与单精度相比，训练的速度会大幅度提升。另外，由于激活值在训练过程中占用内存的很大部分，使用 FP16 储存激活值在大批量训练时也会节省内存。同时，在分布式环境下使用 FP16 梯度通信量也会降低。
 
@@ -185,7 +185,7 @@ ZeRO-DP 对模型状态进行分区而不是复制它们，并使用动态通信
 
 3. **添加参数分区**（Partition parameters，$P_{os+g+p}$）：又称为 ZeRO-3，在优化器状态和梯度分区的基础上，对参数也进行分区。每个进程只存储自身的参数分区，在前向反向传播时需要从其他进程收集所需的参数分区。这会使通信量增加约 50%，但可以实现与并行度 $N_d$ 成正比的内存减少。
 
-![数据并行](images/02DataParallel09.png)
+![数据并行](../../imageswtf/05Framework-04Parallel-images-02DataParallel09.png)
 
 通过这三个阶段的优化，ZeRO-DP 最终能够在保持数据并行高效的同时，将每个 NPU 的内存消耗降低至 $\frac{1}{N_d}$ 的水平，使得利用少量硬件资源训练万亿参数等超大模型成为可能，接下来进行每个阶段的详细介绍。这里假设模型使用混精度训练，模型参数量为 4$\Psi$。
 
@@ -193,7 +193,7 @@ ZeRO-DP 对模型状态进行分区而不是复制它们，并使用动态通信
 
 根据之前的介绍知道，优化器状态是训练过程中 NPU 内存中的主要保存内容，但只有在参数更新的时候会被用到。ZeRO-1 的核心思想是将优化器状态分布到多个 NPU 上，减少每个 NPU 所需的显存，在需要参数更新时进行聚合。
 
-![数据并行](images/02DataParallel10.png)
+![数据并行](../../imageswtf/05Framework-04Parallel-images-02DataParallel10.png)
 
 1. **数据分片（a）**：从优化器状态分片开始，将优化器状态分成 N 份，每个 NPU 保存一份分片，并将训练批次数据（batch data）分成 N 份，每个 NPU 处理一份数据。
    
@@ -211,7 +211,7 @@ ZeRO-DP 对模型状态进行分区而不是复制它们，并使用动态通信
 
 ZeRO-2 在 ZeRO-1 的基础上进一步优化，通过对梯度（Grad）也进行切分，减少显存占用并提高通信效率。
 
-![数据并行](images/02DataParallel11.png)
+![数据并行](../../imageswtf/05Framework-04Parallel-images-02DataParallel11.png)
 
 1. **数据分片**：从优化器状态和梯度分片开始，将优化器状态和梯度分成 N 份，每个 NPU 保存一份分片，并将训练批次数据（batch data）分成 N 份，每个 NPU 处理一份数据。
 
@@ -231,7 +231,7 @@ ZeRO-2 在 ZeRO-1 的基础上进一步优化，通过对梯度（Grad）也进�
 
 ZeRO-3 在 ZeRO-1 和 ZeRO-2 的基础上进一步优化，通过对优化器状态、梯度和权重进行全面切分，最大化显存节约，这种优化使得训练超大模型成为可能。
 
-![数据并行](images/02DataParallel12.png)
+![数据并行](../../imageswtf/05Framework-04Parallel-images-02DataParallel12.png)
 
 1. **数据分片**：对优化器状态、梯度和权重进行全面切分，每个 NPU 保存一份分片，将训练批次数据（batch data）分成 N 份，每块 NPU 处理一份数据。
 
@@ -265,7 +265,7 @@ ZeRO-Infinity 是 ZeRO 的扩展，可以将深度学习训练扩展到前所未
 
 此外，它为训练具有一千万亿个参数的模型铺平了道路——充分利用系统的全部内存容量，利用 NPU、CPU 和 Non-Volatile Memory Express（NVMe）等所有异构内存组件的能力。
 
-![ZeRO-Infinity](images/02DataParallel13.png)
+![ZeRO-Infinity](../../imageswtf/05Framework-04Parallel-images-02DataParallel13.png)
 
 在 ZeRO-Infinity 中，参数从较慢的内存源（如 CPU 和 NVMe）无缝迁移到 NPU，其中它们被合并为完整的层。梯度计算完成后，这些参数被聚合、重新分区，然后重新卸载回较慢的内存组件。其中内存资源的编排确保了最佳利用和最小的开销。这种创新的方法不仅克服了 NPU 内存的常规限制，而且提升了分布式框架的可扩展性。
 

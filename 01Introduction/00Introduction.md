@@ -16,7 +16,7 @@
 
 ### 课程脑图
 
-![AI 系统全栈](images/00Architecture.png)
+![AI 系统全栈](../imageswtf/01Introduction-images-00Architecture.png)
 
 ## 备注
 

@@ -49,15 +49,15 @@
 
 我们以一个具体的例子来引入：特斯拉 HW3 FSD 芯片（如下图），我们可以看到其单一芯片却有着 CPU，GPU，NPU 多种架构。
 
-![future02](images/07Future02.png)
+![future02](../../imageswtf/02Hardware-02ChipBase-images-07Future02.png)
 
 其之所以有如此异构架构则是由需求（如下图所标示）决定的：身为汽车芯片，其要负责雷达、GPS、地图等等多种功能，这时单一传统的架构就会比较难以高效完成任务：
 
-![future01](images/07Future01.png)
+![future01](../../imageswtf/02Hardware-02ChipBase-images-07Future01.png)
 
 而将各部分组件有机结合的异构芯片就可以更好的处理复杂情况，如下图，我们可以看到 GPU、NPU、Quad Cluster 等等硬件均被集合在一起，通过芯片外的 CPU 等等进行协同控制，这样就可以在多种任务的处理和切换时实现非常好的效果。
 
-![future03](images/07Future03.png)
+![future03](../../imageswtf/02Hardware-02ChipBase-images-07Future03.png)
 
 ## 计算体系迎来异构
 
@@ -73,7 +73,7 @@
 
 下面我们将用一个最常见的 CPU-GPU 异构工作流来给出一个具体的例子，如下图：
 
-![future04](images/07Future04.png)
+![future04](../../imageswtf/02Hardware-02ChipBase-images-07Future04.png)
 
 其具体流程为：
 
@@ -104,11 +104,11 @@
 
 ASIC 工作流示意图如下：
 
-![future06](images/07Future06.png)
+![future06](../../imageswtf/02Hardware-02ChipBase-images-07Future06.png)
 
 从 CPU 到 ASIC，我们会发现架构越来越碎片化，指令作为软件和硬件之间的媒介，其复杂度决定了系统的软硬件解耦程度。典型的处理器平台可以分为 CPU、协处理器、GPU、FPGA、DSA 和 ASIC。随着指令复杂度的提高，单个处理器能够覆盖的场景变得越来越小，处理器的形态也变得越来越多样化。这种碎片化趋势导致构建生态变得越来越困难。这形成了易用性和性能之间的权衡关系，如下图：
 
-![future07](images/07Future07.png)
+![future07](../../imageswtf/02Hardware-02ChipBase-images-07Future07.png)
 
 而在 CPU+XPU 的异构计算中，XPU 的选择决定了整个系统的性能和灵活性特征。GPU 具有较好的灵活性，但性能效率不够极致；DSA 性能优异，但灵活性较差，难以适应复杂计算场景对灵活性的要求；FPGA 的功耗和成本较高，需要进行定制开发，落地案例相对较少；ASIC 的功能完全固定，难以适应灵活多变的复杂计算场景。
 
@@ -134,11 +134,11 @@ ASIC 工作流示意图如下：
 
 了解背景后，我们来正式介绍超异构的概念，如下图：
 
-![future08](images/07Future08.png)
+![future08](../../imageswtf/02Hardware-02ChipBase-images-07Future08.png)
 
 超异构实际上就是集合了三种以上类型引擎/架构的超架构，但是这种集合非简单的集成，而是把更多的异构计算整合重构，各类型处理器间充分、灵活的数据交互，形成统一的超异构计算体系。计算从单核的串行走向多核的并行；又进一步从同构并行走向异构并行。下图为异构计算的发展的概略流程图：
 
-![future09](images/07Future09.png)
+![future09](../../imageswtf/02Hardware-02ChipBase-images-07Future09.png)
 
 超异构有以下基本特征：
 
@@ -146,7 +146,7 @@ ASIC 工作流示意图如下：
 
 2. 复杂计算系统，由分层分块组件组成，如下图所示。超异构计算系统的复杂性主要体现在以下几个方面：不同类型的计算单元具有不同的性能和特性，需要进行统一管理和调度；计算任务可能涉及多个计算节点，需要进行任务分解和数据通信；需要考虑功耗、可靠性等因素，进行系统优化。
 
-![future10](images/07Future10.png)
+![future10](../../imageswtf/02Hardware-02ChipBase-images-07Future10.png)
 
 ## 超异构的挑战与思考
 
@@ -158,7 +158,7 @@ ASIC 工作流示意图如下：
 
 软件需要跨平台复用：跨架构、跨不同处理器类型、跨厂家平台、跨不同位置、跨不同设备类型。因此软件架构的复杂性增长，会成为一个最大的挑战。如下图：
 
-![future11](images/07Future11.png)
+![future11](../../imageswtf/02Hardware-02ChipBase-images-07Future11.png)
 
 2. 解决办法
 
@@ -180,7 +180,7 @@ ASIC 工作流示意图如下：
 
 软硬件协同定义（Co-Design）：软硬件协同定义（Co-Design）是一种设计理念，它强调软件和硬件的协同设计与优化，以实现最佳的系统性能。在 Co-Design 模式下，软件和硬件的设计团队紧密合作，共同探讨系统需求，并提出满足需求的软硬件解决方案。Co-Design 的核心思想是打破软件和硬件之间的传统界限，将软硬件设计视为一个整体，通过协同设计和优化来实现最佳的系统性能。Co-Design 能够充分发挥软件和硬件的各自优势，实现 1+1>2 的效果。
 
-![future12](images/07Future12.png)
+![future12](../../imageswtf/02Hardware-02ChipBase-images-07Future12.png)
 
 在计算机系统的发展历程中，硬件和软件的关系经历了从"硬件定义软件"到"软件定义硬件"的转变。早期的计算机系统，如早期的操作系统，其系统业务逻辑主要由硬件实现，软件只是起到辅助作用，并且软件的构建依赖于硬件提供的接口。然而，随着计算机技术的不断进步，"软件定义硬件"的概念逐渐兴起。
 
@@ -206,7 +206,7 @@ ASIC 工作流示意图如下：
 
 跨平台统一计算架构（如下图）是未来计算资源中心化的关键，通过将孤岛计算资源连接起来，实现计算资源池化，可以显著提升算力利用率。这种架构能够支持应用软件跨同类处理器架构、跨不同类处理器架构、跨芯片平台以及跨云边端运行，满足更复杂应用场景对算力无限的需求，形成开放生态。
 
-![future13](images/07Future13.png)
+![future13](../../imageswtf/02Hardware-02ChipBase-images-07Future13.png)
 
 为了实现软件应用算法对硬件加速的支持，需要调整软件架构，将控制面和计算/数据面分开，并实现接口标准化。同时，通过底层基础软件（编译器）自适应选择计算/数据，使数据输入/输出不仅可以来源于软件，还可以来源于硬件，甚至可以下沉到硬件独立传输计算。
 

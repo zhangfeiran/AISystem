@@ -36,7 +36,7 @@ $$
 
 有了这样的规则，便可以指导我们进行实例的优化，例如下面的实例算子，令 $A,B,C$ 为具体的张量，其他算子均为图示，优化规则如上所述：
 
-![结合律](images/10Algebraic01.png)
+![结合律](../../imageswtf/03Compiler-03Frontend-images-10Algebraic01.png)
 
 根据上述结合律规则，我们可以把 A 与 B 的卷积给抽离出来，讲红色方框部分做简化，这样我们就减少运算算子，也减少了运算开销。
 
@@ -75,7 +75,7 @@ $$
 
 根据这样的规则我们可以看到如下实例的优化：
 
-![交换律](images/10Algebraic02.png)
+![交换律](../../imageswtf/03Compiler-03Frontend-images-10Algebraic02.png)
 
 如图所示，A 是一个张量，相比较先位移再 ReduceSum 的操作顺序，我们可以根据结合律，先 ReduceSum，得到一个维度更小的 batch，再进行 BitShift，显然运算的开销减少了。
 
@@ -111,7 +111,7 @@ $$
 
 根据这样的规则我们可以看到如下实例的优化：
 
-![分配律](images/10Algebraic03.png)
+![分配律](../../imageswtf/03Compiler-03Frontend-images-10Algebraic03.png)
 
 我们会发现，$A\cdot B$ 之后与 $C,D$ 分别做乘法操作时没有必要的，于是可以提取公因式，将 $C,D$ 单独加和再做乘法，将 4 次算子操作降低为 3 次操作，减少了运算开销。
 
@@ -131,7 +131,7 @@ $$
 
 其中还包括更多复杂的简化规则供读者参考。
 
-![DNNFusion](images/10Algebraic04.png)
+![DNNFusion](../../imageswtf/03Compiler-03Frontend-images-10Algebraic04.png)
 
 ## 运行简化
 
@@ -162,11 +162,11 @@ $$
 
 我们用图来展示上述两中运行化简：
 
-![对合算子](images/10Algebraic05.png)
+![对合算子](../../imageswtf/03Compiler-03Frontend-images-10Algebraic05.png)
 
 如图所示，对于对合算子 Op1,两次对合后，根据对合性质可得等价于没有操作，所以运行化简后只剩下 Op2。
 
-![幂等算子](images/10Algebraic06.png)
+![幂等算子](../../imageswtf/03Compiler-03Frontend-images-10Algebraic06.png)
 
 如图所示，对于幂等算子 Op1，多个幂等算子等价与一次操作，于是运行化简后等价与一个 Op1 算子。
 
@@ -180,7 +180,7 @@ $$
 (S_1+Mat_1)+(S_2+Mat_2) \rightarrow(S_1+S_2)+(Mat_1+Mat_2)
 $$
 
-![BroadcastExample](images/10Algebraic07.png)
+![BroadcastExample](../../imageswtf/03Compiler-03Frontend-images-10Algebraic07.png)
 
 假设矩阵的维度为 4，则一个向量与 4 维矩阵相加时，要先广播为 4 维，再与 Mat 相加，显然左式需要广播两次；但我们可以通过位置替换，将两个向量首先相加再广播，此时就节省了一个广播的开销，达到我们优化的目的。
 

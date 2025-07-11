@@ -8,7 +8,7 @@
 
 在 The Deep Learning Compiler: A Comprehensive Survey 文中做了一个调研，横向对比了**TVM、nGraph、TC、Glow 和 XLA**共五个热门 AI 编译器，如下图所示。
 
-![五个热门 AI 编译器横向对比图](images/04Future01.png)
+![五个热门 AI 编译器横向对比图](../../imageswtf/03Compiler-02AICompiler-images-04Future01.png)
 
 下面将分别介绍这五个业界主流的 AI 编译器。
 
@@ -28,7 +28,7 @@ XLA（加速线性代数）是一个专门针对特定领域的线性代数编�
 
 在 XLA 的优化过程中，关键的挑战之一是如何将原本复杂的大算子打开成小算子。这需要对模型的计算逻辑进行深入分析和理解，以找出合适的切分点和拆解方式。而小算子经过优化后，可能需要重新融合成新的大算子，这要求对各个小算子的优化效果进行全面评估，并采取合适的融合策略。最后，通过使用高级优化语言（如 HLO/LLO）和底层编译器（如 LLVM IR）来实现整体的设计，所有的优化 Pass 规则都需要手工提前指定，以确保编译器能够正确地识别和应用优化策略。这种综合利用高级语言和底层编译器的设计，使得 XLA 能够在保持模型功能不变的前提下，显著提升模型的执行效率，为神经网络模型的推理过程提供了强大的支持。
 
-![TVM logo](images/04Future02.png)
+![TVM logo](../../imageswtf/03Compiler-02AICompiler-images-04Future02.png)
 
 ### nGraph
 
@@ -52,7 +52,7 @@ Glow 是 Meta 开源的一个强大的深度学习推理框架，它不仅具备
 
 此外，Glow 还支持灵活的部署选项，可以适用于嵌入式设备、云端服务器和边缘计算等多种场景，满足不同应用需求。在 Meta 内部，Glow 已经被广泛应用于各种项目中，为用户提供快速、高效的深度学习推理服务，助力各种应用领域的发展和创新。
 
-![nGraph logo](images/04Future03.png)
+![nGraph logo](../../imageswtf/03Compiler-02AICompiler-images-04Future03.png)
 
 ## AI 编译器面临挑战
 
@@ -74,7 +74,7 @@ Python 静态化通常指的是将 Python 代码转换为静态类型语言的�
 
 如图所示，Python 执行时，首先会将 .py 文件中的源代码编译成 Python 的 byte code(字节码)，其格式为.pyc。然后编译器对这些字节码进行编译处理，再对程序进行执行操作。
 
-![nGraph logo](images/04Future04.png)
+![nGraph logo](../../imageswtf/03Compiler-02AICompiler-images-04Future04.png)
 
 Python 在执行时一般有两种方法。第一种是生成字节码后通过 Python 虚拟机（Python Virtual Machine）交给硬件去执行，这也是最通用的一种执行方式。第二种是通过 Python 提供的 JIT（Just-In-Time）即时编译器进行编译生成一个机器码，然后直接交给硬件去执行。
 
@@ -90,7 +90,7 @@ Python 在执行时一般有两种方法。第一种是生成字节码后通过 
 
 这种混合编译和解释的方式使得 CPython 具有了良好的灵活性和性能表现。编译过程提前将代码转换成字节码，避免了每次执行都需要重新解析源代码的开销，而解释器内部的 C 函数库则为执行字节码指令提供了高效的底层支持。这样一来，CPython 在保持了 Python 语言的灵活性和易用性的同时，也能够在一定程度上提高程序的执行效率。
 
-![CPython](images/04Future05.png)
+![CPython](../../imageswtf/03Compiler-02AICompiler-images-04Future05.png)
 
 **PyPy**
 
@@ -100,7 +100,7 @@ PyPy 是一个基于 RPython 语言构建的 Python 解释器实现。与传统�
 
 同时，PyPy 也保持了与 CPython 的兼容性，这意味着它可以运行绝大部分的 Python 代码，并且与 CPython 在语言特性和标准库方面保持一致。这使得开发者可以无需修改现有的 Python 代码，就可以享受到 PyPy 带来的性能提升。
 
-![PyPy](images/04Future06.png)
+![PyPy](../../imageswtf/03Compiler-02AICompiler-images-04Future06.png)
 
 此时则可以提出第一个 Python 静态化的操作方法，即使用 Python JIT 虚拟机：期望在 Python 解释执行的基础上增加 JIT 编译加速的能力，例如使用 PyPy 或者 CPython，但由于前期设计问题 Python JIT 虚拟机兼容难。
 

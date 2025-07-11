@@ -28,11 +28,11 @@ AI 芯片主要是为实现并行计算，从程序并行的角度出发，主�
 
 SISD 系统中每个指令部件每次仅译码一条指令，而且在执行时仅为操作部件提供一份数据，此时支持串行计算，硬件并不支持并行计算，在时钟周期内 CPU 只能处理一个数据流。
 
-![SISD](images/01introduction01.png)
+![SISD](../../imageswtf/02Hardware-07Thought-images-01introduction01.png)
 
 目前 CPU 和 GPU 主要用到的并行计算架构是 SIMD，处理器硬件中添加了多个 PU（Process Unit）单元，此时一个控制器控制多个处理器，同时对一组数据中每一个数据分别执行相同的操作，实现并行计算。SIMD 主要执行向量、矩阵等数组运算，处理单元数目固定，适用于科学计算，特点是处理单元数量很多，但是处理单元速度会受到计算机通信带宽数据传输速率的限制。
 
-![SIMD](images/01introduction02.png)
+![SIMD](../../imageswtf/02Hardware-07Thought-images-01introduction02.png)
 
 英伟达 GPU 架构围绕可扩展的多线程流式多处理器 (Streaming Multiprocessors，SM) 阵列构建，当主机 CPU 上的 CUDA 程序调用内核网格时，网格的块被枚举并分发到具有可用执行能力的多处理器。一个线程块的线程在一个 SM 上并发执行，多个线程块可以在一个 SM 上并发执行，当线程块终止时，新块在空出的 SM 上启动，SM 使 GPU 同时执行数百个线程。
 
@@ -44,7 +44,7 @@ SISD 系统中每个指令部件每次仅译码一条指令，而且在执行时
 
 在神经网络中，单个神经元展开，其中最核心的计算为矩阵乘 $(X·W)$，无论 FFN 还是 CNN，早期的 ALSTN，亦或是大模型中的 Transformer 都大量地使用到矩阵乘计算。
 
-![神经网络架构图](images/01Introduction03.png)
+![神经网络架构图](../../imageswtf/02Hardware-07Thought-images-01Introduction03.png)
 
 > FFN (Feedforward Neural Network)：是一种最简单的神经网络结构，由多个全连接层组成，每一层的神经元与下一层的神经元全连接。FFN 主要用于在神经网络中进行特征提取和非线性变换。
 >
@@ -64,7 +64,7 @@ SISD 系统中每个指令部件每次仅译码一条指令，而且在执行时
 
 在 AI 框架的开发流程中，首先由算法工程师定义神经网络，然后使用 AI 框架（如 PyTorch、MindSpore、PaddlePaddle 等框架）编写对应的程序；AI 框架自动构建正向计算图，根据自动微分机制构建反向计算图；最后将计算图转变成算子的执行序列，算子最终会执行在底层 AI 芯片上。
 
-![AI 框架的开发流程](images/01introduction04.png)
+![AI 框架的开发流程](../../imageswtf/02Hardware-07Thought-images-01introduction04.png)
 
 ### 硬件模型
 

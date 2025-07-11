@@ -48,7 +48,7 @@ $$
 
 即如图所示，前向自动微分（tangent mode AD）和后向自动微分（adjoint mode AD）分别计算了 Jacobian 矩阵的一列和一行。
 
-![微分的两种模式](images/03GradMode01.png)
+![微分的两种模式](../../imageswtf/05Framework-02AutoDiff-images-03GradMode01.png)
 
 前向自动微分（tangent mode AD）可以在一次程序计算中通过链式法则，得到：
 
@@ -80,7 +80,7 @@ $$
 
 - 输出变量：假设输出变量维度为 $m$，这里 $m = 1$，输出变量就是 $y1$，也就是 $f(x1,x2)$。
 
-![正向计算图](images/03GradMode02.png)
+![正向计算图](../../imageswtf/05Framework-02AutoDiff-images-03GradMode02.png)
 
 转化成如上 DAG（有向无环图）结构之后，我们可以很容易分步计算函数的值，并求取它每一步的导数值，然后，我们把 $df/dx_1$ 求导过程利用链式法则表示成如下的形式：
 
@@ -114,7 +114,7 @@ $$
 
 可以看出，左侧是源程序分解后得到的基本操作集合，而右侧则是每一个基本操作根据已知的求导规则和链式法则由上至下计算的求导结果。
 
-![正向 AD 计算流程](images/03GradMode03.png)
+![正向 AD 计算流程](../../imageswtf/05Framework-02AutoDiff-images-03GradMode03.png)
 
 ### 计算过程
 
@@ -195,7 +195,7 @@ $$
 
 从下图可以看出来，reverse mode 和 forward mode 是一对相反过程，reverse mode 从最终结果开始求导，利用最终输出对每一个节点进行求导。下图虚线就是反向模式。
 
-![正反向计算图](images/03GradMode04.png)
+![正反向计算图](../../imageswtf/05Framework-02AutoDiff-images-03GradMode04.png)
 
 ### 计算过程
 
@@ -215,7 +215,7 @@ $$
 
 可以看出，左侧是源程序分解后得到的基本操作集合，而右侧则是每一个基本操作根据已知的求导规则和链式法则**由下至上**计算的求导结果。
 
-![反向 AD 计算流程](images/03GradMode05.png)
+![反向 AD 计算流程](../../imageswtf/05Framework-02AutoDiff-images-03GradMode05.png)
 
 1. 计算 $y$ 对 $v_5$ 的导数值，即 $\overline{v}_5=\overline{y}=1$；
 2. 计算 y 对 $v_4$ 的导数值，$\overline{v}_4=\overline{v}_5\frac{\delta{v_5}}{\delta{v_4}}=1$；

@@ -70,7 +70,7 @@
 
 在现在的 AI 框架中，通常都是采取的多种策略的混合并行来加速模型训练的。而要支持这种多种并行策略的训练模型，就需要涉及不同“切分”的模型部分如何通信。
 
-![AI 训练图切分](images/04BasicNvlink01.png)
+![AI 训练图切分](../../imageswtf/02Hardware-04NVIDIA-images-04BasicNvlink01.png)
 
 如上图所示，在 AI 计算框架中，我们需要将原来的一个网络模型进行切分，将其分布在不同的机器上进行计算，这里通过在模型中插入 Send 和 Recv 节点来进行通信。
 
@@ -82,7 +82,7 @@
 
 在 AI 训练中，分布式通信是至关重要的，特别是在处理大模型和海量数据时。分布式通信涉及不同设备或节点之间的数据传输和协调，以实现并行计算和模型参数同步，如下图所示。
 
-![GPU 服务结构](images/04BasicNvlink02.png)
+![GPU 服务结构](../../imageswtf/02Hardware-04NVIDIA-images-04BasicNvlink02.png)
 
 在机器内通信方面，有几种常见的硬件：
 
@@ -100,7 +100,7 @@
 
 在了解硬件之后，实现通信不可或缺的是提供集合通信功能的库。其中，最常用的集合通信库之一是 MPI（Message Passing Interface），在 CPU 上被广泛应用。而在英伟达 GPU 上，最常用的集合通信库则是 NCCL（NVIDIA Collective Communications Library）。
 
-![NVLink&NVSwitch](images/04BasicNvlink03.png)
+![NVLink&NVSwitch](../../imageswtf/02Hardware-04NVIDIA-images-04BasicNvlink03.png)
 
 如上图所示，通过 NCCL 库，我们可以利用 NVLink 或 NVSwitch 将不同的 GPU 相互连接起来。NCCL 在算法层面提供了外部 API，通过这些 API，我们可以方便地进行跨多个 GPU 的集合通信操作。NCCL 的 API 覆盖了常见的集合通信操作，如广播、归约、全局归约、全局同步等，为开发者提供了丰富而高效的并行计算工具。
 
@@ -110,7 +110,7 @@
 
 例如，一对多的广播（broadcast）、多对一的收集（gather）、多对多的收集（all-gather）、一对多的发散（scatter）、多对一的规约（reduce）、多对多的规约（all-reduce）、组合的规约与发散（reduce-scatter）、多对多的全互连（all-to-all）等。下面我们简单介绍几个。
 
-![集合通信](images/04BasicNvlink04.png)
+![集合通信](../../imageswtf/02Hardware-04NVIDIA-images-04BasicNvlink04.png)
 
 - **Gather** 操作属于多对一的通信原语，具有多个数据发送者，一个数据接收者，可以在集群内把多个节点的数据收集到一个节点上，他的反向操作对应 Scatter。
 
@@ -136,23 +136,23 @@ NVLink 和 NVSwitch 是英伟达推出的两项革命性技术，它们正在重
 
 ### NVLink 发展
 
-![NVLink 发展](images/04BasicNvlink05.png)
+![NVLink 发展](../../imageswtf/02Hardware-04NVIDIA-images-04BasicNvlink05.png)
 
 如上图所示，从 Pascal 架构到 Hoppe 架构，NVLink 已经经过了四代的发展演进。在 2024 年的 GTC 大会上，英伟达发布了 Blackwell 架构，其中 NVLink 再次更新，发布了第五代 NVLink，其中互联带宽达到了 1800GB/s。每一层 NVLink 的更新，其每个 GPU 的互联带宽都是在不断的提升，其中 NVLink 之间能够互联的 GPU 数，也从第一代的 4 路到第四代的 18 路。最新的 Blackwell 架构其最大互联 GPU 数，仍是 18 路并未增加。
 
-![NVLink 发展](images/04BasicNvlink06.png)
+![NVLink 发展](../../imageswtf/02Hardware-04NVIDIA-images-04BasicNvlink06.png)
 
 从上图可以看出，在 P100 中每一个 NVLink 只有 40GB/s，而从第二代 V100 到 H100 每一个 NVLink 链路都有 50GB/s，通过增加了链路的数量使得整体带宽增加。
 
 ### NVSwitch 发展
 
-![NVSwitch 发展](images/04BasicNvlink07.png)
+![NVSwitch 发展](../../imageswtf/02Hardware-04NVIDIA-images-04BasicNvlink07.png)
 
 如上图所示，NVSwitch 技术从 Volta 架构到 Hopper 架构，经历了三代的演进与发展。在每一代中，每个 GPU 互联的芯片模组数量保持不变，都为 8 个，这意味着互联的基本结构保持了稳定性和一致性。随着 NVLink 架构的升级，GPU 到 GPU 之间的带宽却实现了显著的增长，因为 NVSwitch 就是 NVLink 具体承载的芯片模组，从 Volta 架构的 300GB/s 增加到了 Hopper 架构的 900GB/s。
 
 下面我们来看下 NVLink 与 NVSwitch 在服务器中的关系。
 
-![NVSwitch 发展](images/04BasicNvlink08.png)
+![NVSwitch 发展](../../imageswtf/02Hardware-04NVIDIA-images-04BasicNvlink08.png)
 
 如上图所示，在 P100 中只有 NVLink 的，GPU 间通过 CubeMesh 进行互联。在 P100 中，每一个 GPU 有 4 路进行互联，每 4 个组成一个 CubeMesh。
 

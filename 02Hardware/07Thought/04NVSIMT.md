@@ -36,15 +36,15 @@ SIMT 是标量指令的多个指令流，可以动态地把线程按 wrap 分组
 
 第一个迭代 Warp0 执行第 0~32 个线程：
 
-![第一个迭代 Warp0](images/04NVSIMT01.png)
+![第一个迭代 Warp0](../../imageswtf/02Hardware-07Thought-images-04NVSIMT01.png)
 
 第二个迭代 Warp1 执行第 33~64 个线程：
 
-![第二个迭代 Warp1](images/04NVSIMT02.png)
+![第二个迭代 Warp1](../../imageswtf/02Hardware-07Thought-images-04NVSIMT02.png)
 
 以此类推，第二十一个迭代 Warp20 执行第 20x33+1 ~ 20x33+32 个线程：
 
-![第二十一个迭代 Warp20](images/04NVSIMT03.png)
+![第二十一个迭代 Warp20](../../imageswtf/02Hardware-07Thought-images-04NVSIMT03.png)
 
 由于程序并行执行最大的瓶颈是访存和控制流，因此 SIMD 架构中单线程 CPU 通过大量控制逻辑进行超前执行、缓存、预取等机制来强行缓解计算瓶颈。
 
@@ -54,19 +54,19 @@ SIMT 架构 GPU 通过细粒度的多线程（Fine-Grained Multi-Threading，FGM
 
 Warp 是在不同地址数据下，执行相同指令的线程集合，所有线程执行相同的代码，可以看出 Thread Warp 中有很多个 Thread，多个 Warp 组成 SIMD Pipeline 执行对应的操作。
 
-![Thread Warp](images/04NVSIMT04.png)
+![Thread Warp](../../imageswtf/02Hardware-07Thought-images-04NVSIMT04.png)
 
 SIMT 架构通过细粒度多线程（FGMT）隐藏延迟，SIMD Pipeline 中每个线程一次执行一条指令，Warp 支持乱序执行以隐藏访存延迟，并不是通过顺序的方式调度执行，此外线程寄存器值都保留在 RF（Register File）中，并且 FGMT 允许长延迟。英伟达通过添加 Warp Schedluer 硬件调度，使 Warp 先访存完毕之后交给 SIMD Pipeline 去执行尽可能多的指令，隐藏其它 Warp 的访存时间。
 
-![细粒度多线程（FGMT）](images/04NVSIMT05.png)
+![细粒度多线程（FGMT）](../../imageswtf/02Hardware-07Thought-images-04NVSIMT05.png)
 
 SIMT 相比 SIMD 在可编程性上最根本性的优势在于硬件层面解决了大部分流水编排的问题，Warp 指令级并行中每个 warp 有 32 个线程和 8 条执行通道，每个时钟周期执行一次 Warp，一次 Warp 完成 24 次操作。
 
-![warp 指令执行的时序图](images/04NVSIMT06.png)
+![warp 指令执行的时序图](../../imageswtf/02Hardware-07Thought-images-04NVSIMT06.png)
 
 在 GPU 宏观架构层面，GDDR 里面的数据通过内存控制器（Memory Controller）传输到片内总线（Interconnection Network），然后分发到具体的核心（Cuda Core/Tensor Core），在每个执行核心中会有 SIMD 执行单元，从而实现并行计算。
 
-![GPU 数据存取与并行计算](images/04NVSIMT07.png)
+![GPU 数据存取与并行计算](../../imageswtf/02Hardware-07Thought-images-04NVSIMT07.png)
 
 ## AMD 编程模型
 
@@ -78,15 +78,15 @@ AMD 的显卡也是有大量的计算单元和计算核心，为什么没有 SIM
 
 2023 年 AMD 发布 MI300X，将计算拆分到加速器复合芯片 (XCD) 上，每个 XCD 包含一组核心和一个共享缓存。具体来说，每个 XCD 物理上都有 40 个 CDNA 3 计算单元，其中 38 个在 MI300X 上的每个 XCD 上启用。XCD 上也有一个 4 MB 二级缓存，为芯片的所有 CU 提供服务。MI300X 有 8 个 XCD，总共有 304 个计算单元。以 CDNA 3 架构的 MI300X 可以将所有这些 CU 公开为单个 GPU。
 
-![ADM CDNA3 架构](images/04NVSIMT08.png)
+![ADM CDNA3 架构](../../imageswtf/02Hardware-07Thought-images-04NVSIMT08.png)
 
 每个 CU 有 4 个 SIMD 计算单元，每个周期 CU 调度程序会从 4 个 SIMD 中选择一个进行执行，并检查线程是否准备好执行。AMD MI300 支持 ROCm 6，支持 TF32 和 FP8 数据类型，Transformer Engine 和结构化稀疏性，AI/ML 框架等。
 
-![ADM CDNA3 CU 架构](images/04NVSIMT09.png)
+![ADM CDNA3 CU 架构](../../imageswtf/02Hardware-07Thought-images-04NVSIMT09.png)
 
 英伟达的 H100 由 132 个流式多处理器 （SM）组成，作为一个大型统一的 GPU 呈现给程序员。计算通过 CUDA 程序分发到具体的核心（Cuda Core/Tensor Core），每个执行核心有 SIMD 执行单元，从而实现并行计算。
 
-![NVIDIA Hopper 架构](images/04NVSIMT10.png)
+![NVIDIA Hopper 架构](../../imageswtf/02Hardware-07Thought-images-04NVSIMT10.png)
 
 ## 小结与思考
 

@@ -10,7 +10,7 @@
 
 实际上，计算图的执行方式，可以分为两种模式：1）逐算子下发执行的交互式方式，如 PyTroch 框架；2）以及整个计算图或者部分子图一次性下发到硬件进行执行，如 TensorFlow 和 MindSpore。无论采用哪种模式，其大致架构如下所示。
 
-![计算图执行通用架构](images/framework05.png)
+![计算图执行通用架构](../../imageswtf/05Framework-03DataFlow-images-framework05.png)
 
 ## 图调度
 
@@ -38,7 +38,7 @@ $$ f(x1,x2)=ln(x1)+x1*x2−sin(x2) $$
 
 下图是函数对应的计算图，一共有 5 个算子：
 
-![正向计算图](images/forward_mode03.png)
+![正向计算图](../../imageswtf/05Framework-03DataFlow-images-forward_mode03.png)
 
 AI 框架根据上述计算图的数据流的依赖关系，在单设备环境下，依次调用具体的算子可以如下所示：
 
@@ -67,7 +67,7 @@ Sub_grad(v5, v5_delta) -> v4_delta
 
 图中按照数据流约束执行对应的计算图的一个可能调度序列。其中蓝色为正向计算时候用到的算子，红色为反向计算时候用到的算子。这种调度方式主要以 PyTorch 的默认执行方式，TensorFlow 的 eager 模式，以及 MindSpore 的 PyNative 模式为主。
 
-![执行队列时间轴](images/forward_mode02.png)
+![执行队列时间轴](../../imageswtf/05Framework-03DataFlow-images-forward_mode02.png)
 
 ### 算子并发调度
 
@@ -79,14 +79,14 @@ Sub_grad(v5, v5_delta) -> v4_delta
 
 先进先出队列中的一个节点被分配给线程池中的线程调度执行时，这个线程会一次执行完计算图中所有低代价节点；部分 AI 框架会执行预编译阶段，在计算图调度模块中预先遍历计算图，区分高代价节点和低代价加点，并对其优先级根据具体情况进行按等级划分。假设遇到高代价节点时，将该节点派发给线程池中其他线程执行，从而实现算子并发调度执行。
 
-![算子多队列并发调度](images/forward_mode04.png)
+![算子多队列并发调度](../../imageswtf/05Framework-03DataFlow-images-forward_mode04.png)
 
 ### 算子异构调度
 
 在手机端侧异构计算环境中，主要存在 CPU、GPU 以及 NPU 等多种异构的计算 IP，因此一张计算图可以由运行在不同计算 IP 的算子组成为异构计算图，继续以
 :eqref:`autodiff_04_eq1`为例，下图展示了一个在端侧 SoC 中典型的由异构 IP 共同参与的计算图。
 
-![算子异构调度](images/forward_mode05.png)
+![算子异构调度](../../imageswtf/05Framework-03DataFlow-images-forward_mode05.png)
 
 假设该手机 SoC 芯片有 CPU、GPU 和 NPU 三款计算 IP，所述计算图由如下几类异构计算 IP 对应的算子组成：
 
@@ -114,7 +114,7 @@ AI 框架生成计算图后，经过图调度模块对进行图进行标记，�
 
 单算子执行类似于串行执行，将计算图展开为具体的执行序列，按照执行序逐个 Kernel 执行，如图所示。其特点为执行顺序固定，单线程执行，对系统资源要求相对较低。
 
-![算子异构调度](images/forward_mode06.png)
+![算子异构调度](../../imageswtf/05Framework-03DataFlow-images-forward_mode06.png)
 
 单算子执行的一般执行过程：算子在高级语言如 Python 侧被触发执行后，经过 AI 框架初始化，其中需要确定算子的输入输出数据、算子类型、算子大小以及对应的硬件设备等信息，接着 AI 框架会为该算子预分配计算所需的内存信息，最后交给具体的硬件加速芯片执行具体的计算。
 
@@ -138,7 +138,7 @@ AI 框架生成计算图后，经过图调度模块对进行图进行标记，�
 
 计算图下沉的执行方式避免了在计算过程中，host 主机侧和 device 设备侧频繁地进行交互，CPU 下发一个算子到 NPU，再从队列中取出下一个节点下发到 NPU，因此可以获得更好的整体计算性能。然而计算图下沉执行的方式也存在一些局限，例如算子在动态 Shape，复杂控制流、副作用等场景下会面临较大的技术挑战。
 
-![图下沉硬件执行](images/graph_framework01.png)
+![图下沉硬件执行](../../imageswtf/05Framework-03DataFlow-images-graph_framework01.png)
 
 ### 图切分与多设备执行
 
@@ -148,7 +148,7 @@ AI 框架生成计算图后，经过图调度模块对进行图进行标记，�
 
 下面以简单的模型并行对神经网络模型的计算图进行切分，对模型按层数来切分，也可以按照模型单一层横向来切分出不同的子图。
 
-![针对 Transformer 模型并行](images/model_parallel02.png)
+![针对 Transformer 模型并行](../../imageswtf/05Framework-03DataFlow-images-model_parallel02.png)
 
 多计算设备环境下执行计算图，AI 框架的运行时需要解决，如何将计算图中的具体计算，放置到不同设备上以及如何管理跨设备数据传输两个问题：
 
@@ -156,7 +156,7 @@ AI 框架生成计算图后，经过图调度模块对进行图进行标记，�
 
 2. **跨设备通信**：子图被放置不同设备上，此时 AI 框架会为计算图新增一些跨设备的链接和通信节点（All Reduce 或 All Gather 等集合通信），实现跨设备数据传输。
 
-![基本的 Inception 模块执行策略](images/model_parallel01.png)
+![基本的 Inception 模块执行策略](../../imageswtf/05Framework-03DataFlow-images-model_parallel01.png)
 
 实际上做好计算图切分，并把计算图映射到多设备是一个复杂的组合优化问题，目前针对大模型在千卡集群规模下同时进行训练的最优并行策略寻优，称为自动并行。
 
@@ -168,7 +168,7 @@ PyTorch 的函数是一个非常复杂核心的模块，其大部分代码都是
 
 以 PyTorch 的加法为例，假设调用 torch.add 函数 API 时，AI 框架总共会经历两次调度：
 
-![PyTorch 算子执行](images/dispatch03.png)
+![PyTorch 算子执行](../../imageswtf/05Framework-03DataFlow-images-dispatch03.png)
 
 第一次调度会根据执行张量的设备（device）和布局（layout）动态选择对应的实现函数，比如 `<CPU, Strided> Tensor`，`<CPU, Sparse> Tensor`或者`<GPU, , Strided> Tensor`。不同设备布局的实现，可能会编译在不同的动态链接库里。
 

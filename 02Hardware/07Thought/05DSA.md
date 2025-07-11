@@ -89,7 +89,7 @@ int main() {
 
 在指令流水线编排方面，最重要的是从硬件设计上解决 SIMD data path 流水编排问题。程序执行最大的瓶颈是访存和控制流，单线程 CPU 需要大量资源进行分支预测、超前执行、缓存、预取等机制来缓解访存和控制流遇到的瓶颈。SIMD 往往依赖 CPU 自身乱序、投机、缓存和预取等能力来缓解。英伟达 GPU 则是依靠多线程交错执行提升整体并行计算的性能，大量的线程通过不同的 block 和不同的线程读取数据和执行计算指令。
 
-![指令流水线](images/05DSA01.png)
+![指令流水线](../../imageswtf/02Hardware-07Thought-images-05DSA01.png)
 
 即使在 DSA 上为 SIMD 硬件封装了 SIMT 前端，如果遇到执行指令有依赖，基础性能也会非常差，流水编排仍然需要开发者动手，想写出开箱即用，性能较优的代码同样很难。
 
@@ -97,13 +97,13 @@ int main() {
 
 增加了 SIMT 前端硬件，通过线程组 Warp 隐藏线程指令流水。在 CUDA 编程模型中，每一个线程块（thread block）内部需要有很多并行线程，隐式分成了若干个 Warp，每个 Warp 包含串行交错的访存和计算。GPU 通过 Warp Scheduler 动态交错执行，如果一组 Warp0 流水阻塞就会切到下一个 Warp1，隐式通过 Warp 的并行掩盖指令流水阻塞，因此开发者可以得到较好的性能。
 
-![通过 Warp 并行掩盖流水阻塞](images/05DSA02.png)
+![通过 Warp 并行掩盖流水阻塞](../../imageswtf/02Hardware-07Thought-images-05DSA02.png)
 
 DSA 硬件架构同样可以引入 Warp Scheduler 进行指令流水掩盖，让每个 DSA 核执行多个线程，相互掩盖流水线阻塞。英伟达 GPU 使用 Warp 来掩盖指令流水是基于运行时的具体信息，而开发者和编译器只能基于静态信息进行流水编排，很难做到足够均衡，使得 SIMD/DSA 在进行手工或者编译器自动流水编排时相对困难，资深开发者也很难把流水编排得足够好。
 
 增加 SIMT 前端硬件同样会带来开销，但是可以实现流水阻塞掩盖，通过 SIMT 表达将接口暴露给用户，让用户主动写多线程，warp scheduler 在硬件层面实现多线程相互掩盖流水阻塞。SIMD 指令掩盖可以通过 SIMT 表达实现用户写通用单线程，同时 warp 分组组成 SIMD 指令。
 
-![SIMT 前端实现流水阻塞掩盖](images/05DSA03.png)
+![SIMT 前端实现流水阻塞掩盖](../../imageswtf/02Hardware-07Thought-images-05DSA03.png)
 
 但是 CUDA 没有解决 DSA 指令掩盖，目前只是通过给开发者一个 Warp 概念，透传指令 API 来解决表达和使用的问题，因此 CUDA 的上手门槛并不低，需要在前期充分了解英伟达 GPU 的硬件细节。
 
@@ -113,23 +113,23 @@ SPMD 编程模型对分支预测和控制流的高容忍度是支撑易用性的
 
 英伟达 GPU 可以使线程在 Warp-base SIMD 上执行不同的分支，每个线程都可以执行带条件控制流指令（Conditional Control Flow Instructions），同时不同线程间可以分别执行不同的控制流路径（Different Control Flow Paths），比如分别执行不同的 Thread W，Thread X 和 Thread Y 控制流执行路径。
 
-![分支预测机制](images/05DSA04.png)
+![分支预测机制](../../imageswtf/02Hardware-07Thought-images-05DSA04.png)
 
 但是 SIMT 的控制流仍然存在很多问题，因此不推荐在 CUDA 编程中出现大量的 if/else 语句。通常使用 SIMD 流水线来节省控制逻辑上的面积，例如将 Scalar 线程放在 Warps 里面。当 Warp 内部的线程分支到不同的执行路径时，就会发生分支执行冲突，比如当存在 Path 1 和 Path 2 两个分支路径时，可以使得不同时间执行不同的路径，但是这样会增加时耗。
 
-![分支执行冲突](images/05DSA05.png)
+![分支执行冲突](../../imageswtf/02Hardware-07Thought-images-05DSA05.png)
 
 为了解决分支预测的问题，动态 Warp Formating/Merging 在分支后动态合并执行相同指令的线程，从正在等待的 Warps 中形成新的 Warps，分支下每条路径线程用于创建新的 Warp。可以将 Warp X 和 Warp Y 合并为 Warp Z，从而更好地执行相同指令。
 
-![动态 Warp 合并](images/05DSA06.png)
+![动态 Warp 合并](../../imageswtf/02Hardware-07Thought-images-05DSA06.png)
 
 当存在 Path 1 和 Path 2 两条路径的时候，由于某些时钟周期为空，因此在动态合并分支之后执行相同指令的线程，以便同时执行不同的代码路径，从而避免线程之间的等待和资源浪费。
 
-![动态分支合并](images/05DSA07.png)
+![动态分支合并](../../imageswtf/02Hardware-07Thought-images-05DSA07.png)
 
 动态 Warp 分组（Dynamic Warp Formation）更多是在编译器层面解决分支预测的问题，根据线程执行情况和数据依赖性动态组织 Warp 中的线程，以提高并行计算性能和资源利用率，优化 GPU 计算，提高程序的执行效率。
 
-![动态 Warp 分组](images/05DSA08.png)
+![动态 Warp 分组](../../imageswtf/02Hardware-07Thought-images-05DSA08.png)
 
 ### 交互方式
 

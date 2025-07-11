@@ -22,7 +22,7 @@ ISA 是处理器支持的所有指令的语义，包括指令本身及其操作�
 
 现在从更宏观的视角来看看指令集架构，可以将指令集架构理解为一个抽象层，它是处理器底层硬件与运行在硬件上的软件之间桥梁和接口，如下层所示上面是软件部分，下面是硬件部分。
 
-![ISA](images/02CPUISA01.png)
+![ISA](../../imageswtf/02Hardware-02ChipBase-images-02CPUISA01.png)
 
 计算机可以通过指令集，判断这一段二进制码是什么意思，然后通过 CPU 转换成控制硬件执行的信号，从而完成整个操作，这样一来，指令集其实就是硬件和软件之间的接口（interface），我们不再需要直接和硬件进行交互，而是和具有更高的抽象程度的 ISA 进行交互，集中注意在指令的编写逻辑，提高工作效率。
 
@@ -58,7 +58,7 @@ MIPS32 的指令字长是 32 位的定长格式，也就是由 32 个 0 或者 1
 
 接下来我们详细解释一条 MIPS32 指令，来加深读者对于指令的理解。如下图所示的是一条 addi 指令，那为什么是 addi 指令呢？决定这条指令功能的是前 6 位，也就是 op code，也可以理解为运算符，不同的 op code 对应了不同的操作，图中是以“加法”为例。
 
-![ISA](images/02CPUISA02.png)
+![ISA](../../imageswtf/02Hardware-02ChipBase-images-02CPUISA02.png)
 
 右边三个部分对应着的是操作对象，其中一共有三个参数分别是：目的操作数 Addr1、原操作数 Addr2 以及立即数 imediate Value。其中目的操作数 Addr1、原操作数 Addr2 都是 5 位所代表的是我们寄存器的地址，Addr1 用于存储计算后的结果，Addr2 地址中存储着要进行加法计算的数值。imediate Value 是一个立即数共 16 位，它是一个有符号的常量值，用于与 Addr2 寄存器中的值相加。
 
@@ -114,7 +114,7 @@ CPU 的运算指令、控制指令和数据移动指令通常在底层编程语�
 
 目前看来，按照指令系统复杂程度的不同，CPU 的 ISA 可分为 CISC 和 RISC 两大阵营。CISC 是指复杂指令系统计算机（Complex Instruction Set Computer）；RISC 是指精简指令系统计算机（Reduced Instruction Set Computer），如下图所示也是很好区分 RISC 和 CISC。
 
- ![ISA](images/02CPUISA03.png)
+ ![ISA](../../imageswtf/02Hardware-02ChipBase-images-02CPUISA03.png)
 
 CISC 和 RISC 并不是具体的指令集，而是两种不同的指令体系，相当于指令集中的门派，是指令的设计思想。
 
@@ -194,7 +194,7 @@ RISC 架构代表性的 CPU 有 MIPS（Microprocessor without Interlocked Pipeli
 
 CPU 指令集从最初的二进制机器指令发展到如今包含丰富特性和多样化的 RISC 和 CISC 架构，其间经历了存储程序概念的确立、微处理器时代的兴起、不同架构的设计理念分化、以及针对高性能计算和大数据处理所需的 SIMD 扩展等多个重要阶段。未来，随着量子计算、AI 芯片等新型计算模式的出现，CPU 指令集将继续朝着更加智能、高效的方向演进。更多的指令集架构如图所示。
 
-![ISA](images/02CPUISA06.png)
+![ISA](../../imageswtf/02Hardware-02ChipBase-images-02CPUISA06.png)
 
 ### 两者之间的异同
 
@@ -212,13 +212,13 @@ CISC 中的指令集就是大杂烩，长短不一、使用频率不一、没有
 
 3. 立即数寻址：立即数寻址就是操作数是一个常数。只所以叫立即数就是凸显这个”数据“CPU 拿来立即可以使用，在执行指令时无需去内存或寄存器中寻址。如：`mov ax, 0x18`，将数据 0x18 写入 ax 寄存器。
 
-![CISCvsRISC](images/02CPUISA04.png)
+![CISCvsRISC](../../imageswtf/02Hardware-02ChipBase-images-02CPUISA04.png)
 
 总结一下，CISC（复杂指令集计算机）和 RISC（精简指令集计算机）代表了两种不同的计算机指令集架构设计思想。CISC 架构通过丰富而复杂的指令集，旨在简化编程、提高代码密度和兼容性，但其复杂的指令解码和执行过程可能影响性能和增加硬件设计复杂性。
 
 典型的 CISC 处理器如 Intel x86 在桌面计算机和服务器领域广泛应用。相对而言，RISC 架构强调简化指令集和统一指令执行时间，通过固定长度的简单指令和流水线技术来提高处理器效率和减少硬件复杂性，具有高效、低功耗的优势。RISC 处理器如 ARM 和 RISC-V 在移动设备、嵌入式系统和物联网中广泛应用。两种架构各有优缺点，适用于不同的应用场景。
 
-![CISCvsRISC](images/02CPUISA05.png)
+![CISCvsRISC](../../imageswtf/02Hardware-02ChipBase-images-02CPUISA05.png)
 
 ## CPU 并行处理架构
 
@@ -242,29 +242,29 @@ CISC 中的指令集就是大杂烩，长短不一、使用频率不一、没有
 
 3. 多模块交叉方式组织存储器（内存的低位交叉编址）。
 
-![SISD](images/01CPUBase15.png)
+![SISD](../../imageswtf/02Hardware-02ChipBase-images-01CPUBase15.png)
 
 ### 单指令流多数据流（SIMD）
 
 单指令流多数据流（SIMD）系统采用一个控制器控制多个处理器，同时对一组数据中每一个分别执行相同操作，SIMD 主要执行向量、矩阵等数组运算，处理单元数目固定，适用于科学计算。特点是处理单元数量很多，但处理单元速度受计算机通信带宽传递速率的限制。一个指令流同时对多个数据流进行处理，同时称为数据级并行技术。各指令序列只能并发，不能并行。一个指令控制部件、多个处理单元。每个执行单元有各自的寄存器组、局部存储器、地址寄存器。
 
-![SIMD](images/01CPUBase16.png)
+![SIMD](../../imageswtf/02Hardware-02ChipBase-images-01CPUBase16.png)
 
 ### 多指令流单数据流（MISD）
 
 多指令流单数据流机器，采用多个指令流来处理单个数据流，这种方式没什么必要，所以仅作为理论模型出现，没有投入到实际应用之中。
 
-![MISD](images/01CPUBase17.png)
+![MISD](../../imageswtf/02Hardware-02ChipBase-images-01CPUBase17.png)
 
 ### 多指令流多数据流（MIMD）
 
 多指令流多数据流（MIMD）系统是在多个数据集上执行多个指令的多处理器机器，共享内存 MIMD 和分布式内存。特性是各处理器之间，可以通过 LOAD/STORE 指令，访问同一个主存储器，可通过主存相互传送数据。硬件组成为：一台计算机内，包含多个处理器加一个主存储器。多个处理器共享单一的物理地址空间。
 
-![MIMD](images/01CPUBase18.png)
+![MIMD](../../imageswtf/02Hardware-02ChipBase-images-01CPUBase18.png)
 
 MIMD 系统可以分为共享内存系统和分布式内存系统。共享内存系统中的处理器通过互连网络与内存连接，处理器之间隐式通信，共享内存。分布式内存系统中的每个处理器有自己私有的内存空间，通过互连网络通信（显式通信），如下图所示：
 
-![MIMD 共享](images/01CPUBase19.png)
+![MIMD 共享](../../imageswtf/02Hardware-02ChipBase-images-01CPUBase19.png)
 
 ### 单指令多线程（SIMT）
 
@@ -278,13 +278,13 @@ SIMT 中文译为单指令多线程，英文全称为 Single Instruction Multipl
 
 因此，总的来说，英伟达提出 SIMT 的初衷是希望硬件像 SIMD 一样高效，编程起来又像多核多线程一样轻松。
 
-![SIMT](images/01CPUBase20.png)
+![SIMT](../../imageswtf/02Hardware-02ChipBase-images-01CPUBase20.png)
 
 ## CPU 应用场景
 
 在上一个小节，我们介绍了诸多指令集架构，像是 x86、Arm 等等，接下来我们就来聊一点更贴近生活的，分为服务器、PC 以及嵌入式三个领域来介绍一下相应指令集所对应的应用场景。
 
-![SIMT](images/02CPUISA08.png)
+![SIMT](../../imageswtf/02Hardware-02ChipBase-images-02CPUISA08.png)
 
 ### 服务器领域
 

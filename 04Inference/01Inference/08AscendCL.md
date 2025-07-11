@@ -22,7 +22,7 @@ AscendCL 优势主要有三个要点：
 
 - 零感知芯片：一套 AscendCL 接口可以实现应用代码统一，多款昇腾 AI 处理器无差异。
 
-![逻辑架构图](images/08AscendCL01.png)
+![逻辑架构图](../../imageswtf/04Inference-01Inference-images-08AscendCL01.png)
 
 ### AscendCL 应用场景
 
@@ -56,7 +56,7 @@ AscendCL 优势主要有三个要点：
 
 下面将会介绍 Device、Context 和 Stream 在 AscendCL 框架中的作用及其相互关系：
 
-![Device、Context、Stream 关系](images/08AscendCL02.png)
+![Device、Context、Stream 关系](../../imageswtf/04Inference-01Inference-images-08AscendCL02.png)
 
 1. Device，用于指定计算设备。
 
@@ -92,7 +92,7 @@ Context 分隐式创建和显式创建。隐式创建的 Context（即默认 Con
 - 线程中创建的多个 Context，线程缺省使用最后一次创建的 Context。
 - 进程内创建的多个 Context，可以通过 aclrtSetCurrentContext 设置当前需要使用的 Context。
 
-![接口调用流程](images/08AscendCL03.png)
+![接口调用流程](../../imageswtf/04Inference-01Inference-images-08AscendCL03.png)
 
 ### 默认 Context 和默认 Stream
 
@@ -116,7 +116,7 @@ Device 上执行操作下发前，必须有 Context 和 Stream，这个 Context�
 
 调用 AscendCL 接口，可开发包含模型推理、媒体数据处理、单算子调用等功能的应用，这些功能可以独立存在，也可以组合存在。下图给出了使用 AscendCL 接口开发 AI 应用的整体接口调用流程。
 
-![接口调用流 2 程](images/08AscendCL04.png)
+![接口调用流 2 程](../../imageswtf/04Inference-01Inference-images-08AscendCL04.png)
 
 上图根据应用开发中的典型功能抽象出主要的接口调用流程。例如，如果模型对输入图片的宽高要求与用户提供的源图不一致，则需要媒体数据处理，将源图裁剪成符合模型的要求；如果需要实现模型推理的功能，则需要先加载模型，模型推理结束后，则需要卸载模型；如果模型推理后，需要从推理结果中查找最大置信度的类别标识对图片分类，则需要数据后处理。
 

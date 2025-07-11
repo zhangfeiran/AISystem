@@ -14,13 +14,13 @@
 
 基于卷积因子分解的原则，ESP（Efficient spatial pyramid）模块将标准卷积分解成 point-wise 卷积和空洞卷积金字塔（spatial pyramid of dilated convolutions）。point-wise 卷积将输入的特征映射到低维特征空间，即采用 K 个 1x1xM 的小卷积核对输入的特征进行卷积操作，1x1 卷积的作用其实就是为了降低维度，这样就可以减少参数。空洞卷积金字塔使用 K 组空洞卷积的同时下采样得到低维特征，这种分解方法能够大量减少 ESP 模块的参数和内存，并且保证了较大的感受野(如下图 a 所示)。
 
-![Cnn](images/03Cnn01.png)
+![Cnn](../../imageswtf/04Inference-02Mobilenet-images-03Cnn01.png)
 
 #### HFF 特性
 
 虽然将扩张卷积的输出拼接在一起会给 ESP 模块带来一个较大的有效感受野，但也会引入不必要的棋盘或网格假象，如下图所示。
 
-![Cnn](images/03Cnn02.png)
+![Cnn](../../imageswtf/04Inference-02Mobilenet-images-03Cnn02.png)
 
 上图(a)举例说明一个网格伪像，其中单个活动像素（红色）与膨胀率 r = 2 的 3×3 膨胀卷积核卷积。
 
@@ -34,7 +34,7 @@
 
 EESP 模块结构如下图，图 b 中相比于 ESPNet，输入层采用分组卷积，DDConv+Conv1x1 取代标准空洞卷积，依然采用 HFF 的融合方式，（c）是（b）的等价模式。当输入通道数 M=240，g=K=4, d=M/K=60，EESP 比 ESP 少 7 倍的参数。
 
-![Cnn](images/03Cnn03.png)
+![Cnn](../../imageswtf/04Inference-02Mobilenet-images-03Cnn03.png)
 
 描述了一个新的网络模块 EESP，它利用深度可分离扩张和组逐点卷积设计，专为边缘设备而设计。该模块受 ESPNet 架构的启发，基于 ESP 模块构建，使用了减少-分割-变换-合并的策略。通过组逐点和深度可分离扩张卷积，该模块的计算复杂度得到了显著的降低。进一步，描述了一种带有捷径连接到输入图像的分层 EESP 模块，以更有效地学习多尺度的表示。
 
@@ -56,7 +56,7 @@ $$\underset {a∈A}{min}  \underset {w_{a}}{min} L(a,w_{a}) $$
 
 给定结构空间 A，寻找最优的结构 $a∈A$，在训练好权值后 $w_{a}$，可以满足最小化损失 $L(a,w_{a})$，论文主要集中于 3 个因素：搜索空间、考虑实际时延的损失函数以及高效的搜索算法。
 
-![Cnn](images/03Cnn04.png)
+![Cnn](../../imageswtf/04Inference-02Mobilenet-images-03Cnn04.png)
 
 #### Latency-Aware 损失函数
 
@@ -79,7 +79,7 @@ $$LAT(a) = \sum_{l}LAT(b_{l}^{(a)}) $$
 
 把不同的 channel 加入搜索空间，之前的 DNAS 方法就是把不同的选项融进超网，这样会带来接近 o(N2)种选择的可能。为了减少搜索 channel 时候的计算量，作者构造了 channel masking 的机制，把不同 channel 的最终输出，表征为和一个 mask 相乘的形式，如下图所示。
 
-![Cnn](images/03Cnn05.png)
+![Cnn](../../imageswtf/04Inference-02Mobilenet-images-03Cnn05.png)
 
 其中右边那个灰色的长方体表示一个 shape 为(c, h, w)的 tensor，和左边的 mask 向量 M 相乘的结果。M 可以拆解为多个 mask，m1，m2，m3...和对应 3 的 Gumbel Softmax 的系数 g1，g2，g3...的乘积和。通过调节左边的 mask，就能得到等价的不同 channel 的结果。相当于对一个大的 tensor，mask 掉额外的 channel，得到相应的别的 channel 的结果。
 
@@ -107,7 +107,7 @@ $$
 
 这种近似只需要一个正向传递和一个特征映射，除了等式 3 中可忽略的 M 项之外，不会引起额外的 FLOP 或存储器成本。(图 Channel Masking for channel search（DMaskingNAS），通道屏蔽)。此外，这种近似并不等价，只是因为权重是共享的，这在 DNAS 被证明可以减少训练时间和提高准确性[Single-path nas: Device-aware efficient convnet design]。这使本文能够搜索任何模块的输出通道数，包括相关的架构决策，如反向残差模块中的扩展速率。
 
-![Cnn](images/03Cnn06.png)
+![Cnn](../../imageswtf/04Inference-02Mobilenet-images-03Cnn06.png)
 
 #### FBNetV3
 
@@ -137,7 +137,7 @@ A，h，Ω分别表示网络架构、训练策略以及搜索空间；$g_{i}(A)$
 
 为了追求更好的精度和效率，在连续网络缩放过程中平衡网络宽度、深度和分辨率的所有维度是至关重要的。如下图所示。
 
-![Cnn](images/03Cnn07.png)
+![Cnn](../../imageswtf/04Inference-02Mobilenet-images-03Cnn07.png)
 
 不同维度的 Scaling 并不相互独立，需要协调和平衡不同维度的 Scaling，而不是常规的单维度 Scaling。EfficientNet 提出了 compound scaling method（复合缩放方法），这种方法是通过一个复合系数φ去统一缩放网络的宽度，深度和分辨率，公式表示如下：
 $$
@@ -220,7 +220,7 @@ $$
 
 利用`Ghost Module`生成与普通卷积层相同数量的特征图，我们可以轻松地将`Ghost Module`替换卷积层，集成到现有设计好的神经网络结构中，以减少计算成本。第一、先通过普通的 conv 生成一些特征图。第二、对生成的特征图进行 cheap 操作生成冗余特征图，这步使用的卷积是 DW 卷积。第三将 conv 生成的特征图与 cheap 操作生成的特征图进行 concat 操作。如下图（b）所示，展示了 Ghost 模块和普通卷积的过程。
 
-![Cnn](images/03Cnn08.png)
+![Cnn](../../imageswtf/04Inference-02Mobilenet-images-03Cnn08.png)
 
 ### GhostNet V2
 

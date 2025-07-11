@@ -20,7 +20,7 @@ Fuse Binary Eltwise：x3 = x1 *b1+x2 *b2，把 BinaryOp Add 转换成 Eltwise Su
 
 Fuse Reduction with Global Pooling：对一个三维 tensor 先后两次分别进行 w 维度的 reduction mean 和 h 维度的 reducetion mean，最终只剩下 c 这个维度，就等于进行了一次 global_mean_pooling。
 
-![其他图优化](images/03Extend02.png)
+![其他图优化](../../imageswtf/04Inference-05Optimize-images-03Extend02.png)
 
 ## Flash Attention
 
@@ -50,7 +50,7 @@ FlashAtention 加速的原理是最基础和常见的系统性能优化的手段
 
 在之前的学习中，我们了解到 CPU 的多级分层存储架构，其实 GPU 的存储架构也是类似的，遵守同样的规则，即内存越快，越昂贵，容量越小。如下图左侧部分所示，在 A100 GPU 有 40-80GB 的高带宽内存(HBM，它是由多个 DRAM 堆叠出来的)，带宽为 1.5-2.0 TB/s，而每 108 个流处理器(SM)有 192KB 的 SRAM，带宽估计在 19TB/s 左右。这里我们可以了解到 SRAM 的访问速率是 HBM 的 10 倍左右，然而其能承载的数据量却远远小于 HBM。
 
-![flashAttention](images/03Extend03.png)
+![flashAttention](../../imageswtf/04Inference-05Optimize-images-03Extend03.png)
 
 结合上图，我们了解到 flashAttention 是优化了计算过程中的访存（HBM）的过程，那么我们先来看下标准 Attention 的计算访存：
 
@@ -84,7 +84,7 @@ Recomputation（重算）则是一种以计算能力为代价来节省存储空�
 
 主要的算法实现：
 
-![flashAttention 算法方式](images/03Extend04.png)
+![flashAttention 算法方式](../../imageswtf/04Inference-05Optimize-images-03Extend04.png)
 
 ### 步骤一：计算分子块的大小
 
@@ -92,26 +92,26 @@ Recomputation（重算）则是一种以计算能力为代价来节省存储空�
 
 其次，在 SRAM 上需要存在的数据包括，Q 子块，K 子块，V 子块，其次还应包括计算过程中的中间输出 O，O 的大小应该与 Q、K、V 子块大小一致。
 
-![flashAttention 算法方式](images/03Extend05.png)
+![flashAttention 算法方式](../../imageswtf/04Inference-05Optimize-images-03Extend05.png)
 1. Set block sizes B_c = [M / 4d], B_r = min([M / 4d],d)
 
 所以，在这里我们计算出子块的列大小 Bc =[M/4d]， d 为矩阵维度。当然，需要注意的是，上面的设置子块的大小并非唯一的，只有保证子块大小不超过 SRAM 的大小即可。
 
 ### 步骤二：初始化输出矩阵 O
 
-![flashAttention 算法方式](images/03Extend06.png)
+![flashAttention 算法方式](../../imageswtf/04Inference-05Optimize-images-03Extend06.png)
 
 SRAM 上的输出 O 矩阵赋值为全 0，它将作为一个累加器保存 softmax 的累积分母，其中 l 也类似。m 用于记录每一行行最大分数，其初始化为-inf。
 
 ### 步骤三：切分子块
 
-![flashAttention 算法方式](images/03Extend07.png)
+![flashAttention 算法方式](../../imageswtf/04Inference-05Optimize-images-03Extend07.png)
 
 将 Q 划分成 Tr 个 Bolck，K、V 划分成 Tc 个 Block，初始化 attention output O，并划分成 Tr 个 Block。
 
 ### 步骤四：外循环加载 K、V 内循环加载 Q 子块
 
-![flashattention cycle](images/03Extend08.png)
+![flashattention cycle](../../imageswtf/04Inference-05Optimize-images-03Extend08.png)
 
 上图完美解释了这个循环过程，
 
@@ -119,7 +119,7 @@ SRAM 上的输出 O 矩阵赋值为全 0，它将作为一个累加器保存 sof
 2. 内循环：对于每个 Block Query，从 HBM 加载进 SRAM
 3. 在 SRAM 上完成 Block S 的计算
 
-![flashattention cycle](images/03Extend09.png)
+![flashattention cycle](../../imageswtf/04Inference-05Optimize-images-03Extend09.png)
 
 这里要注意的是，Oi, li, mi 其中存储的可能是上一个循环计算的中间结果。
 
@@ -129,7 +129,7 @@ SRAM 上的输出 O 矩阵赋值为全 0，它将作为一个累加器保存 sof
 
 #### 标准 softmax 计算方式
 
-![flashattention cycle](images/03Extend10.png)
+![flashattention cycle](../../imageswtf/04Inference-05Optimize-images-03Extend10.png)
 
 在实际硬件中，因为浮点数表示的范围是有限的，对于 float32 和 bfloat16 来说，当 z ≥ 89 时，exp(z) 就会变成 inf，发生数据上溢的问题。
 
@@ -137,7 +137,7 @@ SRAM 上的输出 O 矩阵赋值为全 0，它将作为一个累加器保存 sof
 
 所以说，现有所有的深度学习框架中都采用了“safe softmax”这种计算方式，其计算公式如下：
 
-![flashattention cycle](images/03Extend11.png)
+![flashattention cycle](../../imageswtf/04Inference-05Optimize-images-03Extend11.png)
 
 计算举例：a = [0.1, 0.2, 0.3, 0.4]; m(a) = 0.4
 
@@ -155,7 +155,7 @@ SRAM 上的输出 O 矩阵赋值为全 0，它将作为一个累加器保存 sof
 
 1. 假如有切片向量 x = [x^(1), x^(2)]，切片后 softmax 的计算方式：
 
-![softmax 计算方式 1](images/03Extend12.png)
+![softmax 计算方式 1](../../imageswtf/04Inference-05Optimize-images-03Extend12.png)
 
 2. update m(x)，根据更新后的 m(x)，根据上一步计算结果重新计算 f(x), l(x)。假设存在 x^(3), 那么便可以将 x^(1)和 x^(2)合并成一个序列，重复步骤 1 即可。
 
@@ -173,7 +173,7 @@ SRAM 上的输出 O 矩阵赋值为全 0，它将作为一个累加器保存 sof
 
 在介绍完 flashAttention 中 softmax 的改进后，我们继续围绕论文中的代码进行分析：
 
-![softmax 计算方式 1](images/03Extend13.png)
+![softmax 计算方式 1](../../imageswtf/04Inference-05Optimize-images-03Extend13.png)
 
 首先，根据上一步计算的子块 Sij，来计算当前块的行最大值 mij，当前块 Pij (即 softmax 的分子)，lij 为 Pij 的累积值。
 
@@ -183,7 +183,7 @@ SRAM 上的输出 O 矩阵赋值为全 0，它将作为一个累加器保存 sof
 
 到此前向计算就算完成，我们可以通过下图来总结下 flashAttention 的前向计算过程，这里就不做过多解释了。
 
-![softmax 计算方式 1](images/03Extend14.png)
+![softmax 计算方式 1](../../imageswtf/04Inference-05Optimize-images-03Extend14.png)
 
 步骤六：反向计算
 
@@ -301,7 +301,7 @@ Flash Attention 的优点在于充分考虑了在计算任务中 IO 的重要性
 
 具体示例如下：
 
-![数据节点转换](images/03Extend15.png)
+![数据节点转换](../../imageswtf/04Inference-05Optimize-images-03Extend15.png)
 
 内存优化是一种计算机系统优化技术，主要目的是提高系统的运行性能，通过更有效地使用和管理内存资源来达到这个目的。
 
@@ -309,7 +309,7 @@ Inplace operation：是一种内存优化手段，它在当前的内存块上直
 
 Memory sharing：是另一种内存优化策略。它在内存使用上进行优化，当两个数据的内存大小相同，且有一个数据参与计算后不再需要时，我们可以让后一个数据直接覆盖前一个数据的内存。这样做的好处是可以减少内存的开销，节省内存空间，提高内存的使用效率。
 
-![内存优化](images/03Extend16.png)
+![内存优化](../../imageswtf/04Inference-05Optimize-images-03Extend16.png)
 
 ## 小结与思考
 

@@ -12,7 +12,7 @@
 
 现有 AI 编译器架构图如下图所示。
 
-![现有 AI 编译器架构图](images/03Architecture01.png)
+![现有 AI 编译器架构图](../../imageswtf/03Compiler-02AICompiler-images-03Architecture01.png)
 
 此编译器接受的高级语言为 Python，编译器前端会对 Python 代码进行解析，解析器会将高层次的代码转换为一个中间表示（IR），以便进一步处理。这里编译器前端会生成 Graph IR 传递给 Graph Optimizer（图优化器）。
 
@@ -26,7 +26,7 @@ Ops Optimizer 接收到 Tensor IR 后，其会针对每个算子进行具体的�
 
 > 推荐阅读 AI 编译器的综述，名称为 The Deep Learning Compiler: A Comprehensive Survey。其中有一副插图展示了一个通用 AI 编译器的完整架构，涵盖从模型输入到在不同硬件平台上执行的整个流程。它分为编译器前端（Compiler Frontend）和编译器后端（Compiler Backend）两个主要部分。下面将结合此图对通用 AI 编译器进行初步分析。
 
-![通用 AI 编译器架构图](images/03Architecture02.png)
+![通用 AI 编译器架构图](../../imageswtf/03Compiler-02AICompiler-images-03Architecture02.png)
 
 ### 编译器前端
 
@@ -154,7 +154,7 @@ DL 编译器（如 TVM、nGraph 和 TC）在代码生成阶段可以生成对这
 
 现用一图流来展示 AI 编译器全栈产品。针对图中所示，现在从下向上分层介绍。
 
-![AI 编译器全栈产品](images/03Architecture03.png)
+![AI 编译器全栈产品](../../imageswtf/03Compiler-02AICompiler-images-03Architecture03.png)
 
 1. Hardware
 

@@ -10,7 +10,7 @@
 
 在 Fire 中文章作者建议 $s_{1\times 1}$<$e_{1 \times 1}$+$e_{3 \times 3}$，这么做相当于两个 $3 \times 3$ 卷积中加入了瓶颈层。
 
-![Squeezenet](images/02Squeezenet01.png)
+![Squeezenet](../../imageswtf/04Inference-02Mobilenet-images-02Squeezenet01.png)
 
 ### 压缩策略
 
@@ -59,7 +59,7 @@ class fire(nn.Module):
 
 相同分辨率的 Fire Module 数量前面要少一点，后面要多一点，通道数通常以 32 或 64 的倍数增加。在通道数相同的层之间，添加旁路相加结构（short-cut）可以明显提升准确性（top-1 和 top-5 分别提升 2.9% 和 2.2%）。带有卷积的旁路结构可以在任意层之间添加（1*1 卷积调控 depth），准确性提升较小，模型增大。
 
-![Squeezenet](images/02Squeezenet02.png)
+![Squeezenet](../../imageswtf/04Inference-02Mobilenet-images-02Squeezenet02.png)
 
 ```python
 #导入所需的 pytorch 库
@@ -153,7 +153,7 @@ class Bottle(nn.Module):
 
 在 SqueezeNext 模块中，使用了两层 bottleneck，每一层都将通道数减小为原来的 1/2，然后使用了两个分离卷积层。最后使用了一层 $1 \times 1$ 卷积的扩充层，进一步减少了分离卷积输出数据的通道数。
 
-![Squeezenet](images/02Squeezenet03.png)
+![Squeezenet](../../imageswtf/04Inference-02Mobilenet-images-02Squeezenet03.png)
 
 ### 低秩过滤器
 
@@ -169,13 +169,13 @@ class Bottle(nn.Module):
 
 AlexNet 96% 的参数来自于全连接层，SqueezeNet 和 ResNet 中都只包含一个全连接层。假设输入数据为 $H \times W \times C_{i}$ ，那么最后的全连接层的参数数量为 $H \times W \times C_{i} \times L_{i}$，L 表示输出的类别数。SqueezeNext 在最后一个全连接层之前使用了一个 bottleneck 层，进一步减少了参数数量。
 
-![Squeezenet](images/02Squeezenet04.png)
+![Squeezenet](../../imageswtf/04Inference-02Mobilenet-images-02Squeezenet04.png)
 
 SqueezeNext 的设计就是不断的堆叠上图的 block，在模拟硬件性能实验结果中发现，维度越低，计算性能也越低效，于是将更多的层操作集中在维度较高的 block。
 
 SqueezeNext-23 结构如下图所示:
 
-![Squeezenet](images/02Squeezenet05.png)
+![Squeezenet](../../imageswtf/04Inference-02Mobilenet-images-02Squeezenet05.png)
 
 其代码实现具体如下所示：
 

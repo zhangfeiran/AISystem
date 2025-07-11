@@ -139,7 +139,7 @@ AutoTVM 需要事先编写模板来组成调度的搜索空间，最佳性能的
 
 Ansor 自动生成一个覆盖全面的优化的大搜索空间，并为空间中的每个张量程序提供被选择的机会。首先，它自动构建一个大的搜索空间，以覆盖给定计算定义的尽可能多的张量程序。其次，在大搜索空间中高效搜索，该搜索空间可能比现有模板可以覆盖的范围大几个数量级。最后，在优化具有许多子图的整个 DNN 时，识别对端到端性能至关重要的子图并对其进行优先级排序，因为资源是有限的，应该将调优时间和算力资源分配给对性能有更大影响的子图。
 
-![img](images/06AutoTuning02.png)
+![img](../../imageswtf/03Compiler-04Backend-images-06AutoTuning02.png)
 
 Ansor 有三个关键设计，分别是程序采样器、性能微调器、任务调度器。
 
@@ -203,7 +203,7 @@ MetaSchedule 提供以下特性：
 
 Meta Scheduler 遵循下图的调优流程：
 
-![img](images/06AutoTuning03.png)
+![img](../../imageswtf/03Compiler-04Backend-images-06AutoTuning03.png)
 
 ### 设计空间生成
 

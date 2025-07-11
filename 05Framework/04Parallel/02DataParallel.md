@@ -20,7 +20,7 @@
 
 如图所示，不断上述步骤重复进行，直到模型收敛或者达到预定的训练轮数。
 
-![数据并行](images/02DataParallel01.png)
+![数据并行](../../imageswtf/05Framework-04Parallel-images-02DataParallel01.png)
 
 但由于数据并行相对来说还不够完善，造成了许多性能的浪费。如在**语言层面**，使用作为最热门的深度学习开发语言 Python，在数据并行中采用的单进程、多线程并行方式往往受到 GIL（全局解释器锁）限制，CPU 的性能瓶颈使得多线程不能良好的利用 NPU 集群的资源。
 
@@ -168,7 +168,7 @@ class DistributedDataParallel(Module, Joinable):
 
 如图所示，在部分梯度计算完成后，即可立即进行通信，一般通过钩子函数来实现。在通信的同时也会继续计算梯度，这样就无需等待所有计算完成后再集中进行通信，也不必在计算完成后等待通信完成，从而将通信过程覆盖到计算时间内，充分利用 AI 集群，提高了 AI 集群使用率。
 
-![数据并行](images/02DataParallel02.png)
+![数据并行](../../imageswtf/05Framework-04Parallel-images-02DataParallel02.png)
 
 这里同样使用 PyTorch2.0 进行举例。在此过程中涉及到钩子函数 `hook`、参数桶 `bucket` 和归约管理器 `reducer` 三个关键部分。
 
@@ -407,11 +407,11 @@ class DistributedSampler(Sampler[T_co]):
 
 这里使用了两张 V100-SXM2-16GB 作为设备并使用 NV-Link 连接，通过 CIFAR10 训练 ResNet50 网络。
 
-![DDP 性能分析](images/02DataParallel04.png)
+![DDP 性能分析](../../imageswtf/05Framework-04Parallel-images-02DataParallel04.png)
 
 从 `profile` 对 ResNet50 的性能分析结果可以看到，计算与通信的重叠几乎覆盖了整个反向传播的过程（反向传播的计算时间约为前向传播的两倍，图中重叠的部分约为只计算部分的两倍，只通信的部分可以忽略不记）
 
-![DDP 性能分析](images/02DataParallel05.png)
+![DDP 性能分析](../../imageswtf/05Framework-04Parallel-images-02DataParallel05.png)
 
 同样，在追踪视图中，可以看到反向传播的主要计算函数 `autograd::engine::evaluate_function:ConvolutionBackward0` 与集合通信的函数 `nccl:all_reduce` 执行是重叠的。
 
@@ -423,13 +423,13 @@ DDP 反向传播中计算与通信的重叠导致无需等待所有计算完成�
 
 由于所有 NPU 在每个训练步骤中都执行相同的更新操作，模型的收敛性更容易得到保证。且所有 NPU 都参与到梯度更新的计算中，整体计算效率也相对较高。此外，同步数据并行还易于实现，因为所有 NPU 的操作都是同步的，不需要复杂的同步机制。
 
-![数据并行](images/02DataParallel14.png)
+![数据并行](../../imageswtf/05Framework-04Parallel-images-02DataParallel14.png)
 
 但是同步数据并行也有一些局限性。当集群中的某些 NPU 性能较差或者出现故障时，整体的训练效率会受到影响，所有 NPU 都需要等待最慢的 NPU 完成计算。又或是当 NPU 数量过多时，集合通信的时间可能会成为训练的瓶颈，从而限制整体的扩展性。
 
 **异步的数据并行（Asynchronous Data Parallelism, ADP）** 可以在一定程度上解决这些问题。在异步数据并行中，不同 NPU 的计算过程相互独立，不再需要等待其他 NPU 完成计算。每个 NPU 都按照自己的速度进行前向和反向传播，随时将计算得到的梯度更新到模型参数中。这样，快速的 NPU 不再受到慢速 NPU 的影响，整体计算效率得到提高。异步数据并行的步骤为：
 
-![数据并行](images/02DataParallel15.png)
+![数据并行](../../imageswtf/05Framework-04Parallel-images-02DataParallel15.png)
 
 - **前向传播**：将 mini-batch 数据平均分配到每个 NPU 上。接下来进行分布式初始化，将模型和优化器复制到每个 NPU 上，保证各 NPU 的模型、优化器完全相同。初始化完成后，各 NPU 根据分配到的数据和模型同时进行前向传播。
 
@@ -473,7 +473,7 @@ Elastic Agent 是 Torch Elastic 的控制面板。它是一个进程，负责启
 
 当有新的节点加入或现有节点退出时（即成员变更），Rendezvous 过程会重新开始。Rendezvous 过程包括两个关键步骤：屏障操作（barrier）和排名分配（rank assignment）。屏障操作确保所有节点在达到最小节点数量之前都处于等待状态，并在达到最大节点数量后立即完成。排名分配则为每个节点分配一个唯一的 rank，确保每个节点在分布式训练中的 rank 是明确的。
 
-![数据并行](images/02DataParallel16.png)
+![数据并行](../../imageswtf/05Framework-04Parallel-images-02DataParallel16.png)
 
 Elastic Agent 持续监控本地的工作进程状态。如果检测到任何工作进程失败或不健康，Elastic Agent 会立即终止所有工作进程，并重新启动。这一过程通过重新启动（respawn）工作进程来实现，确保训练任务的持续进行。
 
@@ -518,7 +518,7 @@ rdzv_handler = DynamicRendezvousHandler.from_backend(
 
 下面是描述 Rendezvous 工作流程的状态图。
 
-![数据并行](images/02DataParallel17.png)
+![数据并行](../../imageswtf/05Framework-04Parallel-images-02DataParallel17.png)
 
 1. **Version Counter**：在流程开始时，Rendezvous 机制会创建一个版本号（如果不存在则创建初始值为“0”）。这个版本号由 /rdzv/version_counter 跟踪，并使用原子操作 fetch-add(1) 来确保版本号的唯一性和一致性。当新的节点加入或现有节点重新启动时，版本号会递增，从而标识新的 Rendezvous 过程。
 

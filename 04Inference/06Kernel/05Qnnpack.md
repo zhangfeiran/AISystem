@@ -14,15 +14,15 @@ QNNPACK（Quantized Neural Networks PACKage 是 Marat Dukhan (Meta) 开发的专
 
 现假设已经完成 Im2Col 的转换，将卷积已经转换为如下图所示的矩阵乘法。B 矩阵为 kernel，尺寸为 N × K；A 矩阵为 feature map，尺寸为 K × M；结果矩阵 C 尺寸为 N × M。要想得到 C 矩阵中某一个位置的数据，需要计算 B 矩阵中对应列与 A 矩阵中对应行相乘的结果。
 
-![矩阵乘法示意图](images/05QNNPACK01.png)
+![矩阵乘法示意图](../../imageswtf/04Inference-06Kernel-images-05QNNPACK01.png)
 
 一般经过向量化优化后，同时可以并行计算多个结果数据，则一次计算一块 MR × NR 的小块。
 
-![向量化优化后计算 MR×NR](images/05QNNPACK02.png)
+![向量化优化后计算 MR×NR](../../imageswtf/04Inference-06Kernel-images-05QNNPACK02.png)
 
 在分块概念出现后，传统 Im2Col+GEMM 方法一般是在 K 维度上进行拆分，在一次计算核中仅计算 K 维的局部，最后通过累加得到结果数据。这样的话，在每次计算核的处理中，都会发生对输出的加载和存储，即要将本次计算产生的部分和累加到输出中。
 
-![传统 Im2Col + GEMM 方法](images/05QNNPACK03.png)
+![传统 Im2Col + GEMM 方法](../../imageswtf/04Inference-06Kernel-images-05QNNPACK03.png)
 
 使用传统 Im2Col + GEMM 存在几个明显的缺陷：
 
@@ -96,7 +96,7 @@ Marat Dukhan 于 2019 年离开 Meta 来到谷歌之后，发表了一篇名为 
 
 间接卷积算法的计算同样也是基于对输出的切分，计算 MR × NR 的小块。如图19.5.4所示，与传统 GEMM 方法不同的是，其将将整个 K 维全部在计算 Kernel 中处理完，消除了输出部分和的访存。这里所说的「将整个 K 维全部」并不是指 K 维不进行拆分，而是指拆分后不和其他维度交换，实际计算中 K 维会以 $2^n$ 为基础进行拆分。
 
-![间接卷积算法示意图](images/05QNNPACK04.png)
+![间接卷积算法示意图](../../imageswtf/04Inference-06Kernel-images-05QNNPACK04.png)
 
 “消除所有非计算必需的内存转换”即为间接卷积算法的核心特定，这样的特性同样也注定了它在非量化任务中同样能起到显著的优化作用。
 
@@ -215,7 +215,7 @@ QNNPACK 通过消除不必要的 Repacking，优化了内存使用率并提高�
 
 下图展示了间接卷积算法使用间接缓冲区执行卷积运算的基本工作流程：
 
-![间接卷积算法工作流程图](images/05QNNPACK05.png)
+![间接卷积算法工作流程图](../../imageswtf/04Inference-06Kernel-images-05QNNPACK05.png)
 
 左侧部分表示多个输入使用相同的输入缓冲区（Input Buffer），间接卷积算法会在该输入缓冲区基础上构建间接缓冲区。如图中右侧在网络运行时，每次计算出 M × N 规模的输出，其中 M 将视为 OH × OW 视作一维后的向量规模化。一般 M × N 的尺寸在量化神经网络中是 4 × 4、4 × 8 以及 8 × 8。在计算 M×N 规模大小输出时，经由间接缓冲区取出对应输入缓冲区数据，并取出权重，计算出结果，整体计算过程等价于计算 M×K 和 K×N 矩阵乘。
 
@@ -233,7 +233,7 @@ QNNPACK 通过消除不必要的 Repacking，优化了内存使用率并提高�
 
 下图以 M 和 N 均为 4，KH 和 KW 均为 3 的情况做出示例。
 
-![间接缓冲区布局](images/05QNNPACK06.png)
+![间接缓冲区布局](../../imageswtf/04Inference-06Kernel-images-05QNNPACK06.png)
 
 当计算大小为 M × N 大小的输出时，使用的输入为卷积核在对应输入位置上滑动 M 步所覆盖的区域，输入规模为：
 
@@ -300,7 +300,7 @@ $$ \left\lceil \frac{OH \times OW}{M} \right\rceil \times \left\lceil \frac{OC}{
 
 在 The Indirect Convolution Algorithm 中作者展示了间接卷积算法、基于 GEMM 的算法以及 ResNet18 和 SqueezeNet 1.0 模型中仅 GEMM 部分的性能。可以看到间接卷积算法性能会明显优于其他算法的性能。
 
-![性能对比](images/05QNNPACK07.png)
+![性能对比](../../imageswtf/04Inference-06Kernel-images-05QNNPACK07.png)
 
 ## 小结与思考
 

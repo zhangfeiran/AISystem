@@ -8,13 +8,13 @@
 
 在早期的 Apple MAC 电脑选择使用 GNU 编译器集合（GCC）作为官方编译器。尽管 GCC 在开源世界中表现良好，但苹果对编译工具提出了更高要求。苹果在增强 Objective-C 和 C 语言方面投入了大量努力，但 GCC 开发者对苹果在 Objective-C 支持方面的努力表示不满。因此，苹果基于 GCC 分为两个分支进行独立开发，导致苹果的编译器版本明显落后于官方 GCC 版本。
 
-![](images/04LLVM01.png)
+![](../../imageswtf/03Compiler-01Tradition-images-04LLVM01.png)
 
 另一方面，GCC 的代码过于耦合，难以独立开发。随着版本更新，代码质量逐渐下降，而 GCC 无法以模块化方式调用实现 Apple 渴望的更好集成开发环境支持，这限制了 Apple 在编译器领域的发展。
 
 面对这一系列问题，苹果一直寻找高效、模块化和更自由的开源替代方案。最终，苹果聘请了编译器领域的专家克里斯·拉特纳来领导 LLVM 项目的实现，标志着 LLVM 编译器的诞生。
 
-![Chris Lattner](images/04LLVM02.png)
+![Chris Lattner](../../imageswtf/03Compiler-01Tradition-images-04LLVM02.png)
 
 LLVM 项目起源于 2000 年伊利诺伊大学厄巴纳-香槟分校的维克拉姆·艾夫（Vikram Adve）和克里斯·拉特纳（Chris Lattner）的研究，旨在为所有静态和动态语言创建动态编译技术。LLVM 是以 BSD 许可证开发的开源软件。2005 年，苹果公司雇用了克里斯·拉特纳及其团队为 macOS 和 iOS 开发工具，LLVM 成为了这些平台开发工具的一部分。
 
@@ -26,7 +26,7 @@ LLVM 项目已经迅速发展成为一个庞大的编译器工具集合。LLVM �
 
 在 2021 年 jetbrains 开发者调查中表示 GCC 编译器拥有 78%的用户使用率，Clang 编译器有 43% 的用户使用率。
 
-![](images/04LLVM05.png)
+![](../../imageswtf/03Compiler-01Tradition-images-04LLVM05.png)
 
 > 由于 LLVM 对产业的重大贡献，计算机协会在 2012 年授予维克拉姆·艾夫、克里斯·拉特纳和 Evan ChengACM 软件系统奖。
 
@@ -54,11 +54,11 @@ LLVM 提供了一套适用于编译器系统的中间语言（Intermediate Repre
 
 GCC：
 
-![GCC](images/04LLVM03.png) 
+![GCC](../../imageswtf/03Compiler-01Tradition-images-04LLVM03.png) 
 
 LLVM：
 
-![LLVM 的 IR](images/04LLVM04.png)
+![LLVM 的 IR](../../imageswtf/03Compiler-01Tradition-images-04LLVM04.png)
 
 LLVM IR 的优点包括：
 
@@ -72,13 +72,13 @@ LLVM IR 的优点包括：
 
 LLVM 是一个模块化和可重用的编译器和工具链技术库。它的整体架构包含从前端语言处理到最终生成目标机器码的完整优化流程。对于用户而言，通常会使用 Clang 作为前端，而 LLVM 的优化器和后端处理则是透明的。
 
-![编译器](images/04LLVM06.png)
+![编译器](../../imageswtf/03Compiler-01Tradition-images-04LLVM06.png)
 
 - 前端（Front-End）：负责处理高级语言（如 C/C++/Obj-C）的编译，生成中间表示（IR）。
 - 优化器（Optimizer）：对中间表示进行各种优化，提高代码执行效率。
 - 后端（Back-End）：将优化后的中间表示转换为目标平台的机器码。
 
-![编译器](images/04LLVM07.png)
+![编译器](../../imageswtf/03Compiler-01Tradition-images-04LLVM07.png)
 
 当用户编写的 C/C++/Obj-C 代码输入到 Clang 前端时，Clang 会执行以下步骤：
 
@@ -90,7 +90,7 @@ LLVM 是一个模块化和可重用的编译器和工具链技术库。它的整
 
 在详细的架构图中，我们可以看到 LLVM 的前端、优化器、后端等各个组件的交互。在前端，Clang 会将高级语言代码转换为为 LLVM 的中间表示（IR）。
 
-![编译器](images/04LLVM08.png)
+![编译器](../../imageswtf/03Compiler-01Tradition-images-04LLVM08.png)
 
 LLVM 的优化器通过多个优化 pass 来提升中间表示（IR）的性能。每个 pass 都对 IR 进行特定的优化操作，例如：
 
@@ -110,7 +110,7 @@ LLVM 的后端负责将优化后的中间表示转换为目标平台的机器码
 
 LLVM 的整体架构清晰地分为前端、优化器和后端三个部分。用户与 Clang 前端直接交互，输入高级语言代码，而 Clang 将其转换为中间表示。之后，LLVM 的优化器和后端在后台处理，进行复杂的优化和代码生成步骤，最终输出高效的目标机器码。
 
-![编译器](images/04LLVM09.png)
+![编译器](../../imageswtf/03Compiler-01Tradition-images-04LLVM09.png)
 
 在使用 LLVM 时，我们会从原始的 C 代码开始。这个 C 代码会经过一系列的预处理步骤，最终被转换为 LLVM 的中间表示文件（.ll 文件）或者 LLVM 比特码文件（.bc 文件）。
 

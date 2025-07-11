@@ -6,7 +6,7 @@
 
 而本书介绍的 AI 系统整体架构（如图所示），则是对应与昇腾 AI 产业的全栈架构较为相似。因此这里以昇腾计算产业作为例子，来以实际工业界计算产业中的昇腾作为例子进行阐述。其他计算产业如英伟达、寒武纪、摩尔线程等全栈架构基本与 AI 系统也较为相似。
 
-![](./images/08AscendBase01.png)
+![](./../../imageswtf/02Hardware-06Domestic-images-08AscendBase01.png)
 
 ## 昇腾计算产业介绍
 
@@ -24,7 +24,7 @@
 
 - 基于昇腾处理器的系列硬件产品，⽐如嵌⼊式模组、板卡、⼩站、服务器、集群等。
 
-![](./images/08AscendBase02.png)
+![](./../../imageswtf/02Hardware-06Domestic-images-08AscendBase02.png)
 
 昇腾AI产品包含训练和推理产品，主要产品系列如表所示，昇腾训练产品同时支持训练和推理业务，各个组件支持的产品范围请参见组件对应文档的产品支持列表。
 
@@ -46,7 +46,7 @@
 | EP 模式  | 推理产品：Atlas 500 智能小站、Atlas 200 AI 加速模块、Atlas 推理系列产品（配置 Ascend 310P AI处理器）、Atlas 200I A2 加速模块 | EP 模式通常由 Host 侧作为主端，Device 侧作为从端。客户的 AI 业务程序运行在 Host 系统中，昇腾产品作为 Device 系统以 PCIe 从设备接入 Host 系统，Host 系统通过 PCIe 通道与 Device 系统交互，将 AI 任务加载到 Device 侧的昇腾 AI 处理器中运行。 |
 | EP 模式  | 训练产品：Atlas 训练系列产品、Atlas A2 训练系列产品 | 同上 |
 
-![](./images/08AscendBase03.png)
+![](./../../imageswtf/02Hardware-06Domestic-images-08AscendBase03.png)
 
 在异构计算架构中, 昇腾AI处理器与服务器的 CPU 通过 PCIe 总线连接协同工作，我们一般分别称为 Device 侧和 Host 侧。
 
@@ -64,7 +64,7 @@
 
 昇腾计算产业也拥抱各种云服务场景，⽀持 laas，SaaS 等多种云服务模式；同时，端边云协同的能⼒，会原⽣的构建在整个技术架构中，推动昇腾计算成为全场景的 AI 基础设施。
 
-![](./images/08AscendBase04.png)
+![](./../../imageswtf/02Hardware-06Domestic-images-08AscendBase04.png)
 
 ### 产业价值
 
@@ -86,7 +86,7 @@
 
 底层的 AI 芯片和结构体系在昇腾 AI 全栈架构中主要指具体的硬件，覆盖了端边云全场景，支持数据中心，边缘和终端测的灵活部署方式。基础软件则是对应本书中 AI 系统的编译以及 AI 计算架构，使能芯片能力，提供具体的软件计算能力。再往上的框架层则是包含 AI 推理引擎、AI 计算框架。最后上层的应用使能则是针对具体的算法和模型提供的封装等相关的接口。
 
-![](images/08AscendBase05.png)
+![](../../imageswtf/02Hardware-06Domestic-images-08AscendBase05.png)
 
 为满足最大化 AI 开发和部署的灵活性，昇腾整体 AI 架构遵照如下的设计理念。
 

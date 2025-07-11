@@ -22,7 +22,7 @@
 
 CANN 是华为针对 AI 场景推出的异构计算架构，对上支持多种 AI 框架，对下服务 AI 处理器与编程，发挥承上启下的关键作用，是提升昇腾 AI 处理器计算效率的关键平台。而 CANN 算子又包括两类，分别是 AI Core 算子和 AI CPU 算子。与算子名称相符，两种算子分别执行在昇腾 AI 处理器的 AI Core 和 AI CPU 上，昇腾 AI 处理器中 AI Core 与 AI CPU 的相互关联如下图所示：
 
-![昇腾 AI 处理器 SoC 逻辑图](images/01OPType01.png)
+![昇腾 AI 处理器 SoC 逻辑图](../../imageswtf/03Compiler-07CANN-images-01OPType01.png)
 
 其中，AI Core 是昇腾 AI 处理器的计算核心，负责执行矩阵、向量、标量计算密集的算子任务；AI CPU 负责执行不适合在 AI Core 上运行的算子任务，即非矩阵类复杂计算。
 
@@ -62,7 +62,7 @@ AI CPU 算子编译执行所涉及组件如下：
 
 - 第三步，算子计算逻辑实现结束后，用“REGISTER_CPU_KERNEL(算子类型，算子类名) ”进行算子的注册。
 
-![AICPU 算子基类](images/01OPType02.png)
+![AICPU 算子基类](../../imageswtf/03Compiler-07CANN-images-01OPType02.png)
 
 ## 小结与思考
 

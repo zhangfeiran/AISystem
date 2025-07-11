@@ -10,7 +10,7 @@
 
 本节展示了如何通过使用**朴素张量并行**解决这个问题。与数据并行相反，张量并行将单个模型拆分到不同的设备上，而不是在每个设备上复制整个模型（具体来说，假设一个模型 `m` 包含 6 层：使用数据并行时，每个设备将拥有这 6 层的副本，而使用张量并行在两个设备上时，每个设备只拥有 3 层）。
 
-![张量并行](images/03ModelParallel01.png)
+![张量并行](../../imageswtf/05Framework-04Parallel-images-03ModelParallel01.png)
 
 来看一个简单的张量并行的例子：
 
@@ -43,7 +43,7 @@ class ModelParallelResNet50(ResNet):
 
 朴素张量并行实现解决了模型过大无法放入单个设备的问题。然而，你可能已经注意到，如果模型能够放入单个设备，朴素张量并行将比在单个设备上运行更慢。这是因为在任何时候，只有一个设备在工作，而另一个设备处于空闲状态。当中间输出需要从 `npu:0` 复制到 `npu:1` 时，性能会进一步恶化。
 
-![朴素张量并行](images/03ModelParallel02.png)
+![朴素张量并行](../../imageswtf/05Framework-04Parallel-images-03ModelParallel02.png)
 
 实际上朴素张量并行实现的执行时间比现有的单设备实现慢 `7%`。因此，可以得出结论，跨设备复制张量的开销约为 7%。仍有改进的空间，因为知道在整个执行过程中有一个设备是空闲的。一种选择是进一步将每个批次分成流水线的分片，这样当一个分片到达第二个子网络时，下一个分片可以进入第一个子网络。这样，两个连续的分片可以在两个设备上并行运行。
 
@@ -63,13 +63,13 @@ class ModelParallelResNet50(ResNet):
 
 矩阵乘法（MatMul）是深度学习中最常见的操作之一。在张量并行中，可以将矩阵按列或者按行切分，然后在不同设备上并行执行部分计算。以矩阵乘法 $A \times B = C$ 为例，假设将矩阵 $B$ 按列切分成 $B_1$ 和 $B_2$，分别存储在设备 1 和设备 2 上。在这种情况下，设备 1 和设备 2 可以分别计算 $B_1 \times A$ 和 $B_2 \times A$，最终通过合并结果得到 $C$。
 
-![模型并行](images/03ModelParallel08.png)
+![模型并行](../../imageswtf/05Framework-04Parallel-images-03ModelParallel08.png)
 
 ### Transformer 并行
 
 在 Transformer 模型中，主要包括多层感知机（MLP）和自注意力（Self-Attention）模块，它们的计算本质上也是矩阵乘法。对于 MLP 模块，可以将输入矩阵 $X$ 和权重矩阵 $A$ 按列切分，不同设备分别计算一部分乘积，然后合并结果。对于自注意力模块，可以将查询（Query）、键（Key）和值（Value）矩阵按列切分，不同设备分别计算注意力得分和加权求和，最后合并结果。
 
-![模型并行](images/03ModelParallel09.png)
+![模型并行](../../imageswtf/05Framework-04Parallel-images-03ModelParallel09.png)
 
 对于多层感知机（MLP），对 A 采用列切割，对 B 采用行切割，在初始时使用函数 f 复制 X，结束时使用函数 g 通过 All-Reduce 汇总 Z，这样设计的原因是，尽量保证各设备上的计算相互独立，减少通信量。对 A 来说，需要做一次 GELU 计算，而 GELU 函数是非线形的，$GeLU(X + Y) \not = GeLU(X) + GeLU(Y)$，对 A 采用列切割，那每块设备就可以继续独立计算了。
 
@@ -81,7 +81,7 @@ class ModelParallelResNet50(ResNet):
 
 在大型 Transformer 模型中（如：LLM），词嵌入的并行处理是一种有效的技术，可以减轻单个设备的内存负担并提高计算效率，通常有两种主要的切分方式：表切分（Table-wise split）和列切分（Column-wise split）。
 
-![模型并行](images/03ModelParallel10.png)
+![模型并行](../../imageswtf/05Framework-04Parallel-images-03ModelParallel10.png)
 
 - 表切分模式（a）下，每个设备存储部分的嵌入表。例如：每个嵌入表对应一个类别特征，每个设备存储一部分嵌入表。设备 1 存储嵌入表 0，设备 2 存储嵌入表 1，依此类推。在这种模式下，每个设备只处理它存储的嵌入表对应的类别特征。这个方法的优点是每个设备只需处理和存储一部分数据，减少了单个设备的内存负担。
 
@@ -93,7 +93,7 @@ class ModelParallelResNet50(ResNet):
 
 Cross Entropy Loss 并行用于在计算损失函数时节省内存和通信，因为模型输出通常非常大。在 Cross Entropy Loss 并行中，当模型输出在（通常是巨大的）词汇维度上进行分片时，可以高效地计算交叉熵损失，而无需将所有模型输出聚集到每一个设备上。这不仅大大减少了内存消耗，还通过减少通信开销和并行分片计算提高了训练速度。
 
-![模型并行](images/03ModelParallel11.png)
+![模型并行](../../imageswtf/05Framework-04Parallel-images-03ModelParallel11.png)
 
 Cross Entropy Loss 并行可以分为以下几步：
 

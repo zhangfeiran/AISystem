@@ -59,7 +59,7 @@ int () {}
 
 Ascend C 算子采用标准 C++ 语法和一组编程类库 API 进行编程，可以根据自己的需求选择合适的 API。Ascend C 编程类库 API 示意图如下图所示，Ascend C API 的操作数都是 Tensor 类型：`GlobalTensor`（外部数据存储空间）和 `LocalTensor`（核上内存空间）；类库 API 分为高阶 API 和基础 API。
 
-![编程类库 API](images/04Grmmar01.png)
+![编程类库 API](../../imageswtf/03Compiler-07CANN-images-04Grmmar01.png)
 
 ### 基础 API
 
@@ -89,7 +89,7 @@ Ascend C 算子采用标准 C++ 语法和一组编程类库 API 进行编程，�
 
 Tensor 前 n 个数据计算可以实现一维的连续计算，可以指定 Tensor 的特定长度参与计算，Tensor 前 n 个数据计算也是一般开发过程中使用最为频繁的接口，兼具较强的功能性和易用性；整个 Tensor 参与计算是易用性最强的，使用难度最低的，针对整个 Tensor 进行计算，但是功能性较低。开发者可以根据自身水平和不同的需要去灵活地选择各种层级的接口。
 
-![编程类库 API](images/04Grmmar02.png)
+![编程类库 API](../../imageswtf/03Compiler-07CANN-images-04Grmmar02.png)
 
 ### 高阶 API
 
@@ -178,7 +178,7 @@ LocalTensor<half> tensor1 = que.DeQue<half>();
 
 `TQue` 队列内存初始化完成后，需要使用内存时，通过调用 AllocTensor 来为 `LocalTensor` 分配内存，当创建的 `LocalTensor` 完成相关计算无需再使用时，再调用 FreeTensor 来回收 `LocalTensor` 的内存。内存管理示意图如下图所示：
 
-![内存管理](images/04Grmmar03.png)
+![内存管理](../../imageswtf/03Compiler-07CANN-images-04Grmmar03.png)
 
 一个使用 `TPipe` 数据结构的样例展示如下所示：
 

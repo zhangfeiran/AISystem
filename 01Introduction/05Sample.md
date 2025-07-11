@@ -12,7 +12,7 @@
 
 如图所示，可以看到一个神经网络模型可以接受输入（如当前手写数字图片），产生输出（如数字分类），这个过程叫前向传播（Forward Propagation）。
 
-![](images/04Sample02.png)
+![](../imageswtf/01Introduction-images-04Sample02.png)
 
 那么如何得到一个针对当前已有的输入输出数据上，预测效果最好的神经网络模型呢？这个时候需要通过对网络模型进行训练，训练过程可以抽象为数学上的优化问题，优化目标为:
 
@@ -170,7 +170,7 @@ class LeNet(nn.Module):
 
 如图中所示，输入张量形状（Tensor Shape）为 $3 \times 32 \times 32$（3 代表通道数，32 代表张量高度和宽度），经过 $2 \times 3 \times 5 \times 5$ 的卷积（2 代表输出通道数，3 代表输入通道数，5 代表卷积核高度和宽度）后，输出张量形状为 $2 \times 28 \times 28$（2 代表通道，28 代表高度和宽度）。
 
-![](images/04Sample04.png)
+![](../imageswtf/01Introduction-images-04Sample04.png)
 
 ### 卷积执行样例
 
@@ -230,7 +230,7 @@ for n in range(batch_size):
 
 因此如图自底向上分为不同的步骤和处理流程。后面以 [cuDNN 书写的卷积神经网络 LeNet 实例](https://github.com/tbennun/cudnn-training) 作为简单示例。
 
-![](images/04Sample05.png)
+![](../imageswtf/01Introduction-images-04Sample05.png)
 
 1. 通过 cuDNN + CUDA API 编程实现 LeNet
 

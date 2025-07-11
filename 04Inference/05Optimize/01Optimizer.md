@@ -6,7 +6,7 @@
 
 计算图优化是一种重要的技术，主要目标是提高计算效率和减少内存占用，通常由 AI 框架的编译器自动完成，通过优化，可以降低模型的运行成本，加快运行速度，提高模型的运行效率，尤其在资源有限的设备上，优化能显著提高模型的运行效率和性能.
 
-![推理引擎架构](images/01Optimizer01.png)
+![推理引擎架构](../../imageswtf/04Inference-05Optimize-images-01Optimizer01.png)
 
 ## 挑战与架构
 
@@ -167,7 +167,7 @@ ORT 提供了五种优化方向，分别为：
 
 对于计算图中节点的消融、算子融合、常量折叠等操作主要提供了两种接口即 GraphTransofrmer 和 RewriteRule 。ORT 还进一步按照 selectors＋actions 策略设计了 SelectorActionTransformer 接口，按照多个既定规则设计了 RuleBasedGraphTransformer 接口。ORT 提供的绝大多数计算图优化方法都是继承自如上接口。
 
-![类图](images/01Optimizer02.png)
+![类图](../../imageswtf/04Inference-05Optimize-images-01Optimizer02.png)
 
 ### GraphTransformer and RewriteRule
 
@@ -237,7 +237,7 @@ InferenceSession 是推理过程中主要的功能类，在该类中包含了推
 
 运行阶段调用了 inference_session.cc 中的 InferenceSession::Run() 函数，该函数是模型推理功能实现的主要函数。前面两个阶段完成了推理中需要的管理器设置和初始化，为计算图创建了执行计划 p_seq_exec_plan_，在运行阶段只需要按照创建的执行计划依次调用对应的 kernel 即可。
 
-![算子调用函数链](images/01Optimizer03.png)
+![算子调用函数链](../../imageswtf/04Inference-05Optimize-images-01Optimizer03.png)
 
 Session.Run() 函数会调用 ExecutionGraph() 函数来运行计算图，这里的 Session.Run() 是调用了 InferenceSession 中的 Run 函数，而该函数是个递归函数，会调用 N+1 次来捕获全图。ExecutionGraph 会调用 ExecutionGraphImpl 函数，ExecutionGraphImpl 会调用 ExecuteThePlan。
 

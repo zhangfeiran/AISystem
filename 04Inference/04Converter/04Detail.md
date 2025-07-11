@@ -12,7 +12,7 @@
 
 **规范式转换**设计了一种开放式的文件规范，使得主流 AI 框架可以实现对该规范标准的支持。例如不是直接转换 Pytorch 格式，而是把 Pytorch 转换为 ONNX 格式，或者把 MindSpore 转换成 ONNX 格式，再通过 ONNX Converter 转换成推理引擎 IR。主流 AI 框架基本上都是支持这两种转换技术的。
 
-![模型转换](images/01Introduction01.png)
+![模型转换](../../imageswtf/04Inference-04Converter-images-01Introduction01.png)
 
 ### 直接转换流程
 
@@ -163,15 +163,15 @@ else:
 
 使用 Netron（开源的模型可视化工具）来可视化 ONNX 模型：
 
-![ONNX 模型可视化](images/04Detail02.png)
+![ONNX 模型可视化](../../imageswtf/04Inference-04Converter-images-04Detail02.png)
 
 点击 input 或者 output，可以查看 ONNX 模型的基本信息，包括模型的版本信息，以及模型输入、输出的名称和数据类型。
 
-![模型基本信息](images/04Detail03.png)
+![模型基本信息](../../imageswtf/04Inference-04Converter-images-04Detail03.png)
 
 点击某一个算子节点，可以看到算子的具体信息。比如点击第一个 Gemm 可以看到：
 
-![算子信息](images/04Detail04.png)
+![算子信息](../../imageswtf/04Inference-04Converter-images-04Detail04.png)
 
 每个算子记录了算子属性、图结构、权重三类信息:
 
@@ -197,7 +197,7 @@ else:
    
 4. 根据推理引擎的中间格式 IR，导出并保存模型文件，用于后续真正推理执行使用。
 
-![模型转换通用流程](images/04Detail01.png)
+![模型转换通用流程](../../imageswtf/04Inference-04Converter-images-04Detail01.png)
 
 在模型转换过程中，要注意确保源框架和目标框架中的算子兼容，能够处理不同框架中张量数据格式的差异。此外，还可以对计算图进行优化，提升推理性能，尽可能确保模型的精度不受损失。
 

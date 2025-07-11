@@ -8,13 +8,13 @@
 
 CPU 内存主要架构图如下图所示，其中比较关键的是有主存，以及其上的多级缓存架构，CPU 运行的速度太快，相对而言内存的读写速度就非常慢。如果 CPU 每次都要等内存操作完成，才可以继续后续的操作，那效率会非常低下。由此设计出了多级缓存架构，缓存级别越小，越靠近 CPU，同样也意味着速度越快，但是对应的容量越少。
 
-![CPU 架构示意图](images/06Memory01.png)
+![CPU 架构示意图](../../imageswtf/04Inference-06Kernel-images-06Memory01.png)
 
 当 CPU 需要取数据时，如果通过索引得知缓存中没有该数据，那么此时 CPU 需要从 RAM 主存中先获取数据，然后将该数据及其临近数据加载到 Cache 缓存中，以便利用访问局部性提升访问命中率。当然多级缓存也会带来问题，即数据同步问题，当出现多核和乱序时，如何保证数据同步也需要提供一种内存屏障的规则。
 
 GPU 内存主要架构图如下图所示，在主缓存等主要架构上，与 CPU 没太多的区别，也是多级缓存架构，其调度执行模式主要是按照 SIMT 模式进行，由许多 SM 组成。
 
-![GPU 架构示意图](images/06Memory02.png)
+![GPU 架构示意图](../../imageswtf/04Inference-06Kernel-images-06Memory02.png)
 
 SM（Streaming Multiprocessors）：可以理解为一个 GPU 计算单元的小集合，好比多核 CPU 的一个核 —— 但 CPU 的一个核一般运行一个线程，而 SM 能够运行多个轻量线程，每一个 SM 有自己的 Wrap scheduler 、寄存器（Register）、指令缓存、L1 缓存、共享内存。Wrap scheduler：运算规划器，可以理解为运算时一个 warp 抓一把线程扔进了 cores 里面进行计算。
 
@@ -26,7 +26,7 @@ GPU 互相之间一般是通过 PCIe 桥直接传输数据，或者是通过 NVL
 
 由于典型的卷积神经网络随着层数的增加，其特征图在下采样后的长和宽逐渐减小，但是通道数随着卷积的过滤器的个数不断增大是越来越大的，经常会出现通道数为 128，256 等很深的特征图。这些很深的特征图与过滤器数很多的卷积层进行运算的运算量很大。为了充分利用有限的矩阵计算单元，进行了通道维度的拆分是很有必要的。根据不同数据结构特点，常见的有分别对 Channel 维进行了 Channel/4，Channel/32 和 Channel/64 的拆分，下图为 NCHWX 的物理存储结构。
 
-![NCHWX 示意图](images/06Memory03.png)
+![NCHWX 示意图](../../imageswtf/04Inference-06Kernel-images-06Memory03.png)
 
 具体来说，先取 Channel 方向的数据，按照 NCHW4 来进行举例，先取 17/13/X，再取 W 方向的数据，再取 H 方向的数据。
 
@@ -64,7 +64,7 @@ MNN 在 WinoGrad 卷积计算优化中使用的数据排布格式为 NC4HW4。�
 
 MNN 中数据重新排布后，对 WinoGrad 卷积的计算如下图所示：
 
-![MNN 中 WinoGrad 卷积计算示意图](images/06Memory04.png)
+![MNN 中 WinoGrad 卷积计算示意图](../../imageswtf/04Inference-06Kernel-images-06Memory04.png)
 
 我们看数据格式重新排布后的重要计算公式：
 

@@ -4,7 +4,7 @@
 
 在本节我们探讨一下，如何利用 AI 编译器在新的硬件上部署一个神经网络，从算法设计到实际运行，有哪些需要考虑的地方？本节将以 TVM 为例，首先介绍一下 TVM 的工作流：
 
-![image-20240612213553327](images/07Practice01.png)
+![image-20240612213553327](../../imageswtf/03Compiler-04Backend-images-07Practice01.png)
 
 - 导入模型。TVM 可以从 TensorFlow、PyTorch、ONNX 等框架导入模型。
 - 转换为 Relay。Relay 是 TVM 的中间表示形式，已导入 TVM 的模型以 Relay 表示。最新版本为 Relax。
@@ -19,11 +19,11 @@
 
 在部署网络时，首先要考虑在目标硬件平台的可行性，如果目标硬件平台不支持某个算子，那么就需要替换为相似的受支持的算子。例如在 YoloV5 中，默认的激活函数为 SiLU，SiLU 的计算公式涉及自然指数和除法，对 FPGA 硬件非常不友好，其函数曲线如下：
 
-![](images/07Practice02.png)
+![](../../imageswtf/03Compiler-04Backend-images-07Practice02.png)
 
 而 YoloV5 中还提供了其他的激活函数如 ReLU6，其函数曲线如下图。经过实验发现二者在精度上面并无太大差异，而 ReLU6 的计算方式则简单的多，可以用 ReLU6 来替换 SiLU。
 
-![](images/07Practice03.png)
+![](../../imageswtf/03Compiler-04Backend-images-07Practice03.png)
 
 除了激活函数的替换，另一个典型例子是卷积的改进。为了改进普通卷积高额的计算开销，研究人员开发了多种紧凑卷积来压缩计算量：
 
@@ -532,7 +532,7 @@ $$
 
         好在如果使用 int8 量化，那么输入的数据只有[-128,127]这 256 个数，经过激活函数后产生 256 个输出值，这是个一对一的映射关系，因此可以使用查找表提前保存这 256 个值，在运算时直接查表即可。查找表的生成可以模拟浮点计算的过程：将 input 到 output 的过程看作大小为 256 的一对一映射，把 input（int8 的整数）看作索引，LUT 看作数组，直接取值即可
 
-        ![img](images/07Practice04.jpg)
+        ![img](../../imageswtf/03Compiler-04Backend-images-07Practice04.jpg)
 
         以 tanh 为例，获得 int8 范围内[-127,128]的 LUT 代码如下：
 
@@ -585,7 +585,7 @@ $$
 
 在经过一系列的转换后，量化网络的结构会发生极大变化，这里有一个简要的示意图：
 
-![](images/07Practice05.jpg)
+![](../../imageswtf/03Compiler-04Backend-images-07Practice05.jpg)
 
 左边的原始网络会变成右边的结构。标号处是值得关注的地方：
 
@@ -628,7 +628,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 该框架流程如下：
 
-![](images/07Practice06.png)
+![](../../imageswtf/03Compiler-04Backend-images-07Practice06.png)
 
 流程：
 
@@ -648,7 +648,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 2)一些硬件供应商使用自己的低级 IR，需要从高层 IR 转换
 
-![img](images/07Practice07.png)
+![img](../../imageswtf/03Compiler-04Backend-images-07Practice07.png)
 
 **基于模式的分组：**
 
@@ -656,7 +656,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 该框架提供了模式匹配机制，如下代码描述的匹配一个 Conv2d-add-relu
 
-![](images/07Practice08.png)
+![](../../imageswtf/03Compiler-04Backend-images-07Practice08.png)
 
 通过上述匹配模式表，可以将图 3（上）a 转换为 b
 
@@ -664,7 +664,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 在根据模式将 node 进行分组后，下一步是根据编程模型指定支持的算子列表。例如下代码注册了一个函数，指示所有浮点类型的 Conv2D 节点被注释并卸载到 MyAccel 中
 
-![](images/07Practice09.png)
+![](../../imageswtf/03Compiler-04Backend-images-07Practice09.png)
 
 通过一组注解函数，在图中生成了多个区域，这些区域可以被卸载到目标加速器上，如上图 3（c） 。
 
@@ -682,7 +682,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 在划分之后，一个图被分割成多个不同后端处理的区域，在 host 上的区域可以有效利用从现有的深度学习编译器中进行的标准优化，然而卸载到加速器的区域可能需要一些特定于硬件的优化（例如融合、替换、存储布局转换、量化等），这些优化通常是专有的，无法在深度学习编译器中处理。
 
-![](images/07Practice11.png)
+![](../../imageswtf/03Compiler-04Backend-images-07Practice11.png)
 
 上图左边是量化，右边是存储布局转换。
 
@@ -690,7 +690,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 编译流的最后一步是代码生成。
 
-![](images/07Practice12.png)
+![](../../imageswtf/03Compiler-04Backend-images-07Practice12.png)
 
 该框架通过遍历图并为每个图节点调用相应的代码生成来生成一个子模块。当遍历到 host 上的节点时，可以利用现有深度学习编译器中的代码生成，如 TVM 和 XLA，它们能为通用设备（如 CPU 和 GPU）生成代码。当遍历到特定 target 标注的节点（即划分函数）时，生成一个外部函数调用作为运行时内核调用的 hook。同时调用加速器特定的代码生成，其包含了硬件供应商提供的代码生成工具和编译流，为该节点中的划分函数生成一个“加速器子模块”。
 
@@ -713,7 +713,7 @@ TVM 推荐的 BYOC（Bring Your Own Codegen to Deep Learning Compiler）方式�
 
 运行时系统负责执行模型图的推理，并将算子和子图分发到目标平台。图执行引擎可以是一个简单的数据流图 visitor，处理大多数 CNN；也可以是一个虚拟机来执行字节码，处理现代模型中呈现出的动态性和控制流。
 
-![img](images/07Practice10.png)
+![img](../../imageswtf/03Compiler-04Backend-images-07Practice10.png)
 
 运行时系统流程如下：
 

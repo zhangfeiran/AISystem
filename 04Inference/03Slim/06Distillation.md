@@ -16,7 +16,7 @@
 
 知识蒸馏通常应用于那些结构复杂的神经网络模型上，这些模型具有众多层次和大量参数，被当作教师模型来使用。如下图所示，在知识蒸馏过程中，一个小的“学生”模型通过模仿大的“教师”模型，学习和吸收教师模型中的知识，从而获得与教师模型相似甚至更高的准确度。
 
-![知识蒸馏架构](images/06Distillation01.png)
+![知识蒸馏架构](../../imageswtf/04Inference-03Slim-images-06Distillation01.png)
 
 随着深度学习在过去十年的迅猛发展，知识蒸馏技术已经在多个领域取得了显著的成功，包括语音识别、图像识别和自然语言处理等，知识蒸馏技术在实际应用中越来越受到重视，成为优化模型性能和部署效率的重要手段。
 
@@ -34,7 +34,7 @@
 
 知识的类型可以分为四类，主要有 Response-based、Feature-based、Relation-based 三种，另外还有一种较少提及的类型，即 Architecture-based 的知识。
 
-![知识类型](images/06Distillation03.png)
+![知识类型](../../imageswtf/04Inference-03Slim-images-06Distillation03.png)
 
 ### response-based knowledge
 
@@ -42,7 +42,7 @@
 
 当知识蒸馏对这部分知识进行转移时，学生模型直接学习教师模型的最终输出，以使学生模型获得与教师模型一样的预测性能。
 
-![Response-based knowledge](images/06Distillation04.png)
+![Response-based knowledge](../../imageswtf/04Inference-03Slim-images-06Distillation04.png)
 
 通俗的说法就是老师充分学习知识后，直接将结论告诉学生。假设张量 $z_t$ 为教师模型的输出 logits，张量 $z_s$ 为学生模型的输出 logits，蒸馏学习的目标是让 $z_s$ 模仿 $z_t$，降低上图中的 distillation loss。图中基于响应的知识的 distillation loss 被表示为
 
@@ -58,7 +58,7 @@ $$L_{ResD}(z_t,z_s)=L_{R}(z_t,z_s)$$
 
 随着网络的深度增加，每一层提取的特征都越来越抽象和高级，可以捕捉到数据中更加复杂和抽象的模式和结构。考虑到神经网络擅长学习不同抽象级别的多层特征表示，因此模型中间层的输出，即特征图，也可以作为指导学生模型学习的知识。
 
-![Feature-based knowledge](images/06Distillation05.png)
+![Feature-based knowledge](../../imageswtf/04Inference-03Slim-images-06Distillation05.png)
 
 这些来自中间层基于特征的知识是对基于响应的知识的良好扩展，特别适用于训练更瘦更深的网络。上图展示了 Feature-based knowledge 的知识蒸馏过程。
 
@@ -78,7 +78,7 @@ $$L_{FeaD}(f_t(x),f_s(x)) = L_F(\phi_{t}(f_t(x)),\phi_{s}(f_s(x)))$$
 
 其重点在于提供一个一致的关系映射，使得学生模型能够更好地学习教师模型中的关系知识。例如将教师模型中某两层特征图的 Gram 矩阵（网络层输出之间的关系）作为知识，或者将数据样本之间的关系表示为数据样本在教师模型中的特征表征的概率分布，将这种概率分布（数据样本间的关系）作为知识供学生模型学习。
 
-![Feature-based knowledge](images/06Distillation11.png)
+![Feature-based knowledge](../../imageswtf/04Inference-03Slim-images-06Distillation11.png)
 
 上图展示了数据样本之间的关系知识蒸馏的过程，其蒸馏损失函数可以表述为：
 
@@ -94,7 +94,7 @@ $$
 
 类似于人类教师和学生之间的学习模式，神经网络的知识蒸馏在学习方式上也有多种模式，一般分为三种：离线蒸馏（offline distillation），在线蒸馏（online distillation）以及自蒸馏（self-distillation）。
 
-![知识蒸馏方式](images/06Distillation07.png)
+![知识蒸馏方式](../../imageswtf/04Inference-03Slim-images-06Distillation07.png)
 
 ### offline distillation
 

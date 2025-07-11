@@ -12,7 +12,7 @@ LLVM 的前端其实是把源代码也就是 C、C++、Python 这些高级语言
 
 这个阶段属于代码生成之前的过程，和硬件与目标无关，所以在前端的最后一个环节是 IR 的生成
 
-![编译器](images/07LLVMFrontend01.png)
+![编译器](../../imageswtf/03Compiler-01Tradition-images-07LLVMFrontend01.png)
 
 Clang 是一个强大的编译器工具，作为 LLVM 的前端承担着将 C、C++ 和 Objective-C 语言代码转换为 LLVM 中间表示（IR）的任务。
 
@@ -24,7 +24,7 @@ Clang 是一个强大的编译器工具，作为 LLVM 的前端承担着将 C、
 
 - 语义分析阶段则确保语法树的各部分之间的关系和含义是正确的，比如类型匹配、变量声明的范围等，以确保程序的正确性和可靠性。
 
-![编译器](images/07LLVMFrontend02.png)
+![编译器](../../imageswtf/03Compiler-01Tradition-images-07LLVMFrontend02.png)
 
 每个编程语言前端都会有自己的词法分析器、语法分析器和语义分析器，它们的任务是将程序员编写的源代码转换为通用的抽象语法树（AST），这样可以为后续的处理步骤提供统一的数据结构表示。AST 是程序的一个中间表示形式，它便于进行代码分析、优化和转换。
 
@@ -170,7 +170,7 @@ TranslationUnitDecl 0x1c08a71cf28 <<invalid sloc>> <invalid sloc>
 clang -fsyntax-only -Xclang -ast-view hello.c
 ```
 
-![编译器](images/07LLVMFrontend03.png)
+![编译器](../../imageswtf/03Compiler-01Tradition-images-07LLVMFrontend03.png)
 
 AST 节点 CompoundStmt 包含 `if` 和 `return` 语句，`IfStmt` 和 `ReturnStmt`。每次对 a 和 b 的使用都生成一个到 int 类型的 `ImplicitCastExpr`，如 C 标准的要求。
 

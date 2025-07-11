@@ -22,7 +22,7 @@ ShuffleNet V1 网络结构同样沿袭了稀疏连接的设计理念。作者通
 
 因此，在使用分组逐点卷积的同时，需要引入组间信息交换的机制。也就是说，对于第二层卷积而言，每个卷积核需要同时接收各组的特征作为输入，如下图 (b)所示。作者指出，通过引入“通道重排”（channel shuffle，见下图 (c)）可以很方便地实现这一机制；并且由于通道重排操作是可导的，因此可以嵌在网络结构中实现端到端的学习。
 
-![Shufflenet](images/03Shufflenet01.png)
+![Shufflenet](../../imageswtf/04Inference-02Mobilenet-images-03Shufflenet01.png)
 
 ### 逐点分组卷积
 
@@ -74,7 +74,7 @@ def shuffle_channels(x, groups):
 
 基于残差块（residual block）和 通道重排（channel shuffle）设计的 ShuffleNet Unit 主要由深度卷积、逐点分组卷积和逐点分组卷积组成。
 
-![Shufflenet](images/03Shufflenet02.png)
+![Shufflenet](../../imageswtf/04Inference-02Mobilenet-images-03Shufflenet02.png)
 
 ```python
 # ShuffleNet 中 stride=1 的基本单元
@@ -197,7 +197,7 @@ class ShuffleNet(nn.Module):
 
 在移动设备中的运行速度不仅仅需要考虑 FLOPs，还需要考虑其他的因素，比如内存访问成本(memory access cost)和平台特点(platform characterics)。所以，ShuffleNet v2 通过控制不同的环境来测试网络在设备上运行速度的快慢，而不是通过 FLOPs 来判断性能指标。
 
-![Shufflenet](images/03Shufflenet03.png)
+![Shufflenet](../../imageswtf/04Inference-02Mobilenet-images-03Shufflenet03.png)
 
 因此，ShuffleNetv2 提出了设计应该考虑两个原则：
 
@@ -232,7 +232,7 @@ def split(x, groups):
 
 针对需要进行空间下采样的 block，卷积单元（block）进行了修改，通道切分算子被移除，然后 block 的输出通道数变为两倍，详细信息如下图(d) 所示。
 
-![Shufflenet](images/03Shufflenet04.png)
+![Shufflenet](../../imageswtf/04Inference-02Mobilenet-images-03Shufflenet04.png)
 
 ```python
 #Shuffle V2 block

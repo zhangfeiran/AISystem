@@ -18,13 +18,13 @@
 
 在数学中，张量是标量和向量的推广，而在机器学习领域中，一般将多维数据称为张量。AI 框架的 Tensor 张量具有 Tensor 形状和元素类型等基本属性，常见的二维张量和三维张量的示意图分别如下所示:
 
-![二维张量示意图](images/02Graph01.png)
+![二维张量示意图](../../imageswtf/03Compiler-03Frontend-images-02Graph01.png)
 
-![三维张量示意图](images/02Graph02.png)
+![三维张量示意图](../../imageswtf/03Compiler-03Frontend-images-02Graph02.png)
 
 AI 框架的 Operator 算子一般由最基本的代数算子组成，可以根据神经网络模型的需求组成复杂的算子，常见的 Operator 算子如下表所示。
 
-![常见算子示意图](images/02Graph03.png)
+![常见算子示意图](../../imageswtf/03Compiler-03Frontend-images-02Graph03.png)
 
 算子一般具有 N 个输入的 Tensor 张量，M 个输出的 Tensor 张量，其中 N 和 M 均为正整数。此外，“算子”是 AI 框架的一个概念，而在硬件底层或者使用 CUDA 编写部分算子表达时，一般称为 CUDA Kernel。
 
@@ -34,7 +34,7 @@ AI 框架的 Operator 算子一般由最基本的代数算子组成，可以根�
 
 通过使用该表示方法，正向传播的计算图如下图中左图所示，结合了正向传播和反向传播的计算图如下图右图所示。此外，在计算图中也可能存在特殊的操作，例如 For、While 等构建控制流，也可能存在特殊的边，例如使用控制边表示节点间依赖。
 
-![计算图示例](images/02Graph04.png)
+![计算图示例](../../imageswtf/03Compiler-03Frontend-images-02Graph04.png)
 
 ## AI 框架如何生成计算图
 
@@ -48,13 +48,13 @@ AI 框架的 Operator 算子一般由最基本的代数算子组成，可以根�
 
 在将正向图与反向图结合生成完整的计算图后，AI 编译器将可以对计算图进行后续处理，包括但不限于算子融合、常量折叠等多种优化 Pass。
 
-![AI 框架建立反向图补全计算图的示例](images/02Graph05.png)
+![AI 框架建立反向图补全计算图的示例](../../imageswtf/03Compiler-03Frontend-images-02Graph05.png)
 
 AI 框架将会自动分析上图中表示的计算图的计算过程，通过追踪计算图中的数据流，对其中的每个参数都进行精确地微分，获取相应的梯度，以便后续计算中使用这些梯度在神经网络的训练过程中进行参数更新，上文所示的计算图的自动微分示意图如下图所示。
 
 现代的 AI 框架，如 PyTorch、MindSpore 和 PaddlePaddle，都具备自动微分的功能，极大的简化了神经网络模型的开发和训练过程。
 
-![计算图中自动微分示意图](images/02Graph06.png)
+![计算图中自动微分示意图](../../imageswtf/03Compiler-03Frontend-images-02Graph06.png)
 
 ### AI 框架生成静态图
 

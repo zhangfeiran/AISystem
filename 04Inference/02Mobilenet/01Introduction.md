@@ -6,7 +6,7 @@
 
 但由于大部分的神经网络模型的参数量很大，无法满足直接部署到移动端的条件，因此在不严重影响模型性能的前提下对模型进行重新设计，来减少网络参数量和计算复杂度，提升运算能力是目前相当热门的研究方向。同时也希望在后续的章节中，让大家更了解模型轻量化的一些经典网络结构。
 
-![Introduction](images/01Introduction01.png)
+![Introduction](../../imageswtf/04Inference-02Mobilenet-images-01Introduction01.png)
 
 ## 复杂度分析
 

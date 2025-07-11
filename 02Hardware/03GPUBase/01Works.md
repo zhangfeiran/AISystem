@@ -14,7 +14,7 @@
 
  GPU 即图形处理单元（Graphics Processing Unit），可以更高效地处理并行运行时复杂的数学运算，最初用于处理游戏和动画中的图形渲染任务，现在的用途已远超于此。两者具有相似的内部组件，包括核心、内存和控制单元。
 
-![CPU 和 GPU 架构对比](images/01Works01.png)
+![CPU 和 GPU 架构对比](../../imageswtf/02Hardware-03GPUBase-images-01Works01.png)
 
 GPU 和 CPU 在架构方面的主要区别包括以下几点：
 
@@ -32,7 +32,7 @@ GPU 和 CPU 在架构方面的主要区别包括以下几点：
 
  CPU 优化的目标是尽可能快地在尽可能低的延迟下执行完成任务，同时保持在任务之间具体快速切换的能力。它的本质是以序列化的方式处理任务。GPU 的优化则全部都是用于增大吞吐量的，它允许一次将尽可能多的任务推送到 GPU 内部，然后 GPU 通过大数量的 Core 并行处理任务。
 
-![带宽、延迟与吞吐](images/01Works02.png)
+![带宽、延迟与吞吐](../../imageswtf/02Hardware-03GPUBase-images-01Works02.png)
 
 > 处理器带宽（Bandwidth）、延时（Lantency）和吞吐（Throughput）
 > 
@@ -86,7 +86,7 @@ CPU 和 GPU 的典型架构对比可知 GPU 可以比作一个大型的吞吐器
 
 相对应的可以把 CPU 比喻成一台延迟机，主要工作是为了在一个线程里完成所有的工作，因为希望能够使用足够的线程去解决延迟的问题，所以 CPU 的硬件设计者或者硬件设计架构师就会把所有的资源和重心都投入到减少延迟上面，因此 CPU 的线程比只有一点多倍，这也是 SIMD（Single Instruction, Multiple Data）和 SIMT（Single Instruction, Multiple Threads）架构之间最大的区别。CPU 不是通过增加线程来去解决问题，而是使用相反的方式去优化线程的执行速率和效率，这就是 CPU 跟 GPU 之间最大的区别，也是它们的本质区别。
 
-![CPU 和 GPU 典型架构图](images/01Works03.png)
+![CPU 和 GPU 典型架构图](../../imageswtf/02Hardware-03GPUBase-images-01Works03.png)
 
 > SIMD (Single Instruction, Multiple Data) 和 SIMT (Single Instruction, Multiple Threads)
 > 
@@ -117,7 +117,7 @@ void demo(double alpha, double *x, double *y)
 
 在 O(n) 的时间复杂度下，根据 n 的大小迭代计算 n 次，在 CPU 中串行地按指令顺序去执行 $AX+Y$ 程序。以 Intel Xeon 8280 这款芯片为例，其内存带宽是 131 GB/s，内存的延时是 89 ns，这意味着 8280 芯片的峰值算力是在 89 ns 的时间内传输 11659 个字节（byte）数据。$AX+Y$ 将在 89 ns 的时间内传输 16 字节（C/C++中 double 数据类型所占的内存空间是 8 bytes）数据，此时内存的利用率只有 0.14%（16/11659），存储总线有 99.86% 的时间处于空闲状态。
 
-![内存总线 99.86%时间处于空闲状态](images/01Works04.png)
+![内存总线 99.86%时间处于空闲状态](../../imageswtf/02Hardware-03GPUBase-images-01Works04.png)
 
 不同处理器计算 $AX+Y$ 时的内存利用率，不管是 AMD Rome 7742、Intel Xeon 8280 还是英伟达 A100，对于 $AX+Y$ 这段程序的内存利用率都非常低，基本 ≤0.14%。
 
@@ -183,13 +183,13 @@ void fun_axy(int n, double alpha, double *x, double *y)
 
 其中寄存器（Register）文件也可以视为缓存，寄存器靠近 SM（Streaming Multiprocessors）执行单元，从而可以快速地获取执行单元中的数据，同时也方便读取 L1 Cache 缓存中的数据。此外 L2 Cache 更靠近 HBM Memory，这样方便 GPU 把大量的数据直接搬运到 cache 中，因此为了同时实现上面两个目标，GPU 设计了多级缓存。80G 的显存是一个高带宽的内存，L2 Cache 大小为 40M，所有 SM 共享同一个 L2 Cache，L1 Cache 大小为 192kB，每个 SM 拥有自己独立的 Cache，同样每个 SM 拥有自己独立的 Register，每个寄存器大小为 256 kB，因为总共有 108 个 SM 流处理器，因此寄存器总共的大小是 27MB，L1 Cache 总共的大小是 20 MB。
 
-![英伟达 Ampere A100 内存结构](images/01Works05.png)
+![英伟达 Ampere A100 内存结构](../../imageswtf/02Hardware-03GPUBase-images-01Works05.png)
 
 GPU 和 CPU 内存带宽和时延进行比较，在 GPU 中如果把主内存（HBM Memory）作为内存带宽（B/W, bandwidth）的基本单位，L2 缓存的带宽是主内存的 3 倍，L1 缓存的带宽是主存的 13 倍。在真正计算的时候，希望缓存的数据能够尽快的去用完，然后读取下一批数据，此时就会遇到时延（Latency）的问题。如果将 L1 缓存的延迟作为基本单位，L2 缓存的延迟是 L1 的 5 倍，HBM 的延迟将是 L1 的 15 倍，因此 GPU 需要有单独的显存。
 
 假设使用 CPU 将 DRAM（Dynamic Random Access Memory）中的数据传入到 GPU 中进行计算，较高的时延（25 倍）会导致数据传输的速度远小于计算的速度，因此需要 GPU 有自己的高带宽内存 HBM（High Bandwidth Memory），GPU 和 CPU 之间的通信和数据传输主要通过 PCIe 来进行。
 
-![英伟达 Ampere A100 存储延迟对比](images/01Works06.png)
+![英伟达 Ampere A100 存储延迟对比](../../imageswtf/02Hardware-03GPUBase-images-01Works06.png)
 
 > DRAM 动态随机存取存储器（Dynamic Random Access Memory）
 > 
@@ -219,7 +219,7 @@ GPU 和 CPU 内存带宽和时延进行比较，在 GPU 中如果把主内存（
 
 GPU 整体架构和单个 SM（Streaming Multiprocessor）的架构，SM 可以看作是一个基本的运算单元，GPU 在一个时钟周期内可以执行多个 Warp，在一个 SM 里面有 64 个 Warp，其中每四个 Warp 可以单独进行并发的执行，GPU 的设计者主要是增加线程和增加 Warp 来解决或者掩盖延迟的问题，而不是去减少延迟的时间。
 
-![GPU 整体架构与 SM 架构](images/01Works05.png)
+![GPU 整体架构与 SM 架构](../../imageswtf/02Hardware-03GPUBase-images-01Works05.png)
 
 为了有更多的线程处理计算任务，GPU SMs 线程会选择超配，每个 SM 一共有 2048 个线程，整个 A100 有 20 多万个线程可以提供给程序，在实际场景中程序用不完所有线程，因此有一些线程处于计算的过程中，有一些线程负责搬运数据，还有一些线程在同步地等待下一次被计算。很多时候会看到 GPU 的算力利用率并不是非常的高，但是完全不觉得它慢是因为线程是超配的，远远超出大部分应用程序的使用范围，线程可以在不同的 Warp 上面进行调度。
 

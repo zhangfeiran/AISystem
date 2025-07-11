@@ -17,7 +17,7 @@
 - 权重量化成 INT16 类型，模型精度不受影响，模型大小为原始的 1/2；
 - 权重量化成 INT8 类型，模型精度会受到影响，模型大小为原始的 1/4。
 
-![动态离线量化算法流程](images/04PTQ01.png)
+![动态离线量化算法流程](../../imageswtf/04Inference-03Slim-images-04PTQ01.png)
 
 动态离线量化将模型中特定算子的权重从 FP32 类型量化成 INT8 等类型，该方式的量化有两种预测方式：
 
@@ -41,7 +41,7 @@ $$
 2. 读取小批量样本数据，执行模型的前向推理，保存更新待量化算子的量化 scale 等信息；
 3. 将 FP32 模型转成 INT8 模型，进行保存。
 
-![静态离线量化流程](images/04PTQ02.png)
+![静态离线量化流程](../../imageswtf/04Inference-03Slim-images-04PTQ02.png)
 
 一些常用的计算量化 scale 的方法：
 
@@ -59,7 +59,7 @@ $$
 
 - 激活量化：即对网络中不含权重的激活类算子进行量化。一般采用逐张量（per-tensor）的粒度，也可以选择逐 token（per-token）的量化粒度。
 
-![per-tensor 和 per-channel 量化粒度](images/04PTQ03.png)
+![per-tensor 和 per-channel 量化粒度](../../imageswtf/04Inference-03Slim-images-04PTQ03.png)
 
 ## KL 散度校准法
 
@@ -119,11 +119,11 @@ threshold = (m+0.5) * (width of a bin)
 
 端侧量化推理的结构方式主要由 3 种，分别是下图 (a) FP32 输入 FP32 输出、(b) FP32 输入 INT8 输出、(c) INT8 输入 INT32 输出
 
-![端侧量化推理方式](images/04PTQ04.png)
+![端侧量化推理方式](../../imageswtf/04Inference-03Slim-images-04PTQ04.png)
 
 INT8 卷积如下图所示，里面混合里三种不同的模式，因为不同的卷积通过不同的方式进行拼接。使用 INT8 进行 inference 时，由于数据是实时的，因此数据需要在线量化，量化的流程如图所示。数据量化涉及 Quantize，Dequantize 和 Requantize 等 3 种操作：
 
-![INT8 卷积示意图](images/04PTQ05.png)
+![INT8 卷积示意图](../../imageswtf/04Inference-03Slim-images-04PTQ05.png)
 
 ### 量化过程
 

@@ -16,7 +16,7 @@ Gpipe 是一种用于加速神经网络模型训练的流水线并行技术。�
 
 在 Gpipe 中，模型被分割成多个阶段，每个阶段在不同的设备上执行。输入数据也被切分成多个微批次，每个设备同时处理不同的微批次，从而提高并行效率。此外，Gpipe 也可以使用重计算策略，在前向和反向传播过程中节省内存。
 
-![模型并行](images/03ModelParallel03.png)
+![模型并行](../../imageswtf/05Framework-04Parallel-images-03ModelParallel03.png)
 
 朴素模型并行设备视图（a）和时间视图（b）：在前向传播阶段，计算任务 $F_0$、$F_1$、$F_2$ 和 $F_3$ 分别在 Device 0、Device 1、Device 2 和 Device 3 上执行。这些任务依次进行，将数据从一个设备传递到下一个设备，最终在 Device 3 上完成前向传播。
 
@@ -36,13 +36,13 @@ Gpipe 流水线并行提供了多项显著优势。它可以高效地利用计�
 
 然而，这也增加了任务调度的复杂性，需要更复杂的管理机制来协调设备之间的数据传递和任务分配。同时异步的流水线也会带来收敛的困难。
 
-![模型并行](images/03ModelParallel04.png)
+![模型并行](../../imageswtf/05Framework-04Parallel-images-03ModelParallel04.png)
 
 PipeDream 流水线并行是异步的，每个 Worker 在执行前向传播和后向传播时，都会使用对应的权重版本。例如，Worker 1 在执行任务 1 时使用权重版本 $ W_1^{(1)} $，在执行任务 5 时使用权重版本 $ W_1^{(2)} $。
 
 在前向传播和后向传播完成后，权重会进行异步更新。例如，Worker 1 在执行任务 5 时，会将更新后的权重版本 $ W_1^{(2)} $ 传递给 Worker 2，Worker 2 再根据新的权重版本进行计算。
 
-![模型并行](images/03ModelParallel05.png)
+![模型并行](../../imageswtf/05Framework-04Parallel-images-03ModelParallel05.png)
 
 此外，PipeDream 还扩展了 1F1B，对于使用数据并行的 stage，采用轮询（round-robin）的调度模式将任务分配在同一个 stage 的各个设备上，保证了一个小批次的数据的前向传播计算和后向传播计算发生在同一台机器上，这就是 1F1B-RR（one-forward-noe-backward-round-robin）。
 
@@ -84,7 +84,7 @@ class PipelineParallelResNet50(ModelParallelResNet50):
 
 需要注意的是，设备到设备的张量复制操作在源设备和目标设备上的当前流上同步。如果创建多个流，则必须确保复制操作正确同步。在复制操作完成之前写入源张量或读取/写入目标张量可能会导致未定义的行为。上述实现仅在源设备和目标设备上使用默认流，因此不需要额外的同步。
 
-![模型并行](images/03ModelParallel06.png)
+![模型并行](../../imageswtf/05Framework-04Parallel-images-03ModelParallel06.png)
 
 将输入流水线到模型并行 ResNet50 将训练过程加速约 `49%`。这仍然远低于理想的 100% 加速。不过仍有进一步加速训练过程的机会。例如，所有在 `cuda:0` 上的操作都放置在其默认流上。这意味着下一个分片的计算不能与 `prev` 分片的复制操作重叠。然而，由于 `prev` 和下一个分片是不同的张量，将一个的计算与另一个的复制操作重叠没有问题。
 

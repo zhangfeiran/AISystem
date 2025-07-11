@@ -8,15 +8,15 @@
 
 A100 GPU 架构中 GPC（Graphic Processing Cluster）表示图像处理簇，一共有 8 个。共有两个 L2 Cache 并且可以互相实现数据同步，通过 Memory Controller 实现与高带宽存储器 HBM2（High Bandwidth Memory）进行数据交换。
 
-![A100 GPU 架构图](images/03Concept01.png)
+![A100 GPU 架构图](../../imageswtf/02Hardware-03GPUBase-images-03Concept01.png)
 
 每个 GPC 中包含 TPC（Texture processing cluster）表示纹理处理簇，每个处理簇被分为多个 SM（Streaming Multiprocessors）流处理器，SM 中包含多个 CUDA Core 和 Tensor Core，用于处理图形和 AI 张量计算。
 
-![A100 GPU GPC 架构图](images/03Concept02.png)
+![A100 GPU GPC 架构图](../../imageswtf/02Hardware-03GPUBase-images-03Concept02.png)
 
 SM（Streaming Multiprocessors）称作流式多处理器，核心组件包括 CUDA 核心、共享内存、寄存器等。SM 包含很多为线程执行数学运算的 core，是英伟达 GPU 的核心，在 CUDA 中可以执行数百个线程、一个 block 上线程放在同一个 SM 上执行，一个 SM 有限的 Cache 制约了每个 block 的线程数量。
 
-![A100 GPU SM 架构图](images/03Concept03.png)
+![A100 GPU SM 架构图](../../imageswtf/02Hardware-03GPUBase-images-03Concept03.png)
 
 SM 主要组成如表所示，以英伟达 GP 100 为例，一共有 64 个 CUDA Core，Register File 存储大小为 256 KB，Shared Memory 内存大小为 64 KB，Active Thread 总线程数量是 2048，Active Block 数量是 32，Active Grid 数量是 8。
 
@@ -32,15 +32,15 @@ SM 主要组成如表所示，以英伟达 GP 100 为例，一共有 64 个 CUDA
 
 SP（Streaming Processor）流处理器是最基本的处理单元，最后线程具体的指令和任务都是在 SP 上进行处理的，GPU 在进行并行计算时就是很多个 SP 同时处理。在 Fermi 架构之后，SP 被改称为 CUDA Core，通过 CUDA 来控制具体的指令执行。
 
-![SP 处理器更名为 CUDA Core](images/03Concept04.png)
+![SP 处理器更名为 CUDA Core](../../imageswtf/02Hardware-03GPUBase-images-03Concept04.png)
 
 在 Fermi 架构中，通过 CUDA 来控制具体的指令执行，是最小的运算执行单元。所以对于现在的英伟达 GPU 架构来讲，流处理器的数量就是 CUDA Core 的数量。一个 SM 中包含了 2 组各 16 个 CUDA Core，每个 CUDA Core 包含了一个整数运算单元 ALU（Arthmetic Logit Unit）和一个浮点运算单元 FPU（Floating Point Unit）。
 
-![Fermi 架构 CUDA Core](images/03Concept05.png)
+![Fermi 架构 CUDA Core](../../imageswtf/02Hardware-03GPUBase-images-03Concept05.png)
 
 Volta 架构取消 CUDA core，变为单独的 FP32 FPU 和 INT32 ALU，因为 FP32:INT32 是 1:1 的关系，因此还是可以将它们合并起来一起称为原来的 CUDA Core，这样做的好处是每个 SM 现在支持 FP32 和 INT32 的并发执行，同时新增了光线追踪 RT Core。
 
-![Fermi 架构 CUDA Core](images/03Concept06.png)
+![Fermi 架构 CUDA Core](../../imageswtf/02Hardware-03GPUBase-images-03Concept06.png)
 
 Warp 是线程束，逻辑上所有 Thread 并行执行，但是从硬件的角度讲并不是所有的 Thread 能够在同一时刻执行，因此引入 Warp。Warp 是 SM 基本执行单元，一个 Warp 包含 32 个并行 Thread（$\text{warp}_\text{size}=32$），这 32 个 Thread 执行 SIMT（Single Instruction Multiple Thread）指令模式。
 
@@ -52,21 +52,21 @@ Warp 是线程束，逻辑上所有 Thread 并行执行，但是从硬件的角�
 
 CUDA 编程模型允许开发人员在 GPU 上运行并行计算任务，基于 LLVM 构建了 CUDA 编译器，开发人员可以使用 CUDA C/C++语言编写并行程序，通过调用 CUDA API 将计算任务发送到 GPU 执行。CUDA 编程模型包括主机（CPU）和设备（GPU）之间的协作，此外还提供了对其它编程语言的支持，比如 C/C++，Python，Fortran 等语言，支持 OpenCL 和 DirectCompute 等应用程序接口。
 
-![CUDA-Compute Unified Device Architecture](images/03Concept07.png)
+![CUDA-Compute Unified Device Architecture](../../imageswtf/02Hardware-03GPUBase-images-03Concept07.png)
 
 CUDA 在软件方面由一个 CUDA 库、一个应用程序编程接口（API）及其运行库（Runtime）、两个较高级别的通用数学库，即 CUFFT 和 CUBLAS 组成。CUDA TOOLKIT 包括编译和 C++核，CUDA DRIVER 驱动 GPU 负责内存和图像管理。CUDA-X LIBRARIES 主要提供了机器学习（Meachine Learning）、深度学习（Deep Learning）和高性能（High Performance Computing）计算方面的加速库，APPS & FRAMEWORKS 主要对接 TensorFlow 和 Pytorch 等框架。
 
-![CUDA-Compute Unified Device Architecture](images/03Concept08.png)
+![CUDA-Compute Unified Device Architecture](../../imageswtf/02Hardware-03GPUBase-images-03Concept08.png)
 
 ## CUDA 线程层次结构
 
 CUDA 最基本的执行单位是线程（Thread），图中每条曲线可视为单个线程，大的网格（Grid）被切分成小的网格，其中包含了很多相同线程数量的块（Block），每个块中的线程独立执行，可以通过本地数据共享实现数据交换同步。因此对于 CUDA 来讲，就可以将问题划分为独立线程块，并行解决的子问题，子问题划分为可以由块内线程并行协作解决。
 
-![线程层次结构](images/02principle08.png)
+![线程层次结构](../../imageswtf/02Hardware-03GPUBase-images-02principle08.png)
 
 CUDA 引入主机端（host）和设备（device）概念，CUDA 程序中既包含主机（host）程序也包含设备（device）程序，host 和 device 之间可以进行通信，以此来实现数据拷贝，主机负责管理数据和控制程序流程，设备负责执行并行计算任务。在 CUDA 编程中，Kernel 是在 GPU 上并行执行的函数，开发人员编写 Kernel 来描述并行计算任务，然后在主机上调用 Kernel 来在 GPU 上执行计算。
 
-![CUDA 使用主机端和设备端实现并行计算](images/03Concept09.png)
+![CUDA 使用主机端和设备端实现并行计算](../../imageswtf/02Hardware-03GPUBase-images-03Concept09.png)
 
 代码 cuda_host.cpp 是只使用 CPU 在 host 端实现两个矩阵的加法运算，其中在 CPU 上计算的 Kernel 可看作是加法运算函数，代码中包含内存空间的分配和释放。
 
@@ -176,11 +176,11 @@ int main(void)
 
 - 线程层次结Ⅲ-Thread：CUDA 并行程序实际上会被多个 threads 执行，多个 threads 会被群组成一个线程 block，同一个 block 中 threads 可以同步，也可以通过 shared memory 通信。
 
-![CUDA Grid，Block，Thread 三个层次结构](images/03Concept10.png)
+![CUDA Grid，Block，Thread 三个层次结构](../../imageswtf/02Hardware-03GPUBase-images-03Concept10.png)
 
 因此 CUDA 和英伟达硬件架构有以下对应关系，从软件侧看到的是线程的执行，对应于硬件上的 CUDA Core，每个线程对应于 CUDA Core，软件方面线程数量是超配的，硬件上 CUDA Core 是固定数量的。Block 线程块只在一个 SM 上通过 Warp 进行调度，一旦在 SM 上调用了 Block 线程块，就会一直保留到执行完 Kernel，SM 可以同时保存多个 Block 线程块，多个 SM 组成的 TPC 和 GPC 硬件实现了 GPU 并行计算。
 
-![CUDA 和英伟达硬件架构对应关系](images/03Concept11.png)
+![CUDA 和英伟达硬件架构对应关系](../../imageswtf/02Hardware-03GPUBase-images-03Concept11.png)
 
 ## 算力峰值计算
 

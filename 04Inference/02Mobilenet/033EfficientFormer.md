@@ -10,7 +10,7 @@
 
 大多数现有方法通过从服务器 GPU 获得的计算复杂性（MAC）或吞吐量（图像/秒）来优化 Transformer 的推理速度。但是这些指标不能反映实际的设备延迟。为了清楚地了解哪些操作和设计选择会减慢边缘设备上 VIT 的推断，在下图中作者作者对不同模型在端侧运行进行了一些分析，主要是分为 ViT 对图像进行分块的 Patch Embedding、Transformer 中的 Attention 和 MLP，另外还有 LeViT 提出的 Reshape 和一些激活等。提出了下面几个猜想。
 
-![EfficientFormer](images/11Efficientformer01.png)
+![EfficientFormer](../../imageswtf/04Inference-02Mobilenet-images-11Efficientformer01.png)
 
 **观察 1：在移动设备上，具有大核和步长的 patch 嵌入是一个速度瓶颈。**
 
@@ -53,7 +53,7 @@ def stem(in_chs, out_chs):
 
 ### EfficientFormer 结构
 
-![EfficientFormer](images/11Efficientformer02.png)
+![EfficientFormer](../../imageswtf/04Inference-02Mobilenet-images-11Efficientformer02.png)
 
 基于延迟分析，作者提出了 EfficientFormer 的设计，如上图所示。该网络由 patch 嵌入（PatchEmbed）和 meta transformer 块堆栈组成，表示为 MB：
 
@@ -288,7 +288,7 @@ EfficientFormer 一共有 4 个阶段。每个阶段都有一个 Embeding（两�
 
 EfficientFormerV2 相对于 EfficientFormer 的主要改进如下图所示。
 
-![EfficientFormer](images/11Efficientformer03.png)
+![EfficientFormer](../../imageswtf/04Inference-02Mobilenet-images-11Efficientformer03.png)
 
 结合局部信息可以提高性能，并使 ViT 在缺少显式位置嵌入的情况下更加鲁棒。PoolFormer 和 EfficientFormer 使用 3×3 平均池化层（作为 local token 混合器。用相同内核大小的 depth-wise 卷积）替换这些层不会引入耗时开销，而使用可忽略的额外参数（0.02M），性能提高了 0.6%。此外。在 ViT 中的前馈网络（FFN）中注入局部信息建模层也有利于以较小的开销提高性能。值得注意的是，通过在 FFN 中放置额外的 depth-wise 3×3 卷积来捕获局部信息，复制了原始局部混合器（池或卷积）的功能。基于这些观察，论文移除了显式残差连接的 local token 混合器，并将 depth-wise 3×3 CONV 移动到 FFN 中，以获得 locality enabled 的统一 FFN（上图（b））。论文将统一的 FFN 应用于网络的所有阶段，如上图（a，b）所示。这种设计修改将网络架构简化为仅两种类型的 block（local FFN 和 global attention），并在相同的耗时（见表 1）下将精度提高到 80.3%，参数开销较小（0.1M）。更重要的是，该修改允许直接使用模块的确切数量搜索网络深度，以提取局部和全局信息，尤其是在网络的后期阶段。
 

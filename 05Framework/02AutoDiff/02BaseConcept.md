@@ -20,7 +20,7 @@
 
 - **自动微分法(Automatic Differentiation)**：介于数值微分和符号微分之间的方法，采用类似有向图的计算来求解微分值，也是本文介绍的重点。
 
-![计算机程序求导的方法](images/02BaseConcept01.png)
+![计算机程序求导的方法](../../imageswtf/05Framework-02AutoDiff-images-02BaseConcept01.png)
 
 下面详细对上面 4 种不同的计算机求导方法进行详细说明。
 
@@ -73,7 +73,7 @@ $$ \frac{\delta f(x)}{\delta x} \approx \frac{f(x+h)-f(x-h)}{2h} $$
 
 $$ \frac{\delta f(x)}{\delta x} \approx \frac{f(x+h)-f(x-h)}{2h}+O(h^2) $$
 
-![误差曲线](images/02BaseConcept02.png)
+![误差曲线](../../imageswtf/05Framework-02AutoDiff-images-02BaseConcept02.png)
 
 数值微分的优点是：
 
@@ -112,7 +112,7 @@ $$ \frac{\delta}{\delta x}(f(x)g(x))=(\frac{\delta}{\delta x}f(x))g(x)+f(x)(\fra
 
 $$ l_{n+1}=4l_n(1-l_n) $$
 
-![递归求导](images/02BaseConcept03.png)
+![递归求导](../../imageswtf/05Framework-02AutoDiff-images-02BaseConcept03.png)
 
 可以看到在不同的迭代中其符号微分的结果相比人工简化后的结果复杂很多，且随着迭代次数而增大。
 

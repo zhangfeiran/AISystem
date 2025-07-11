@@ -77,7 +77,7 @@ void demo(double alpha, double *x, double *y)
 
 CPU 指令执行过程如下图所示， 图片中的横轴（Times）表示时间的推进。纵轴则展示了不同操作（如加载、计算、写入）的时延。
 
-![CPU 指令执行过程](images/04CPULatency02.png)
+![CPU 指令执行过程](../../imageswtf/02Hardware-02ChipBase-images-04CPULatency02.png)
 
 1. 数据加载
 
@@ -108,7 +108,7 @@ Write result：将将计算结果写回到缓存中。此步骤展示了计算�
 
 CPU 时延的产生可以归因于多种因素，包括硬件设计、内存访问和系统资源竞争等。我们将结合这张图和进一步的解释来深入探讨。
 
-![CPU 时延的产生](images/04CPULatency03.png)
+![CPU 时延的产生](../../imageswtf/02Hardware-02ChipBase-images-04CPULatency03.png)
 
 图中显示了 CPU 和 DRAM 之间存在一定的物理距离。在实际硬件中，数据需要在这个距离上通过内存总线进行传输。虽然电信号在这种短距离上的传播速度非常快（接近光速），但仍然会产生可测量的延迟。这个延迟是内存访问时延的一部分。
 

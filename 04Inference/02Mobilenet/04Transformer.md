@@ -14,7 +14,7 @@
 
 标准卷积涉及三个操作：展开+局部处理+折叠，利用 Transformer 将卷积中的局部建模替换为全局建模，这使得 MobileViT 具有 CNN 和 ViT 的性质。MobileViT Block 如下图所示:
 
-![MobileVit](images/04Transformer01.png)
+![MobileVit](../../imageswtf/04Inference-02Mobilenet-images-04Transformer01.png)
 
 从上面的模型可以看出，首先将特征图通过一个卷积层，卷积核大小为 $n\times n$，然后再通过一个卷积核大小为 $1\times 1$ 的卷积层进行通道调整，接着依次通过 Unfold、Transformer、Fold 结构进行全局特征建模，然后再通过一个卷积核大小为 $1\times 1$ 的卷积层将通道调整为原始大小，接着通过 shortcut 捷径分支与原始输入特征图按通道 concat 拼接，最后再通过一个卷积核大小为 $n\times n$ 的卷积层进行特征融合得到最终的输出。
 
@@ -22,7 +22,7 @@
 
 给定一系列排序的空间分辨率$S = {(H_{1}, W_{1}), ··· , (H_{n}, W_{n})}$，最大空间分辨率有最小的 batch，加快优化更新；在每个 GPU 第 t 次迭代中随机抽样一个空间分辨率，然后计算迭代大小；相较于以前多尺度采样，这次它不需要自己每隔几个 iteration 微调得到新的空间分辨率，并且改变 batch 提高了训练速度；使用多 GPU 进行训练（我猜不同空间分辨率在不同的 GPU 上运行）这个可以提高网络的泛化能力，减少训练和验证之间差距；并且适用于其他网络训练。
 
-![MobileVit](images/04Transformer02.png)
+![MobileVit](../../imageswtf/04Inference-02Mobilenet-images-04Transformer02.png)
 
 ## MobileFormer 系列
 
@@ -34,7 +34,7 @@
 
 Mobile-Former 将 MobileNet 和 Transformer 并行化，并通过双向交叉注意力连接（下见图）。Mobile（指 MobileNet）采用图像作为输入（$X\in R^{HW \times 3}$），并应用反向瓶颈块提取局部特征。Former（指 Transformers）将可学习的参数（或 tokens）作为输入，表示为 $Z\in R^{M\times d}$，其中 M 和 d 分别是 tokens 的数量和维度，这些 tokens 随机初始化。与视觉 Transformer（ViT）不同，其中 tokens 将局部图像 patch 线性化，Former 的 tokens 明显较少（M≤6），每个代表图像的全局先验知识。这使得计算成本大大降低。
 
-![MobileFormer](images/04Transformer03.png)
+![MobileFormer](../../imageswtf/04Inference-02Mobilenet-images-04Transformer03.png)
 
 ### 低成本双线桥
 
@@ -60,7 +60,7 @@ $$
 
 Mobile-Former 由 Mobile-Former 块组成。每个块包含四部分：Mobile 子块、Former 子块以及双向交叉注意力 Mobile←Former 和 Mobile→Former（如下图所示）。
 
-![MobileFormer](images/04Transformer04.png)
+![MobileFormer](../../imageswtf/04Inference-02Mobilenet-images-04Transformer04.png)
 
 输入和输出：Mobile-Former 块有两个输入：(a) 局部特征图 $X\in R^{HW\times C}$，为 C 通道、高度 H 和宽度 W，以及(b) 全局 tokens $Z\in R^{M\times d}$，其中 M 和 d 是分别是 tokens 的数量和维度，M 和 d 在所有块中一样。Mobile-Former 块输出更新的局部特征图 $X$ 和全局 tokens$Z$，用作下一个块的输入。
 
@@ -74,7 +74,7 @@ Mobile 子块：如上图所示，Mobile 子块将特征图 $X$ 作为输入，�
 
 #### EfficientFormer 结构
 
-![EfficientFormer](images/04Transformer05.png)
+![EfficientFormer](../../imageswtf/04Inference-02Mobilenet-images-04Transformer05.png)
 
 基于延迟分析，作者提出了 EfficientFormer 的设计，如上图所示。该网络由 patch 嵌入（PatchEmbed）和 meta transformer 块堆栈组成，表示为 MB：
 $$

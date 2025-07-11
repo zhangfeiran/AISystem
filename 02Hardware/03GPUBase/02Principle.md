@@ -16,7 +16,7 @@ $$Y[i,j] = \sum_{m}\sum_{n} X[i+m, j+n] \cdot K[m,n]$$
 
 图像卷积正常的三通道卷积，输入维度为 3 维（H, W, 3），卷积核维度为（N, C, KH, KW），输出维度为（N, H, W），卷积默认采用数据排布方式为 NHWC，输入维度为 4 维（N, IH, IW, IC），卷积核维度为（OC, KH, KW, IC），输出维度为（N, OH, OW, OC）。卷积计算的一般方式是计算卷积核模板（Kernel）和卷积图片，卷积核中每一个元素与图片中的每一个元素依次相乘再相加后得到最终输出为特征图（feature map）。
 
-![卷积计算的一般方式](images/02principle01.png)
+![卷积计算的一般方式](../../imageswtf/02Hardware-03GPUBase-images-02principle01.png)
 
 以 Img2col 算法为例，Img2col 是一种常用的图像处理技术，用于在卷积神经网络（CNN）中进行卷积运算。它将输入的图像数据重塑成一个矩阵，使得卷积运算可以转换为矩阵乘法的形式，从而提高计算效率。具体来说，Img2col 的过程如下：
 
@@ -26,19 +26,19 @@ $$Y[i,j] = \sum_{m}\sum_{n} X[i+m, j+n] \cdot K[m,n]$$
 
 通过这种方式，原始的图像数据被重塑成一个二维矩阵，其中每一列对应于卷积核在输入图像上滑动时所覆盖的区域。行数对应输出 $OH \times OW$ 个数，每个行向量中，先排列计算一个输出点所需要输入上第一个通道的 $KH \times KW$ 个数据，再按照次序排列之后的通道，直到第 IC 个通道。在实际应用中，Img2col 通常与矩阵乘法库（如 BLAS）结合使用，以便利用高效的矩阵乘法实现卷积运算，这种技术在提高卷积神经网络的计算效率和加速训练过程中起着重要作用。
 
-![Img2col 图像处理算法](images/02principle02.png)
+![Img2col 图像处理算法](../../imageswtf/02Hardware-03GPUBase-images-02principle02.png)
 
 对权重数据进行重排，即以卷积核大小为步长展开后续卷积窗并存在矩阵下一列。将 N 个卷积核展开为权重矩阵的一行，因此共有 N 行，每个向量上先排列第一个输入通道上 KH*KW 数据，再依次排列之后的通道直到 IC。
 
-![权重数据重排成权重矩阵](images/02principle03.png)
+![权重数据重排成权重矩阵](../../imageswtf/02Hardware-03GPUBase-images-02principle03.png)
 
 在对图像输入数据和权重数据进行重排之后，可以将卷积运算操作转换为矩阵相乘。将输入数据按照卷积窗进行展开并存储在矩阵的列中，多个输入通道对应的卷积窗展开之后将拼接成最终输出矩阵的一列。
 
-![卷积运算的乘法操作](images/02principle04.png)
+![卷积运算的乘法操作](../../imageswtf/02Hardware-03GPUBase-images-02principle04.png)
 
 通过数据重排，完成 Img2col 的操作之后会得到一个输入矩阵，卷积的权重也可以转换为一个矩阵，卷积的计算就可以转换为两个矩阵相乘的求解，得到最终卷积计算的结果，因此 AI 计算的本质是矩阵相乘。
 
-![AI 计算的本质是矩阵相乘](images/02principle05.png)
+![AI 计算的本质是矩阵相乘](../../imageswtf/02Hardware-03GPUBase-images-02principle05.png)
 
 ## GPU 线程分级
 
@@ -50,7 +50,7 @@ $$Y[i,j] = \sum_{m}\sum_{n} X[i+m, j+n] \cdot K[m,n]$$
 
 - 3）All to All（全对全）：全对全操作是指数据结构中的每个元素与同一数据结构或不同数据结构中的每个其他元素进行交互的操作。这意味着所有可能的元素对之间进行信息交换，产生完全连接的通信模式，一个元素的求解得到另一个数据时数据之间的交换并不能够做到完全的线程独立。全对全操作通常用于并行计算和通信算法中，其中需要在所有处理单元之间交换数据。
 
-![AI 计算模式与线程的关系](images/02principle06.png)
+![AI 计算模式与线程的关系](../../imageswtf/02Hardware-03GPUBase-images-02principle06.png)
 
 以卷积运算为例解释在卷积运算中局部内存数据如何与线程分层分级配合工作的，以下是处理一个猫的图像数据，基本过程如下：
 
@@ -58,11 +58,11 @@ $$Y[i,j] = \sum_{m}\sum_{n} X[i+m, j+n] \cdot K[m,n]$$
 - 2）取出其中的一个块进行处理，同样也可以将这个块再进行分割；
 - 3）块中线程（Threads）通过本地数据共享来进行计算，每个像素点都会单独分配一个线程进行计算。
 
-![线程分层执行](images/02principle07.png)
+![线程分层执行](../../imageswtf/02Hardware-03GPUBase-images-02principle07.png)
 
 因此可以将大的网格表示为所有需要执行的任务，小的切分网格中包含了很多相同线程数量的块，块中的线程数独立执行，可以通过本地数据共享实现同步数据交换。
 
-![网格中像素点计算的线程执行](images/02principle08.png)
+![网格中像素点计算的线程执行](../../imageswtf/02Hardware-03GPUBase-images-02principle08.png)
 
 前面的章节讲到 GPU 的并行能力是最重要的，并行是为了解决带宽的时延问题，而计算所需要的线程数量是由计算复杂度决定的，结合不同数据结构对数据并行的影响：
 
@@ -72,7 +72,7 @@ $$Y[i,j] = \sum_{m}\sum_{n} X[i+m, j+n] \cdot K[m,n]$$
 
 - 3）全对全（All to All）一个元素的求解得到另一个数据时数据之间的交换并不能够做到完全的线程独立，此时计算强度会随着计算规模的增加线性增加，All to All 操作通常需要进行大量的数据交换和通信。
 
-![不同数据结构对应计算强度](images/02principle09.png)
+![不同数据结构对应计算强度](../../imageswtf/02Hardware-03GPUBase-images-02principle09.png)
 
 ## 计算强度
 
@@ -82,7 +82,7 @@ $$c_{ij} = \sum_{k=1}^{n} a_{ik} \cdot b_{kj}$$
 
 其中，$a_{ik}$ 是矩阵 $A$ 中第 $i$ 行第 $k$ 列的元素，$b_{kj}$ 是矩阵 $B$ 中第 $k$ 行第 $j$ 列的元素。通过对所有可能的 $k$ 值求和，可以得到 $C$ 中的每一个元素。
 
-![矩阵乘计算基本过程](images/02principle10.png)
+![矩阵乘计算基本过程](../../imageswtf/02Hardware-03GPUBase-images-02principle10.png)
 
 计算强度（Arithmetic Intensity）是指在执行计算任务时所需的算术运算量与数据传输量之比。它是衡量计算任务的计算密集程度的重要指标，可以帮助评估算法在不同硬件上的性能表现。通过计算强度，可以更好地理解计算任务的特性，有助于选择合适的优化策略和硬件配置，以提高计算任务的性能表现。计算强度的公式如下：
 
@@ -112,7 +112,7 @@ $$\text{Arithmetic Intensity} = \frac{2N^3 - N^2}{3N^2}≈O(N)$$
 
 图中红色的线是英伟达 GPU 采用 Tensor Core 专门对矩阵进行计算，很大程度上提高了计算强度，使得内存的搬运能够跟得上数据运算的速度，更好地平衡了矩阵维度和计算强度之间的关系。
 
-![矩阵乘法计算强度](images/02principle11.png)
+![矩阵乘法计算强度](../../imageswtf/02Hardware-03GPUBase-images-02principle11.png)
 
 > FP32 和 FP64
 > 
@@ -146,7 +146,7 @@ $$\text{Arithmetic Intensity} = \frac{2N^3 - N^2}{3N^2}≈O(N)$$
 
 当 Tensor Core 在 L1 缓存、L2 缓存和 HBM 存储位置的不同将影响理想计算强度下矩阵的维度大小，每种存储和矩阵的计算强度分别对应一个交叉点，由此可以看出数据在什么类型的存储中尤为重要，相比较 FP32 和 FP64 对计算强度的影响更为重要。当数据搬运到 L1 缓存中时可以进行一些更小规模的矩阵运算，比如卷积运算，对于 NLP（Natural Language Processing）中使用的 transformer 结构，可以将数据搬运到 L2 缓存进行计算。因为数据运算和读取存在比例关系，如果数据都在搬运此时计算只能等待，导致二者不平衡，因此找到计算强度和矩阵大小的平衡点对于 AI 计算系统的优化尤为重要。
 
-![当使用 Tensor Core 时不同存储位置理想的矩阵大小](images/02principle12.png)
+![当使用 Tensor Core 时不同存储位置理想的矩阵大小](../../imageswtf/02Hardware-03GPUBase-images-02principle12.png)
 
 > NLP transformer 模型
 > 

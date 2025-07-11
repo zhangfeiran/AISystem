@@ -20,7 +20,7 @@ Tensor Core 是针对深度学习和 AI 工作负载而设计的专用核心，�
 
 如图所示，在 Fermi 架构中其计算核心由 16 个 SM（Stream Multiprocessor）组成，每个 SM 包含 2 个线程束（Warp），一个 Warp 中包含 16 个 Cuda Core，共 32 个 CUDA Cores。每一个 Cuda Core 由 1 个浮点数单元 FPU 和 1 个逻辑运算单元 ALU 组成。
 
-![Nvida GPU 架构发展](images/01BasicTC01.png)
+![Nvida GPU 架构发展](../../imageswtf/02Hardware-04NVIDIA-images-01BasicTC01.png)
 
 由于 CUDA Core 在显卡里面是并行运算，也就是说大家分工计算。从逻辑上说，CUDA Core 越多，算力也就相应越强。所以说从 Fermi 架构开始，2012 年的 Kepler 架构和 2014 年的 Maxwell 架构，都在这个基础上疯狂加倍增加 Cuda Core。
 
@@ -46,7 +46,7 @@ Img2col 算法主要包含两个步骤，首先使用 Im2Col 将输入矩阵展�
 
 卷积默认采用数据排布方式为 NHWC，输入维度为 4 维 (N, IH, IW, IC)，卷积核维度为(OC, KH, KW , IC)，输出维度为(N, OH, OW , OC)。
 
-![CNN 转换为 GEMM 计算](images/01BasicTC02.png)
+![CNN 转换为 GEMM 计算](../../imageswtf/02Hardware-04NVIDIA-images-01BasicTC02.png)
 
 Im2Col 算法计算卷积的过程，具体简化过程如下:
 
@@ -82,11 +82,11 @@ Im2Col 算法计算卷积的过程，具体简化过程如下:
 - 最终，使用 FP32 的实际梯度来更新 FP32 的权重副本。
 
 
-![FP32 vs FP16](images/01BasicTC03.png)
+![FP32 vs FP16](../../imageswtf/02Hardware-04NVIDIA-images-01BasicTC03.png)
 
 而在混合精度的实现上，其通常需要特定的硬件支持和软件优化。例如，英伟达的 Tensor Core 就是专门设计来加速 FP16 计算的，同时保持 FP32 的累加精度，从而使得混合精度训练成为可能。在软件层面，AI 框架如 PyTorch 和 MindSpore 等也提供了混合精度训练的支持，通过自动化的工具简化了实现过程。可以从上图看出 FP16 相比于 FP32，不管是从整数位还是小数位来看，它所表示的范围要小很多。
 
-![软件层面混合精度计算](images/01BasicTC04.png)
+![软件层面混合精度计算](../../imageswtf/02Hardware-04NVIDIA-images-01BasicTC04.png)
 
 混合精度训练不仅仅是在模型中同时使用 FP16 和 FP32 那么简单，而是指在底层硬件算子层面，使用半精度(FP16)作为输入和输出，使用全精度(FP32)进行中间结果计算从而不损失过多精度的技术。这个底层硬件层面其实指的就是 Tensor Core，所以 GPU 上具备 Tensor Core 是使用混合精度训练加速的必要条件。
 
@@ -96,7 +96,7 @@ Im2Col 算法计算卷积的过程，具体简化过程如下:
 
 当英伟达的架构演进到 Volta 架构时，标志着深度学习优化的重大突破。Volta 架构的一个显著特点是引入了大量的 Tensor Core，这一变化对于加速深度学习应用产生了革命性的影响。
 
-![Volta SM 架构图](images/01BasicTC05.png)
+![Volta SM 架构图](../../imageswtf/02Hardware-04NVIDIA-images-01BasicTC05.png)
 
 在 Tensor Core 出现之前，CUDA Core 是实现深度学习加速的核心硬件技术。CUDA Core 可以处理各种精度的运算。如上图 Volta 架构图所示，左侧有 FP64、FP32 和 INT32 CUDA Cores 核心，右侧则是许多 Tensor Core 核心。
 
@@ -116,7 +116,7 @@ Im2Col 算法计算卷积的过程，具体简化过程如下:
 
 在具体的运算过程中，Tensor Core 采用融合乘法加法（FMA）的方式来高效地处理计算任务。每个 Tensor Core 每周期能执行 **4x4x4 GEMM**，64 个浮点乘法累加（FMA）运算。
 
-![CNN 转换为 GEMM 计算](images/01BasicTC06.png)
+![CNN 转换为 GEMM 计算](../../imageswtf/02Hardware-04NVIDIA-images-01BasicTC06.png)
 
 如上图所示，在执行运算 **D=A*B+C**，其中 A、B、C 和 D 是 4×4 矩阵。**矩阵乘法**输入 A 和 B 是 FP16 矩阵，而**累加矩阵** C 和 D 可以是 FP16 或 FP32 矩阵。
 
@@ -132,7 +132,7 @@ Im2Col 算法计算卷积的过程，具体简化过程如下:
 
 如图所示，在 CUDA 编程体系中，我们并非直接对线程进行控制，也就是图中的弯弯的线，而是通过控制一个 Warp，一个 Warp 包含很多线程（通常为 32 个线程），这些线程同时并行执行，利用 GPU 的并行计算能力。
 
-![Warp 与 Tensor Core 关系](images/01BasicTC07.png)
+![Warp 与 Tensor Core 关系](../../imageswtf/02Hardware-04NVIDIA-images-01BasicTC07.png)
 
 在实际执行过程中，CUDA 会对 Warp 进行同步操作，确保其中的所有线程都达到同步点，并获取相同的数据。然后，这些线程将一起执行矩阵相乘和其他计算操作，通常以 16x16 的矩阵块为单位进行计算。最终，计算结果将被存储回不同的 Warp 中，以便后续处理或输出。
 
@@ -166,7 +166,7 @@ CUDA 通过 **CUDA C++ WMMA API** 向外提供了 Tensor Core 在 Warp 级别上
 
 一个 Tensor Core 每个周期可以执行 4x4x4 的 GEMM 运算。然而，在 CUDA 的层面，为什么提供了使用 16x16x16 的 GEMM 运算 API 呢？
 
-![Tensor Core 硬件原理](images/01BasicTC08.png)
+![Tensor Core 硬件原理](../../imageswtf/02Hardware-04NVIDIA-images-01BasicTC08.png)
 
 事实上，如果我们整体来看，如上图所示，一个 Tensor Core 是一个 4x4 的 Tensor Core 核心。但实际上，在一个 SM（Streaming Multiprocessor）中有多个 Tensor Core，我们无法对每个 Tensor Core 进行细粒度的控制，否则效率会很低。因此，一个 Warp 就扮演了重要角色，将多个 Tensor Core 打包在一起，以执行更大规模的计算任务。
 
@@ -180,7 +180,7 @@ CUDA 通过 **CUDA C++ WMMA API** 向外提供了 Tensor Core 在 Warp 级别上
 
 上文我们已经提到，卷积运算可以被转化为矩阵乘法操作，这一点是连接卷积和 Tensor Core 的桥梁。
 
-![Tensor Core 硬件原理](images/01BasicTC09.png)
+![Tensor Core 硬件原理](../../imageswtf/02Hardware-04NVIDIA-images-01BasicTC09.png)
 
 在实际执行过程中，如上图中所示，蓝色矩阵和黄色矩阵的片段会被取出进行计算，即所谓的 Fragment。这些 Fragment 进行计算后形成 Fragment block，而这些 Fragment block 在 CUDA 编程模型中就是通过线程块（Thread block）的来组织执行的。在线程块内部的计算过程中，会进一步提取部分数据形成 Warp level 级别的计算，Warp level 的计算其实还是很大，于是在 Fragment 执行时会将其变为满足我们 Tensor Core 和矩阵输入的计算了。
 

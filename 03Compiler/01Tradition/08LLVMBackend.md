@@ -28,7 +28,7 @@ LLVM 的代码生成能力使得开发者可以通过统一的编译器前端（
 
 在将 LLVM IR 转化为目标代码需要非常多的步骤，其 Pipeline 如下图所示：
 
-![Pipeline](images/08LLVMBackend01.png)
+![Pipeline](../../imageswtf/03Compiler-01Tradition-images-08LLVMBackend01.png)
 
 LLVM IR 会变成和后端非常很接近的一些指令、函数、全局变量和寄存器的具体表示，流水线越向下就越接近实际硬件的目标指令。其中白色的 pass 是非必要 pass，灰色的 pass 是必要 pass，叫做 Super Path
 
@@ -46,7 +46,7 @@ LLVM IR 会变成和后端非常很接近的一些指令、函数、全局变量
 
 4. 目标是让 LLVM 代码生成程序库能够利用基于树的模式匹配指令选择算法，以实现高效的指令选择过程。
 
-![Pipeline](images/08LLVMBackend02.png)
+![Pipeline](../../imageswtf/03Compiler-01Tradition-images-08LLVMBackend02.png)
 
 以上是一个 SelectionDAG 节点的例子。
 
@@ -136,7 +136,7 @@ Code Emission（代码生成）是 LLVM 后端的重要阶段，其目标是将�
 
 编译器工作流程为在高级语言 C/C++ 编译过程中，源代码经历了多个重要阶段，从词法分析到生成目标代码。整个过程涉及前端和后端的多个步骤，并通过中间表示（IR）在不同阶段对代码进行转换、优化和分析。
 
-![Pipeline](images/08LLVMBackend03.png)
+![Pipeline](../../imageswtf/03Compiler-01Tradition-images-08LLVMBackend03.png)
 
 通过上述图像分别展示了 LLVM 的各个流程，和代码在不同流程下的状态，在本节的最后我们再回顾一下各个阶段所代表的功能和内容。
 
@@ -182,7 +182,7 @@ Youtube 上 LLVM 之父 Chris Lattner：编译器的黄金时代
 
 在其计算中，Julia 使用 LLVM JIT 编译。LLVM JIT 编译器通常不断地分析正在执行的代码，并且识别代码的一部分，使得从编译中获得的性能加速超过编译该代码的性能开销。
 
-![Pipeline](images/08LLVMBackend04.png)
+![Pipeline](../../imageswtf/03Compiler-01Tradition-images-08LLVMBackend04.png)
 
 3. XLA：优化机器学习编译器
 
@@ -200,13 +200,13 @@ TensorFlow 是一个端到端开源机器学习平台。它拥有一个全面而
 
 TensorFlow 可以更好的应用于工业生产环境，因为它可以利用到硬件加速器，并提供可靠的性能。
 
-![Pipeline](images/08LLVMBackend05.png)
+![Pipeline](../../imageswtf/03Compiler-01Tradition-images-08LLVMBackend05.png)
 
 6. TVM 到端深度学习编译器
 
 为了使得各种硬件后端的计算图层级和算子层级优化成为可能，TVM 从现有框架中取得 DL 程序的高层级表示，并产生多硬件平台后端上低层级的优化代码，其目标是展示与人工调优的竞争力。
 
-![Pipeline](images/08LLVMBackend06.png)
+![Pipeline](../../imageswtf/03Compiler-01Tradition-images-08LLVMBackend06.png)
 
 ## 小结与思考
 

@@ -125,7 +125,7 @@ def fun(x):
 
 以在 AI 框架中更加常用的后向自动微分模式为例（目前作为更多 AI 框架的实现方式），其计算过程表达如图 :numref:`autodiff01` 所示，表的左列浅色为前向计算函数值的过程，与前向计算时相同，右面列深色为反向计算导数值的过程。
 
-![自动微分实现过程](images/07Challenge01.png)
+![自动微分实现过程](../../imageswtf/05Framework-02AutoDiff-images-07Challenge01.png)
 
 反向模式的计算过程如图所示，其中：
 
@@ -157,7 +157,7 @@ $$ \frac{\partial^{2} y }{\partial x^{2}} = \frac{\mathrm{d}}{\mathrm{d} y}\left
 
 如图 :numref:`autodiff02` 所示，从左向右的箭头表示原程序计算过程，而从右向左的箭头表示反向模式自动微分计算过程。圆圈点则表示所选择的中间结果存储点。
 
-![自动微分实现过程](images/07Challenge02.png)
+![自动微分实现过程](../../imageswtf/05Framework-02AutoDiff-images-07Challenge02.png)
 
 图中左侧的策略为，将尽量少的存储中间结果，而当需要的时候，则会使用更早的中间结果进行重计算来得到当前所需的中间结果。图中右侧的策略即为，将尽可能多的存储每一步中间结果，因此当需要时，可以直接获得而不需重计算。
 

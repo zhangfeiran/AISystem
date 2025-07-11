@@ -14,11 +14,11 @@
 
 如下图所示，CANN 作为昇腾 AI 处理器的异构计算架构，支持业界多种主流的 AI 框架，包括 MindSpore、TensorFlow、PyTorch、Jittor 等。Ascend C 算子开发语言，开放全量低阶 API 接口使能开发者完成高性能自定义算子开发；开放高阶 API 接口，降低开发难度，开发者可快速实现复杂自定义算子开发。GE 图引擎（Graph Engine），包括图优化、图编译、图执行等，便于开发者使用，优化整网性能。HCCL 集合通信库（Huawei Collective Communication Library），可供开发者直接调用，改善网络拥塞，提升网络资源利用率和运维效率。AOL 算子加速库（Ascend Operator Library），提供基础算子和大模型融合算子 API 接口对外开放，供开发者直接调用，使能大模型极致性能优化。Runtime 运行时，将硬件资源（计算、通信、内存管理等）的 API 接口对外开放，满足开发者对模型开发、系统优化、第三方 AI 框架对接等不同场景诉求。
 
-![昇腾异构计算架构 CANN](images/01CANN01.png)
+![昇腾异构计算架构 CANN](../../imageswtf/03Compiler-07CANN-images-01CANN01.png)
 
 CANN 提供了功能强大、适配性好、可自定义开发的 AI 异构计算架构，自顶向下分为 5 部分。
 
-![CANN 逻辑架构](images/01CANN02.png)
+![CANN 逻辑架构](../../imageswtf/03Compiler-07CANN-images-01CANN02.png)
 
 昇腾计算语言（Ascend Computing Language，简称 AscendCL）：AscendCL 接口是昇腾计算开放编程框架，是对底层昇腾计算服务接口的封装。它提供设备（Device）管理、上下文（Context）管理、流（Stream）管理、内存管理、模型加载与执行、算子加载与执行、媒体数据处理、图（Graph）管理等 API 库，供用户开发 AI 应用。
 
@@ -58,7 +58,7 @@ CANN 提供了超过 1400 个硬件亲和的高性能算子，可覆盖主流 AI
 
 CANN 包含许多硬件无关的优化，但是到 Low Level 优化层面，由于各家厂商芯片特点不同，每家芯片都存在一些硬件耦合的 Low Level 优化，CANN 也如此，通过 CANN，对上层保持用户使用界面的兼容和统一，尽可能让用户较少感知硬件差异，对下则根据不同代际芯片的特点提升能力。
 
-![昇腾计算语言](images/01CANN03.png)
+![昇腾计算语言](../../imageswtf/03Compiler-07CANN-images-01CANN03.png)
 
 ### 昇腾计算语言
 
@@ -76,7 +76,7 @@ CANN 包含许多硬件无关的优化，但是到 Low Level 优化层面，由�
 
 该系列接口有一个单独的名称——Ascend C。Ascend C 是 CANN 在算子开发场景为开发者提供的编程语言，原生支持 C&C++标准规范，最大化匹配用户的开发习惯。Ascend C 支持结构化的核函数编程，自动流水并行调度以及 CPU/NPU 孪生调试等特性。
 
-![昇腾计算服务层](images/01CANN04.png)
+![昇腾计算服务层](../../imageswtf/03Compiler-07CANN-images-01CANN04.png)
 
 ### 昇腾计算服务层
 
@@ -84,19 +84,19 @@ CANN 包含许多硬件无关的优化，但是到 Low Level 优化层面，由�
 
 昇腾调优引擎用于在推理、训练等场景对模型、算子、子图等进行调优，充分利用硬件资源，不断提升网络的性能。支持整图调优，调度调优，以及分布式场景下通信梯度的调优。调优是门槛相对较高的一项开发活动，以算子调优为例，需要开发者了解诸如片内高速缓存大小、数据搬运逻辑、调度策略等，人工调优是一项耗时耗力的工作，昇腾调优引擎通过将一些常见调优手段、分析方法固化到工具中，使开发者只需通过调优工具对模型进行分析，生成知识库，再运行模型时性能将有一定程度的提升。
 
-![昇腾计算编译层](images/01CANN05.png)
+![昇腾计算编译层](../../imageswtf/03Compiler-07CANN-images-01CANN05.png)
 
 ### 昇腾计算编译层
 
 昇腾计算编译层包含对计算图的编译和对算子的编译。向上可以与各类 AI 框架对接，为其提供构图接口，并通过提供各类解析器解析框架的计算图（比如 TensorFlow Parser）。解析好的 IR 在图编译阶段做一些计算无关的优化，如图准备（形状推导，常量折叠，死边消除等等），图优化（图融合、图切分、流水执行、缓存复用、算子引擎选择、cost model 建立等）、图编译（整图内存复用、连续内存分配、Task 生成等）。算子编译阶段负责 UB（Unified Buffer）融合，CCE-C 代码生成等。
 
-![昇腾计算执行层](images/01CANN06.png)
+![昇腾计算执行层](../../imageswtf/03Compiler-07CANN-images-01CANN06.png)
 
 ### 昇腾计算执行层
 
 包括 DVPP、Graph Executor、HCCL、AIPP 以及 Runtime 等组件。其中 Runtime 包含了对执行流管理、上下文管理、事件管理、任务管理以及其他资源申请及管理等能力。Graph Executor 中包含对计算图的加载和执行能力。HCCL 则包含对子通信域的管理，Rank 管理、梯度切分、集合通信等能力。DVPP 和 AIPP 则在两种不同维度上对数据做预处理操作。
 
-![昇腾计算基础层](images/01CANN07.png)
+![昇腾计算基础层](../../imageswtf/03Compiler-07CANN-images-01CANN07.png)
 
 ### 昇腾计算基础层
 

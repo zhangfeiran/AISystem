@@ -4,7 +4,7 @@
 
 中科寒武纪科技股份有限公司成立于 2016 年 3 月 15 日，其名字 Cambricon 是由 Cambrian（寒武纪）和 Silicon（硅）组合成。企业使命是：为客户创造价值，成为持续创新的智能时代领导者，企业愿景是让机器更好地理解和服务人类。寒武纪提供云边端一体、软硬件协同、训练推理融合、具备统一生态的系列化智能芯片产品和平台化基础系统软件。下面我们将重点展开寒武纪产品背后的相关芯片架构和模块。
 
-![发展历程](images/cambricon06.png)
+![发展历程](../../imageswtf/02Hardware-06Domestic-images-cambricon06.png)
 
 ## 产品形态
 
@@ -18,19 +18,19 @@ IP 终端 | 边缘端 | 云端推理 | 云端训练
 -|--| -- | ---
 1A、1H、1M | MLU220 | MLU370 MLU270| 思元 290 MLU290-M5 MLU-X1000 MLU370
 
-![寒武纪产品](images/cambricon04.png)
+![寒武纪产品](../../imageswtf/02Hardware-06Domestic-images-cambricon04.png)
 
 寒武纪的典型云端产品包括：MLU370、MLU290、MLU-X1000，面向数据中心业务，涵盖训练推理，对标 P100、V100、A100 等。
 
-![云产品线](images/cambricon05.png)
+![云产品线](../../imageswtf/02Hardware-06Domestic-images-cambricon05.png)
 
 寒武纪的典型边缘端产品包括：MLU220 芯片 MLU220-SOM 模组 MLU220-M2 加速卡。
 
-![边缘产品线](images/cambricon01.png)
+![边缘产品线](../../imageswtf/02Hardware-06Domestic-images-cambricon01.png)
 
 端侧产品目前公布的包括 1A 1H 1M 三代，但实际板卡中内部的 IP Core 可能会比它们新。目前寒武纪官方公布的 IP 产品主要是 1H 1M 系列型号。
 
-![端侧产品线](images/cambricon02.png)
+![端侧产品线](../../imageswtf/02Hardware-06Domestic-images-cambricon02.png)
 
 “云边端”一体化是寒武纪的一个重要发展战略，根据一些公开的信息可知，其含义主要是：云、边、端三种场景对于芯片的运算能力和功耗等特性有着不同要求，单一品类的智能芯片难以满足实际应用的需求。
 
@@ -40,15 +40,15 @@ IP 终端 | 边缘端 | 云端推理 | 云端训练
 
 寒武纪产品架构官方公布的名称分为 MLU00 MLU01 MLU02 MLU03，分别对应于 1A、1H、1M、以及官方尚未公布型号的 MLU370 的处理器内核。
 
-![MLU02 产品的架构](images/cambricon18.png)
+![MLU02 产品的架构](../../imageswtf/02Hardware-06Domestic-images-cambricon18.png)
 
 以 MLU02 的产品为例，不同产品线采用的核心相同，但 DRAM、PCIe 等都有不同。以官网所公布的目前（2024.4）为止最新的板卡 MLU370 为例，下图显示了它的产品形态，板卡之间借助主板的的 MLU Link bridge 互联，内存采用低功耗的 LPDDR5，PCIe 采用 Gen4.0 来与 CPU 互联。
 
-![产品形态 1](images/cambricon07.png)
+![产品形态 1](../../imageswtf/02Hardware-06Domestic-images-cambricon07.png)
 
 MLU370-X8 智能加速卡是全面升级的数据中心训推一体 AI 加速卡，基于寒武纪全新一代思元 370 芯片，接口为 PCIe 4.0 X16，是全高全长双宽（FHFL-Dual-Slot）的标准 PCIe 加速卡，适用于业内最新的 CPU 平台，可轻松搭载于最先进的 AI 服务器，快速实现 AI 算力的部署。MLU370-X8 加速卡功耗为 250W，可为计算机视觉、自然语言处理、语音等多样化的 AI 应用提供强大算力支持。
 
-![产品形态 2](images/cambricon08.png)
+![产品形态 2](../../imageswtf/02Hardware-06Domestic-images-cambricon08.png)
 
 MLU370-X8 通过 MLU-Link™高速网络，组建大规模训练集群，并实现芯片间互联。新一代 MLU-Link™，不仅支持板卡上 2 个思元 370 芯片间通过 MLU-Link™进行通讯，同时也可以通过 MLU-Link™桥接卡对外互联，板卡间 MLU-Link 互联双向总带宽为 200 GB/s，满足大型 AI 模型训练的需要。
 
@@ -64,13 +64,13 @@ MLU370-X8 通过 MLU-Link™高速网络，组建大规模训练集群，并实�
 
 下图中展示了 MLU03 的核心架构，MLU03 采用 4 个 IPU 和一个 MPU 组成一个 Cluster（实际上 MLU02 也是），IPU 上有大量的计算单元以及本地 scratchpad memory（NeuronRAM WeightRAM），MPU 上有 SharedRAM，相当于 GPU 的 shared memory。不同 Cluster 数量可以组成不同的产品形态（云端、边缘端、IP）
 
-![MLU03 Cluster](images/cambricon11.png)
+![MLU03 Cluster](../../imageswtf/02Hardware-06Domestic-images-cambricon11.png)
 
 ## 寒武纪软件栈
 
 寒武纪有自己的一套对标英伟达的软件栈，对标 CUDA C 的编程语言 BANG C，对标 CuDNN CuBLAS 的算子库 CNNL，对标 NCCL 的通信库 CNCL，对标 TensorRT 的推理引擎 MagicMind，对标 cuda-gdb 的调试器 cngdb 等等。
 
-![软件栈](images/cambricon20.jpg)
+![软件栈](../../imageswtf/02Hardware-06Domestic-images-cambricon20.jpg)
 
 ### BANG C
 
@@ -219,7 +219,7 @@ CNServing 基于 TensorFlow Serving 架构开发。相比 TensorFlow Serving，C
 
 IPU 在官方文档中也叫作 MLU Core，下面是示意图。
 
-![MLU Core 核心模块](images/cambricon09.png)
+![MLU Core 核心模块](../../imageswtf/02Hardware-06Domestic-images-cambricon09.png)
 
 我们可以看到，Control Unit 比较重要，负责指令的读取、译码和发射。自研指令可以通过 Control Unit 被负责计算和访存的调度器 Dispatch 到 ALU、VFU、TFU、IO-DMA、Move-DMA 五个队列。
 
@@ -237,7 +237,7 @@ VFU/TFU 是计算单元，实现张量 Tensor 和向量 Vector 运算；输入�
 
 MPU 的主要功能是单个 Cluster 内部 Shared-RAM 和多个 Cluster 间 Shared-RAM 的管理和通信。从下图可以看到，每一个 Cluster 包含 4 个 MLU Core（IPU）和一个 MPU。
 
-![Cluster 结构](images/cambricon11.png)
+![Cluster 结构](../../imageswtf/02Hardware-06Domestic-images-cambricon11.png)
 
 在 MPU 中主要由以下几部分组成：Cluster-DMA，负责 Cluster 间和 Shared-RMA 间数据传输。Global-DMA，负责 GPR 与片外内存，GPR 与 Shared-RAM，Shared-RAM 和 DRAM 间数据传输。Shared-RAM，4MB，相当于 1 级缓存，给具体计算提供数据。
 
@@ -249,11 +249,11 @@ MPU 的主要功能是单个 Cluster 内部 Shared-RAM 和多个 Cluster 间 Sha
 
 Cluster 内通信中我们先看 IPU（MLU-Core），其中 ICache 访问 Global-DRAM 读取指令并保存到 Icache 中，IO-DMA 还可以直接在 DRAM 和 W/N-RAM 之间搬运数据。Move-DMA 负责在 S/W/N-RAM 之间以及它们与 GPR 之间搬运数据。之所以要使用两种不同的 DMA 是为了方便两者之间的并行。
 
-![MLU Core 通信](images/cambricon12.png)
+![MLU Core 通信](../../imageswtf/02Hardware-06Domestic-images-cambricon12.png)
 
 MPU 上同样有 ICache，此外它也通过 Global-DMA 在 DRAM 和 Shared RAM 之间搬运数据。特别地，它还有两个不同的 Cluster-DMA 通道负责在 Shared RAM 之间搬运数据。
 
-![MPU 通信](images/cambricon13.png)
+![MPU 通信](../../imageswtf/02Hardware-06Domestic-images-cambricon13.png)
 
 ## 存储层次
 

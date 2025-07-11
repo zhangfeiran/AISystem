@@ -10,7 +10,7 @@ GCC（GNU Compiler Collection，GNU 编译器集合）最初是作为 GNU 操作
 
 同时，GCC 的指导委员会根据其使命宣言做出重要决策，致力于持续发布高质量的版本。通过 Git 版本控制系统和每周的源代码快照，GCC 的最新源代码随时可供获取。任何人都被鼓励参与贡献或协助测试，以推动 GCC 的持续发展。
 
-![编译器](images/03GCC01.png)  
+![编译器](../../imageswtf/03Compiler-01Tradition-images-03GCC01.png)  
 
 此外，GCC 还引入了与现代编程语言如 Swift 和 Java 相关的前端，使其成为一个全面而多功能的编译器。作为一个模块化设计的软件，GCC 提供了丰富的功能和灵活性，既能在本地平台上进行编译，也支持跨平台的交叉编译。作为自由软件的一部分，用户可以免费获取并自由使用 GCC，并且得到了自由软件基金会（Free Software Foundation，FSF）的强力支持。
 
@@ -26,7 +26,7 @@ GCC 具有以下主要特征：
 
 GCC 的编译过程可以大致分为预处理、编译、汇编和链接四个阶段。
 
-![编译器](images/03GCC02.png)
+![编译器](../../imageswtf/03Compiler-01Tradition-images-03GCC02.png)
 
 ### 源程序(文本)
 
@@ -189,7 +189,7 @@ gcc -v hello.c -o hello
 
 传统的三段式划分是指将编译过程分为前端、优化、后端三个阶段，每个阶段都有专门的工具负责。
 
-![编译器](images/03GCC03.png)
+![编译器](../../imageswtf/03Compiler-01Tradition-images-03GCC03.png)
 
 而在 GCC 中，编译过程被分成了预处理、编译、汇编、链接四个阶段 。其中 GCC 的预处理、编译阶段属于三段式划分的前端部分，汇编阶段属于三段式划分的后端部分。
 
